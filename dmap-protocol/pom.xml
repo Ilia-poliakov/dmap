@@ -11,6 +11,19 @@
 
     <artifactId>dmap-protocol</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -24,21 +37,13 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <includeMavenTypes>direct</includeMavenTypes>
+                            <includeDirectories>
+                                <include>src/main/proto</include>
+                            </includeDirectories>
                             <inputDirectories>
-                                <include>src/main/resources/proto</include>
+                                <include>src/main/proto</include>
                             </inputDirectories>
-                            <outputTargets>
-                                <outputTarget>
-                                    <type>java</type>
-                                    <outputDirectory>${project.build.directory}/generated-sources/proto
-                                    </outputDirectory>
-                                </outputTarget>
-                                <outputTarget>
-                                    <type>descriptor</type>
-                                    <outputDirectory>${project.build.directory}/generated-sources/proto/proto
-                                    </outputDirectory>
-                                </outputTarget>
-                            </outputTargets>
                         </configuration>
                     </execution>
                 </executions>
