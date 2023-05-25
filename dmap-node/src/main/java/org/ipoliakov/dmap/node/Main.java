@@ -4,11 +4,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
+@PropertySource("classpath:dmap.properties")
 @ComponentScan(basePackageClasses = Main.class)
 public class Main {
 
