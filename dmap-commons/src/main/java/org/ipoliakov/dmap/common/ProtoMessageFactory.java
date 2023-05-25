@@ -27,24 +27,17 @@ public class ProtoMessageFactory {
         Map<PayloadType, Parser<? extends MessageLite>> payloadParser = new EnumMap<>(PayloadType.class);
         Map<Class<?>, PayloadType> classOnPayloadType = new IdentityHashMap<>();
         try {
-            Reflections reflections = new Reflections(DMapMessage.class.getPackageName());
-            Set<Class<? extends MessageLite>> allClasses = reflections.getSubTypesOf(MessageLite.class);
-            allClasses.removeIf(clazz -> !(clazz.getName().endsWith("Res") || clazz.getName().endsWith("Req")));
-
+            Set<Class<? extends MessageLite>> allClasses = collectRequestsAndResponses();
             Set<MessageLite> defaultInstances = getProtoClassesDefaultInstances(allClasses);
-            String toSnakeCaseRegex = "([a-z])([A-Z]+)";
-            String replacement = "$1_$2";
-            Pattern toSnakeCasePattern = Pattern.compile(toSnakeCaseRegex);
+            Pattern toSnakeCasePattern = Pattern.compile("([a-z])([A-Z]+)");
             for (MessageLite messageLite : defaultInstances) {
-                if (messageLite instanceof Message) {
-                    Message message = (Message) messageLite;
+                if (messageLite instanceof Message message) {
                     Descriptors.FieldDescriptor payloadType = message.getDescriptorForType().findFieldByName("payloadType");
                     if (payloadType != null) {
                         String name = message.getClass().getSimpleName();
-                        name = toSnakeCasePattern.matcher(name).replaceAll(replacement).toUpperCase();
+                        name = toSnakeCasePattern.matcher(name).replaceAll("$1_$2").toUpperCase();
                         PayloadType pt = PayloadType.valueOf(name);
-
-                        payloadParser.put(pt, messageLite.getParserForType());
+                        payloadParser.put(pt, message.getParserForType());
                         classOnPayloadType.put(message.getClass(), pt);
                     }
                 }
@@ -54,6 +47,13 @@ public class ProtoMessageFactory {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Set<Class<? extends MessageLite>> collectRequestsAndResponses() {
+        Reflections reflections = new Reflections(DMapMessage.class.getPackageName());
+        Set<Class<? extends MessageLite>> allClasses = reflections.getSubTypesOf(MessageLite.class);
+        allClasses.removeIf(clazz -> !(clazz.getName().endsWith("Res") || clazz.getName().endsWith("Req")));
+        return allClasses;
     }
 
     private static Set<MessageLite> getProtoClassesDefaultInstances(Set<Class<? extends MessageLite>> protoClasses) throws Exception {

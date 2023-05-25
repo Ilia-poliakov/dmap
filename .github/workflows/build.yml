@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'liberica'
+          java-version: '17.0.6+10'
+      - name: Maven Verify
+        run: mvn -B clean verify
+      - name: Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Checkstyle
+        uses: dbelyaev/action-checkstyle@v0.7.4
+        with:
+          github_token: ${{ secrets.github_token }}
+          workdir: ./
+          checkstyle_config: checkstyle.xml
+          filter_mode: diff_context
+          fail_on_error: true
+          reporter: github-pr-review
+          level: error
