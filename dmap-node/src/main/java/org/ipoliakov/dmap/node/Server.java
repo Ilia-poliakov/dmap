@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class Server {
 
-    public static final int PORT = 9090;
+    private static final int PORT = 9090;
 
     private final MainPipelineInitializer pipelineInitializer;
 

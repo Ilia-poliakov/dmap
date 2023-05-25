@@ -36,7 +36,7 @@ public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
             .collect(Collectors.toMap(
                 Command::getPayloadType,
                 command -> command,
-                (k1, k2) -> {throw new IllegalArgumentException("Duplicate commands for payloadType " + k1.getClass() + " and " + k2.getClass());},
+                (k1, k2) -> { throw new IllegalArgumentException("Duplicate commands for payloadType " + k1.getClass() + " and " + k2.getClass()); },
                 () -> new EnumMap<>(PayloadType.class)
             ));
     }
