@@ -7,6 +7,8 @@ import org.ipoliakov.dmap.client.internal.MessageSender;
 import org.ipoliakov.dmap.client.internal.ResponseFutures;
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
 import org.ipoliakov.dmap.common.ProtoMessageFactory;
+import org.ipoliakov.dmap.protocol.GetReq;
+import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.PutRes;
@@ -35,8 +37,15 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
     }
 
     @Override
-    public V get(K key) {
-        return null;
+    public CompletableFuture<V> get(K key) {
+        GetReq req = GetReq.newBuilder()
+                .setPayloadType(PayloadType.GET_REQ)
+                .setKey(keySerializer.serialize(key))
+                .build();
+        return messageSender.send(req, GetRes.class)
+                .thenApply(GetRes::getValue)
+                .thenApply(valueSerializer::dserialize)
+                .exceptionally(t -> handleError(req, t));
     }
 
     @Override
