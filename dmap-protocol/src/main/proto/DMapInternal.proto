@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "DMapMessages.proto";
+
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+option java_package = "org.ipoliakov.dmap.protocol";
+option java_outer_classname = "ContainerDMapInternal";
+option optimize_for = SPEED;
+
+message Operation {
+  PayloadType payloadType = 1;
+  int64 timestamp = 2;
+  bytes message = 3;
+}
