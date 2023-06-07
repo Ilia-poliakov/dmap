@@ -1,15 +1,14 @@
 package org.ipoliakov.dmap.node.tx.log;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.condition.OS.LINUX;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -17,12 +16,10 @@ import org.ipoliakov.dmap.protocol.PutReq;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.CodedInputStream;
 
-class TxLogWriterTest {
+class TxLogTest {
 
     private File tempFile;
 
@@ -37,8 +34,7 @@ class TxLogWriterTest {
     }
 
     @Test
-    @EnabledOnOs(LINUX)
-    void write() throws IOException {
+    void writeRead() throws IOException {
         TxLogWriter txLogWriter = new TxLogWriter(tempFile, 64);
         List<Operation> expected = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -56,24 +52,12 @@ class TxLogWriterTest {
         }
         txLogWriter.close();
 
-        List<Operation> actual = new ArrayList<>();
-        try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(tempFile))) {
-            CodedInputStream in = CodedInputStream.newInstance(inputStream);
-            while (in.readTag() != 0) {
-                int payloadType = in.readEnum();
-                in.readTag();
-                long timestamp = in.readInt64();
-                in.readTag();
-                ByteString message = in.readBytes();
-                actual.add(
-                        Operation.newBuilder()
-                                .setPayloadType(PayloadType.forNumber(payloadType))
-                                .setTimestamp(timestamp)
-                                .setMessage(message)
-                                .build()
-                );
-            }
-            assertEquals(expected, actual);
+        TxLogReader txLogReader = new TxLogReader(tempFile);
+        List<Operation> actual;
+        try (Stream<Operation> operations = txLogReader.read()) {
+            actual = operations.collect(Collectors.toList());
         }
+
+        assertEquals(expected, actual);
     }
 }

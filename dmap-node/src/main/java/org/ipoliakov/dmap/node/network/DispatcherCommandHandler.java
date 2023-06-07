@@ -3,8 +3,6 @@ package org.ipoliakov.dmap.node.network;
 import static io.netty.channel.ChannelHandler.Sharable;
 
 import java.util.EnumMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.ipoliakov.dmap.common.ProtoMessageFactory;
 import org.ipoliakov.dmap.node.command.Command;
@@ -18,11 +16,13 @@ import com.google.protobuf.Message;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 @Sharable
+@RequiredArgsConstructor
 public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
 
     private static final DefaultCommand DEFAULT_COMMAND = new DefaultCommand();
@@ -30,19 +30,8 @@ public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
     private final ProtoMessageFactory messageFactory;
     private final EnumMap<PayloadType, Command> commandMap;
 
-    public DispatcherCommandHandler(List<Command> commands, ProtoMessageFactory messageFactory) {
-        this.messageFactory = messageFactory;
-        commandMap = commands.stream()
-            .collect(Collectors.toMap(
-                Command::getPayloadType,
-                command -> command,
-                (k1, k2) -> { throw new IllegalArgumentException("Duplicate commands for payloadType " + k1.getClass() + " and " + k2.getClass()); },
-                () -> new EnumMap<>(PayloadType.class)
-            ));
-    }
-
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         DMapMessage message = (DMapMessage) msg;
         Command command = commandMap.getOrDefault(message.getPayloadType(), DEFAULT_COMMAND);
         Message response = (Message) command.execute(ctx, messageFactory.parsePayload(message));

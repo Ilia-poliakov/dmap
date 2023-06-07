@@ -18,7 +18,7 @@ public class ResponseHandler extends SimpleChannelInboundHandler<DMapMessage> {
     private final ProtoMessageFactory messageFactory;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, DMapMessage message) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, DMapMessage message) {
         long messageId = message.getMessageId();
         CompletableFuture future = responseFutures.get(messageId);
         MessageLite payload = messageFactory.parsePayload(message);
