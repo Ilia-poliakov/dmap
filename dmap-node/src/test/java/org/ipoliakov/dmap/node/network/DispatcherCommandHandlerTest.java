@@ -1,13 +1,13 @@
 package org.ipoliakov.dmap.node.network;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
+import java.util.EnumMap;
+import java.util.Map;
 
 import org.ipoliakov.dmap.common.ProtoMessageFactory;
 import org.ipoliakov.dmap.node.command.Command;
@@ -27,14 +27,7 @@ import io.netty.channel.ChannelHandlerContext;
 class DispatcherCommandHandlerTest {
 
     @Test
-    void when_duplicateCommand_shouldThrow() {
-        Command command = Mockito.mock(Command.class);
-        when(command.getPayloadType()).thenReturn(PayloadType.GET_REQ);
-        assertThrows(IllegalArgumentException.class, () -> new DispatcherCommandHandler(List.of(command, command), null));
-    }
-
-    @Test
-    void unknownCommand() throws Exception {
+    void unknownCommand() {
         Command command = Mockito.mock(Command.class);
         ProtoMessageFactory protoMessageFactory = Mockito.mock(ProtoMessageFactory.class);
         ChannelHandlerContext channelHandlerContext = Mockito.mock(ChannelHandlerContext.class);
@@ -48,8 +41,8 @@ class DispatcherCommandHandlerTest {
                 .build();
         when(protoMessageFactory.parsePayload(message)).thenReturn(GetRes.getDefaultInstance());
 
-        when(command.getPayloadType()).thenReturn(PayloadType.GET_REQ);
-        var dispatcher = new DispatcherCommandHandler(List.of(command), protoMessageFactory);
+        EnumMap<PayloadType, Command> commandMap = new EnumMap<>(Map.of(PayloadType.GET_REQ, command));
+        var dispatcher = new DispatcherCommandHandler(protoMessageFactory, commandMap);
 
         dispatcher.channelRead(channelHandlerContext, message);
 

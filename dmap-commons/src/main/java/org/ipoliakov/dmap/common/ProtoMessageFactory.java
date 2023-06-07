@@ -9,9 +9,11 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
+import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.reflections.Reflections;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -66,10 +68,23 @@ public class ProtoMessageFactory {
         return instances;
     }
 
-    public MessageLite parsePayload(DMapMessage protoMessage) throws InvalidProtocolBufferException {
+    public MessageLite parsePayload(DMapMessage protoMessage) {
         PayloadType payloadType = protoMessage.getPayloadType();
-        Parser<? extends MessageLite> parser = payloadTypeOnParser.get(payloadType);
-        return parser.parseFrom(protoMessage.getPayload());
+        return parsePayload(payloadType, protoMessage.getPayload());
+    }
+
+    public MessageLite parsePayload(Operation operation) {
+        PayloadType payloadType = operation.getPayloadType();
+        return parsePayload(payloadType, operation.getMessage());
+    }
+
+    private MessageLite parsePayload(PayloadType payloadType, ByteString payload) {
+        try {
+            Parser<? extends MessageLite> parser = payloadTypeOnParser.get(payloadType);
+            return parser.parseFrom(payload);
+        } catch (InvalidProtocolBufferException e) {
+            throw new InvalidMessageException("Cannot parse proto message", e);
+        }
     }
 
     public PayloadType getPayloadType(Class<? extends MessageLite> type) {

@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
+import org.ipoliakov.dmap.common.ByteBufferUnmapper;
+import org.ipoliakov.dmap.common.OS;
 import org.ipoliakov.dmap.protocol.Operation;
 
 import com.google.protobuf.ByteString;
@@ -28,9 +31,25 @@ public class TxLogWriter implements AutoCloseable {
         bytes.copyTo(mmap);
     }
 
+    @Override
+    public void close() throws IOException {
+        if (mmap == null) {
+            return;
+        }
+        flush();
+        forceUnmapOnWindows();
+        mmap = null;
+    }
+
+    public void flush() throws IOException {
+        ((MappedByteBuffer) mmap).force();
+        resize(mmap.position() - mmap.limit());
+    }
+
     private void resize(long deltaSize) throws IOException {
         try (RandomAccessFile raf = new RandomAccessFile(logFile, "rw")) {
             long newLength = raf.length() + deltaSize;
+            forceUnmapOnWindows();
             raf.setLength(newLength);
             int pos = mmap.position();
             mmap = raf.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, newLength);
@@ -38,8 +57,9 @@ public class TxLogWriter implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() throws IOException {
-        resize(mmap.position() - mmap.limit());
+    private void forceUnmapOnWindows() {
+        if (OS.isWindows() && mmap.isDirect()) {
+            ByteBufferUnmapper.unmap(mmap);
+        }
     }
 }

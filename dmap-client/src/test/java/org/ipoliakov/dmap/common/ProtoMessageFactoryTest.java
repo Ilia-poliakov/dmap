@@ -10,7 +10,6 @@ import org.ipoliakov.dmap.protocol.PayloadType;
 import org.junit.jupiter.api.Test;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 class ProtoMessageFactoryTest {
 
@@ -26,7 +25,7 @@ class ProtoMessageFactoryTest {
     }
 
     @Test
-    void getPayloadType() throws InvalidProtocolBufferException {
+    void getPayloadType() {
         GetReq getReq = GetReq.newBuilder()
                 .setKey(ByteString.copyFrom("key", StandardCharsets.UTF_8))
                 .setPayloadType(messageFactory.getPayloadType(GetReq.class))
