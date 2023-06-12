@@ -25,7 +25,7 @@
         <logback.version>1.4.7</logback.version>
         <lombok.version>1.18.28</lombok.version>
         <reflections.version>0.10.2</reflections.version>
-        <commons-io.version>2.12.0</commons-io.version>
+        <commons-io.version>2.13.0</commons-io.version>
         <spring.version>6.0.9</spring.version>
 
         <awaitility.version>4.2.0</awaitility.version>
