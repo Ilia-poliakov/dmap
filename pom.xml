@@ -25,7 +25,7 @@
         <logback.version>1.4.7</logback.version>
         <lombok.version>1.18.28</lombok.version>
         <reflections.version>0.10.2</reflections.version>
-        <commons-io.version>2.12.0</commons-io.version>
+        <commons-io.version>2.13.0</commons-io.version>
         <spring.version>6.0.9</spring.version>
 
         <awaitility.version>4.2.0</awaitility.version>
@@ -154,7 +154,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.2</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -244,7 +244,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.4</version>
+                <version>3.4.5</version>
             </plugin>
         </plugins>
     </build>
