@@ -53,6 +53,7 @@ public class Server {
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.warn("Server thread has been interrupted", e);
+            Thread.currentThread().interrupt();
         } finally {
             bossGroup.shutdownGracefully();
         }
