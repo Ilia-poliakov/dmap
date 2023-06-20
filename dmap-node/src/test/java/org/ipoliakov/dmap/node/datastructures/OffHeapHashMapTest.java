@@ -47,8 +47,9 @@ class OffHeapHashMapTest {
     void get() {
         Map<ByteString, ByteString> map = new OffHeapHashMap(16);
         map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("value"));
-        ByteString key = map.get(ByteString.copyFromUtf8("key"));
-        assertEquals(key, ByteString.copyFromUtf8("value"));
+        map.put(ByteString.copyFromUtf8("key2"), ByteString.copyFromUtf8("value2"));
+        ByteString value = map.get(ByteString.copyFromUtf8("key"));
+        assertEquals(value, ByteString.copyFromUtf8("value"));
     }
 
     @Test
