@@ -15,11 +15,6 @@ import io.netty.buffer.Unpooled;
 
 public class OffHeapHashMap implements Map<ByteString, ByteString> {
 
-    protected static final int HASH_OFFSET = 0;
-    protected static final int NEXT_OFFSET = 4;
-    protected static final int HEADER_SIZE = 16;
-    protected static final int KEY_OFFSET = HEADER_SIZE + 4;
-
     private final ByteBuf buf;
     private final int capacity;
 
@@ -57,7 +52,6 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int bucketOffset = getBucketFor(hashCode);
 
         for (; buf.getInt(bucketOffset) != 0; bucketOffset += nextOffset) {
-            buf.readerIndex(bucketOffset);
             if (buf.getInt(bucketOffset) == hashCode && equals(bucketOffset, k)) {
                 return getValue(bucketOffset);
             }
@@ -69,7 +63,7 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int keySize =  buf.getInt(entry + keySizeOffset);
         int valueSize =  buf.getInt(entry + valueSizeOffset);
         byte[] dst = new byte[valueSize];
-        buf.getBytes(entry + valueSizeOffset + keySize, dst);
+        buf.getBytes(entry + valueSizeOffset + keySize + Integer.BYTES, dst);
         return ByteString.copyFrom(dst);
     }
 
@@ -79,9 +73,9 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int bucketOffset = getBucketFor(hashCode);
         int valueSize = value.size();
 
-        for (int entry; (entry = buf.getByte(bucketOffset)) != 0; bucketOffset = entry + nextOffset) {
-            if (buf.getInt(entry) == hashCode && equals(entry, key)) {
-                setValue(entry, value);
+        for (; buf.getInt(bucketOffset) != 0; bucketOffset += nextOffset) {
+            if (buf.getInt(bucketOffset) == hashCode && equals(bucketOffset, key)) {
+                setValue(bucketOffset, value);
             }
         }
 
@@ -101,9 +95,13 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     private boolean equals(int entry, ByteString key) {
-        int offset = entry + valueSizeOffset;
-        for (int keyOffset = 0; keyOffset < key.size(); keyOffset++) {
-            if (buf.getByte(offset + keyOffset) != key.byteAt(keyOffset)) {
+        int existingKeySize = buf.getInt(entry + keySizeOffset);
+        if (existingKeySize != key.size()) {
+            return false;
+        }
+        buf.readerIndex(entry + valueSizeOffset + existingKeySize + 1);
+        for (int i = 0; i < existingKeySize; i++) {
+            if (buf.readByte() != key.byteAt(i)) {
                 return false;
             }
         }
