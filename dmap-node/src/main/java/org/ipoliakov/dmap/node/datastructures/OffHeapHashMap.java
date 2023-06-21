@@ -142,7 +142,25 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
 
     @Override
     public ByteString remove(Object key) {
-        return null;
+        ByteString k = (ByteString) key;
+        int hashCode = k.hashCode();
+        int bucketOffset = getBucketFor(hashCode);
+        int entryOffset;
+        ByteString removedValue;
+        for (;;) {
+            if ((entryOffset = buf.getIntLE(bucketOffset)) == 0) {
+                return null;
+            }
+            if (buf.getIntLE(entryOffset + hashCodeOffset) == hashCode && equals(entryOffset, k)) {
+                removedValue = getValue(entryOffset);
+                buf.setIntLE(entryOffset, buf.getIntLE(entryOffset + nextOffset));
+                break;
+            }
+            bucketOffset = entryOffset + nextOffset;
+        }
+        freeEntry(entryOffset);
+        size--;
+        return removedValue;
     }
 
     @Override
