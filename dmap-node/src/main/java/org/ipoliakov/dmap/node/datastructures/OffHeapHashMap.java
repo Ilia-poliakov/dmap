@@ -1,5 +1,6 @@
 package org.ipoliakov.dmap.node.datastructures;
 
+import static org.ipoliakov.dmap.node.datastructures.Entry.hashCodeOffset;
 import static org.ipoliakov.dmap.node.datastructures.Entry.keySizeOffset;
 import static org.ipoliakov.dmap.node.datastructures.Entry.nextOffset;
 import static org.ipoliakov.dmap.node.datastructures.Entry.valueSizeOffset;
@@ -21,7 +22,7 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     private int size;
 
     public OffHeapHashMap(int capacity) {
-        this.buf = Unpooled.directBuffer(capacity * 16, Integer.MAX_VALUE);
+        this.buf = Unpooled.directBuffer(capacity * 4, Integer.MAX_VALUE);
         this.capacity = capacity;
     }
 
@@ -51,17 +52,17 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int hashCode = k.hashCode();
         int bucketOffset = getBucketFor(hashCode);
 
-        for (; buf.getInt(bucketOffset) != 0; bucketOffset += nextOffset) {
-            if (buf.getInt(bucketOffset) == hashCode && equals(bucketOffset, k)) {
-                return getValue(bucketOffset);
+        for (int entryOffset; (entryOffset = buf.getIntLE(bucketOffset)) != 0; bucketOffset = entryOffset + nextOffset) {
+            if (buf.getIntLE(entryOffset + hashCodeOffset) == hashCode && equals(entryOffset, k)) {
+                return getValue(entryOffset);
             }
         }
         return null;
     }
 
     private ByteString getValue(int entry) {
-        int keySize =  buf.getInt(entry + keySizeOffset);
-        int valueSize =  buf.getInt(entry + valueSizeOffset);
+        int keySize =  buf.getIntLE(entry + keySizeOffset);
+        int valueSize =  buf.getIntLE(entry + valueSizeOffset);
         byte[] dst = new byte[valueSize];
         buf.getBytes(entry + valueSizeOffset + keySize + Integer.BYTES, dst);
         return ByteString.copyFrom(dst);
@@ -73,29 +74,56 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int bucketOffset = getBucketFor(hashCode);
         int valueSize = value.size();
 
-        for (; buf.getInt(bucketOffset) != 0; bucketOffset += nextOffset) {
-            if (buf.getInt(bucketOffset) == hashCode && equals(bucketOffset, key)) {
-                setValue(bucketOffset, value);
+        for (int entryOffset; (entryOffset = buf.getIntLE(bucketOffset)) != 0; bucketOffset = entryOffset + nextOffset) {
+            if (buf.getIntLE(entryOffset + hashCodeOffset) == hashCode && equals(entryOffset, key)) {
+                if (canOverwrite(entryOffset, valueSize)) {
+                    setValue(entryOffset, value);
+                    return value;
+                }
+                buf.setIntLE(bucketOffset, buf.getInt(entryOffset + nextOffset));
+                freeEntry(entryOffset);
+                size--;
+                break;
             }
         }
 
-        buf.writerIndex(bucketOffset);
-        buf.writeInt(hashCode);
-        buf.writeInt(bucketOffset);
-        buf.writeInt(key.size());
-        buf.writeInt(valueSize);
+        int endOfBuffer = buf.capacity();
+        buf.writerIndex(endOfBuffer);
+        buf.writeIntLE(hashCode);
+        buf.writeIntLE(buf.getIntLE(bucketOffset));
+        buf.writeIntLE(key.size());
+        buf.writeIntLE(valueSize);
         buf.writeBytes(key.toByteArray());
         buf.writeBytes(value.toByteArray());
+        buf.setIntLE(bucketOffset, endOfBuffer);
 
+        size++;
         return value;
     }
 
-    private void setValue(int entry, ByteString value) {
+    private void freeEntry(int entryOffset) {
+        int keySize =  buf.getIntLE(entryOffset + keySizeOffset);
+        int valueSize =  buf.getIntLE(entryOffset + valueSizeOffset);
+        buf.setZero(entryOffset, valueSizeOffset + keySize + valueSize - Integer.BYTES);
+    }
 
+    private boolean canOverwrite(int bucketOffset, int newValueSize) {
+        return newValueSize <= sizeOf(bucketOffset);
+    }
+
+    private int sizeOf(int bucketOffset) {
+        return buf.getIntLE(bucketOffset + valueSizeOffset);
+    }
+
+    private void setValue(int entry, ByteString value) {
+        int keySize =  buf.getIntLE(entry + keySizeOffset);
+        buf.setIntLE(entry + valueSizeOffset, value.size());
+        buf.writerIndex(entry + valueSizeOffset + keySize + Integer.BYTES);
+        buf.writeBytes(value.toByteArray());
     }
 
     private boolean equals(int entry, ByteString key) {
-        int existingKeySize = buf.getInt(entry + keySizeOffset);
+        int existingKeySize = buf.getIntLE(entry + keySizeOffset);
         if (existingKeySize != key.size()) {
             return false;
         }
