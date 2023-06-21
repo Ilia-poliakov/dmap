@@ -60,7 +60,7 @@ class OffHeapHashMapTest {
         map.put(ByteString.copyFromUtf8("key2"), ByteString.copyFromUtf8("value2"));
         ByteString value = map.get(ByteString.copyFromUtf8("key"));
         assertEquals(ByteString.copyFromUtf8("value"), value);
-        assertEquals(map.size(), 2);
+        assertEquals(2, map.size());
     }
 
     @Test
@@ -69,7 +69,7 @@ class OffHeapHashMapTest {
         map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("value"));
         ByteString value = map.get(ByteString.copyFromUtf8("key"));
         assertEquals(ByteString.copyFromUtf8("value"), value);
-        assertEquals(map.size(), 1);
+        assertEquals(1, map.size());
     }
 
     @Test
@@ -79,7 +79,7 @@ class OffHeapHashMapTest {
         map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("valueNew"));
         ByteString value = map.get(ByteString.copyFromUtf8("key"));
         assertEquals(ByteString.copyFromUtf8("valueNew"), value);
-        assertEquals(map.size(), 1);
+        assertEquals(1, map.size());
     }
 
     @Test
@@ -89,7 +89,7 @@ class OffHeapHashMapTest {
         map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("valueNew"));
         ByteString value = map.get(ByteString.copyFromUtf8("key"));
         assertEquals(ByteString.copyFromUtf8("valueNew"), value);
-        assertEquals(map.size(), 1);
+        assertEquals(1, map.size());
     }
 
     @Test
@@ -99,7 +99,7 @@ class OffHeapHashMapTest {
         map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("longValue"));
         ByteString value = map.get(ByteString.copyFromUtf8("key"));
         assertEquals(ByteString.copyFromUtf8("longValue"), value);
-        assertEquals(map.size(), 1);
+        assertEquals(1, map.size());
     }
 
     @Test
@@ -107,9 +107,11 @@ class OffHeapHashMapTest {
         Map<ByteString, ByteString> map = new OffHeapHashMap(16);
         ByteString key = ByteString.copyFromUtf8("key");
         map.put(key, ByteString.copyFromUtf8("value"));
+
         ByteString removed = map.remove(key);
+
         assertEquals(ByteString.copyFromUtf8("value"), removed);
-        assertEquals(map.size(), 0);
+        assertEquals(0, map.size());
         assertNull(map.get(key));
         assertTrue(map.isEmpty());
     }
@@ -126,6 +128,39 @@ class OffHeapHashMapTest {
 
     @Test
     void clear() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(ByteString.copyFromUtf8("key1"), ByteString.copyFromUtf8("value1"));
+        map.put(ByteString.copyFromUtf8("key2"), ByteString.copyFromUtf8("value2"));
+
+        map.clear();
+
+        assertNull(map.get(ByteString.copyFromUtf8("key1")));
+        assertNull(map.get(ByteString.copyFromUtf8("key2")));
+        assertEquals(0, map.size());
+        assertTrue(map.isEmpty());
+    }
+
+    @Test
+    void clear_addAfterClear() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(ByteString.copyFromUtf8("key1"), ByteString.copyFromUtf8("value1"));
+        map.put(ByteString.copyFromUtf8("key2"), ByteString.copyFromUtf8("value2"));
+
+        map.clear();
+        map.put(ByteString.copyFromUtf8("key3"), ByteString.copyFromUtf8("value3"));
+
+        assertEquals(1, map.size());
+    }
+
+    @Test
+    void clear_doubleClearWithoutErrors() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(ByteString.copyFromUtf8("key1"), ByteString.copyFromUtf8("value1"));
+
+        map.clear();
+        map.clear();
+
+        assertTrue(map.isEmpty());
     }
 
     @Test
