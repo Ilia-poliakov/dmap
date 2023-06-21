@@ -2,6 +2,7 @@ package org.ipoliakov.dmap.node.datastructures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -103,7 +104,20 @@ class OffHeapHashMapTest {
 
     @Test
     void remove() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        ByteString key = ByteString.copyFromUtf8("key");
+        map.put(key, ByteString.copyFromUtf8("value"));
+        ByteString removed = map.remove(key);
+        assertEquals(ByteString.copyFromUtf8("value"), removed);
+        assertEquals(map.size(), 0);
+        assertNull(map.get(key));
+        assertTrue(map.isEmpty());
+    }
 
+    @Test
+    void remove_fromEmpty_return_null() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        assertNull(map.remove(ByteString.copyFromUtf8("key")));
     }
 
     @Test
