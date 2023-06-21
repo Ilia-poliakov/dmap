@@ -22,7 +22,7 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     private int size;
 
     public OffHeapHashMap(int capacity) {
-        this.buf = Unpooled.directBuffer(capacity * 4, Integer.MAX_VALUE);
+        this.buf = Unpooled.directBuffer(capacity * Integer.BYTES, Integer.MAX_VALUE);
         this.capacity = capacity;
     }
 
@@ -170,7 +170,9 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
 
     @Override
     public void clear() {
-
+        buf.capacity(capacity * Integer.BYTES);
+        buf.setZero(0, buf.capacity());
+        size = 0;
     }
 
     @Override
