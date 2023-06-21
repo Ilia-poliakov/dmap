@@ -103,7 +103,11 @@ class OffHeapHashMapTest {
 
     @Test
     void remove() {
-
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("value"));
+        map.remove(ByteString.copyFromUtf8("key"));
+        assertEquals(map.size(), 0);
+        assertTrue(map.isEmpty());
     }
 
     @Test
