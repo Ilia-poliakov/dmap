@@ -1,10 +1,5 @@
 package org.ipoliakov.dmap.node.datastructures;
 
-import static org.ipoliakov.dmap.node.datastructures.Entry.hashCodeOffset;
-import static org.ipoliakov.dmap.node.datastructures.Entry.keySizeOffset;
-import static org.ipoliakov.dmap.node.datastructures.Entry.nextOffset;
-import static org.ipoliakov.dmap.node.datastructures.Entry.valueSizeOffset;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +10,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public class OffHeapHashMap implements Map<ByteString, ByteString> {
+
+    private static int offset = 0;
+
+    public static final int HASH_CODE_OFFSET = offset += 0;
+    public static final int NEXT_ENTRY_OFFSET = offset += 4;
+    public static final int KEY_SIZE_OFFSET = offset += 4;
+    public static final int VALUE_SIZE_OFFSET = offset += 4;
 
     private final ByteBuf buf;
     private final int capacity;
@@ -52,8 +54,8 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int hashCode = k.hashCode();
         int bucketOffset = getBucketFor(hashCode);
 
-        for (int entryOffset; (entryOffset = buf.getIntLE(bucketOffset)) != 0; bucketOffset = entryOffset + nextOffset) {
-            if (buf.getIntLE(entryOffset + hashCodeOffset) == hashCode && equals(entryOffset, k)) {
+        for (int entryOffset; (entryOffset = buf.getIntLE(bucketOffset)) != 0; bucketOffset = entryOffset + NEXT_ENTRY_OFFSET) {
+            if (buf.getIntLE(entryOffset + HASH_CODE_OFFSET) == hashCode && equals(entryOffset, k)) {
                 return getValue(entryOffset);
             }
         }
@@ -61,10 +63,10 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     private ByteString getValue(int entry) {
-        int keySize =  buf.getIntLE(entry + keySizeOffset);
-        int valueSize =  buf.getIntLE(entry + valueSizeOffset);
+        int keySize =  buf.getIntLE(entry + KEY_SIZE_OFFSET);
+        int valueSize =  buf.getIntLE(entry + VALUE_SIZE_OFFSET);
         byte[] dst = new byte[valueSize];
-        buf.getBytes(entry + valueSizeOffset + keySize + Integer.BYTES, dst);
+        buf.getBytes(entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES, dst);
         return ByteString.copyFrom(dst);
     }
 
@@ -74,13 +76,13 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
         int bucketOffset = getBucketFor(hashCode);
         int valueSize = value.size();
 
-        for (int entryOffset; (entryOffset = buf.getIntLE(bucketOffset)) != 0; bucketOffset = entryOffset + nextOffset) {
-            if (buf.getIntLE(entryOffset + hashCodeOffset) == hashCode && equals(entryOffset, key)) {
+        for (int entryOffset; (entryOffset = buf.getIntLE(bucketOffset)) != 0; bucketOffset = entryOffset + NEXT_ENTRY_OFFSET) {
+            if (buf.getIntLE(entryOffset + HASH_CODE_OFFSET) == hashCode && equals(entryOffset, key)) {
                 if (canOverwrite(entryOffset, valueSize)) {
                     setValue(entryOffset, value);
                     return value;
                 }
-                buf.setIntLE(bucketOffset, buf.getInt(entryOffset + nextOffset));
+                buf.setIntLE(bucketOffset, buf.getInt(entryOffset + NEXT_ENTRY_OFFSET));
                 freeEntry(entryOffset);
                 size--;
                 break;
@@ -102,9 +104,9 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     private void freeEntry(int entryOffset) {
-        int keySize =  buf.getIntLE(entryOffset + keySizeOffset);
-        int valueSize =  buf.getIntLE(entryOffset + valueSizeOffset);
-        buf.setZero(entryOffset, valueSizeOffset + keySize + valueSize - Integer.BYTES);
+        int keySize =  buf.getIntLE(entryOffset + KEY_SIZE_OFFSET);
+        int valueSize =  buf.getIntLE(entryOffset + VALUE_SIZE_OFFSET);
+        buf.setZero(entryOffset, VALUE_SIZE_OFFSET + keySize + valueSize - Integer.BYTES);
     }
 
     private boolean canOverwrite(int bucketOffset, int newValueSize) {
@@ -112,22 +114,22 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     private int sizeOf(int bucketOffset) {
-        return buf.getIntLE(bucketOffset + valueSizeOffset);
+        return buf.getIntLE(bucketOffset + VALUE_SIZE_OFFSET);
     }
 
     private void setValue(int entry, ByteString value) {
-        int keySize =  buf.getIntLE(entry + keySizeOffset);
-        buf.setIntLE(entry + valueSizeOffset, value.size());
-        buf.writerIndex(entry + valueSizeOffset + keySize + Integer.BYTES);
+        int keySize =  buf.getIntLE(entry + KEY_SIZE_OFFSET);
+        buf.setIntLE(entry + VALUE_SIZE_OFFSET, value.size());
+        buf.writerIndex(entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES);
         buf.writeBytes(value.toByteArray());
     }
 
     private boolean equals(int entry, ByteString key) {
-        int existingKeySize = buf.getIntLE(entry + keySizeOffset);
+        int existingKeySize = buf.getIntLE(entry + KEY_SIZE_OFFSET);
         if (existingKeySize != key.size()) {
             return false;
         }
-        buf.readerIndex(entry + valueSizeOffset + existingKeySize + 1);
+        buf.readerIndex(entry + VALUE_SIZE_OFFSET + existingKeySize + 1);
         for (int i = 0; i < existingKeySize; i++) {
             if (buf.readByte() != key.byteAt(i)) {
                 return false;
@@ -151,12 +153,12 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
             if ((entryOffset = buf.getIntLE(bucketOffset)) == 0) {
                 return null;
             }
-            if (buf.getIntLE(entryOffset + hashCodeOffset) == hashCode && equals(entryOffset, k)) {
+            if (buf.getIntLE(entryOffset + HASH_CODE_OFFSET) == hashCode && equals(entryOffset, k)) {
                 removedValue = getValue(entryOffset);
-                buf.setIntLE(entryOffset, buf.getIntLE(entryOffset + nextOffset));
+                buf.setIntLE(entryOffset, buf.getIntLE(entryOffset + NEXT_ENTRY_OFFSET));
                 break;
             }
-            bucketOffset = entryOffset + nextOffset;
+            bucketOffset = entryOffset + NEXT_ENTRY_OFFSET;
         }
         freeEntry(entryOffset);
         size--;
