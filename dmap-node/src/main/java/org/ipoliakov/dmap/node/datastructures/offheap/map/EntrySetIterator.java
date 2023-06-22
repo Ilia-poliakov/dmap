@@ -7,6 +7,7 @@ import static org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap.
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.google.protobuf.ByteString;
 
@@ -17,42 +18,32 @@ public class EntrySetIterator implements Iterator<Map.Entry<ByteString, ByteStri
 
     private final OffHeapHashMap map;
 
-    private int i, currentPtr;
+    private int currentPtr;
 
     @Override
     public boolean hasNext() {
-        while (i < map.buf.capacity()) {
-            byte entryOffset = map.buf.getByte(i * Integer.BYTES);
-            if (entryOffset == 0) {
-                i++;
-                continue;
-            }
-            break;
-        }
-        return i < map.buf.capacity();
+        while ((currentPtr = map.buf.readIntLE()) == 0) { }
+        return currentPtr < map.buf.capacity();
     }
 
     @Override
     public Map.Entry<ByteString, ByteString> next() {
-        currentPtr = i * 4;
-        int entry = map.buf.getIntLE(currentPtr);
-        if (entry != 0) {
-            int keySize = map.buf.getIntLE(entry + KEY_SIZE_OFFSET);
-            int valueSize = map.buf.getIntLE(entry + VALUE_SIZE_OFFSET);
-
-            byte[] key = new byte[keySize];
-            byte[] value = new byte[valueSize];
-
-            map.buf.getBytes(entry + VALUE_SIZE_OFFSET + Integer.BYTES, key);
-            map.buf.getBytes(entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES, value);
-
-            currentPtr = entry + NEXT_ENTRY_OFFSET;
-            i = entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES + 1;
-            return new AbstractMap.SimpleImmutableEntry<>(
-                    ByteString.copyFrom(key),
-                    ByteString.copyFrom(value)
-            );
+        if (currentPtr == 0) {
+            throw new NoSuchElementException();
         }
-        return null;
+        int keySize = map.buf.getIntLE(currentPtr + KEY_SIZE_OFFSET);
+        int valueSize = map.buf.getIntLE(currentPtr + VALUE_SIZE_OFFSET);
+
+        byte[] key = new byte[keySize];
+        byte[] value = new byte[valueSize];
+
+        map.buf.getBytes(currentPtr + VALUE_SIZE_OFFSET + Integer.BYTES, key);
+        map.buf.getBytes(currentPtr + VALUE_SIZE_OFFSET + keySize + Integer.BYTES, value);
+
+        currentPtr += NEXT_ENTRY_OFFSET;
+        return new AbstractMap.SimpleImmutableEntry<>(
+                ByteString.copyFrom(key),
+                ByteString.copyFrom(value)
+        );
     }
 }
