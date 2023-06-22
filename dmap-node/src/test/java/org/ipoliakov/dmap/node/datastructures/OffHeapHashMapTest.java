@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
+import java.util.Set;
 
+import org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap;
 import org.junit.jupiter.api.Test;
 
 import com.google.protobuf.ByteString;
@@ -43,14 +45,6 @@ class OffHeapHashMapTest {
         Map<ByteString, ByteString> map = new OffHeapHashMap(16);
         map.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("value"));
         assertFalse(map.isEmpty());
-    }
-
-    @Test
-    void containsKey() {
-    }
-
-    @Test
-    void containsValue() {
     }
 
     @Test
@@ -123,10 +117,6 @@ class OffHeapHashMapTest {
     }
 
     @Test
-    void putAll() {
-    }
-
-    @Test
     void clear() {
         Map<ByteString, ByteString> map = new OffHeapHashMap(16);
         map.put(ByteString.copyFromUtf8("key1"), ByteString.copyFromUtf8("value1"));
@@ -164,14 +154,25 @@ class OffHeapHashMapTest {
     }
 
     @Test
-    void keySet() {
-    }
-
-    @Test
-    void values() {
-    }
-
-    @Test
     void entrySet() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(ByteString.copyFromUtf8("key1"), ByteString.copyFromUtf8("value1"));
+        map.put(ByteString.copyFromUtf8("key2"), ByteString.copyFromUtf8("value2"));
+        map.put(ByteString.copyFromUtf8("key3"), ByteString.copyFromUtf8("value3"));
+
+        Set<Map.Entry<ByteString, ByteString>> entrySet = map.entrySet();
+
+        assertEquals(3, entrySet.size());
+    }
+
+    @Test
+    void entrySet_returnSameSet_ifExist() {
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(ByteString.copyFromUtf8("key1"), ByteString.copyFromUtf8("value1"));
+
+        Set<Map.Entry<ByteString, ByteString>> entrySet1 = map.entrySet();
+        Set<Map.Entry<ByteString, ByteString>> entrySet2 = map.entrySet();
+
+        assertTrue(entrySet1 == entrySet2, "Should be reference equals");
     }
 }
