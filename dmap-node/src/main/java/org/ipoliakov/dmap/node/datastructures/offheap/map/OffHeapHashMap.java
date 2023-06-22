@@ -11,7 +11,7 @@ import io.netty.buffer.Unpooled;
 
 public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
 
-    private static int offset = 0;
+    private static int offset;
 
     public static final int HASH_CODE_OFFSET = offset += 0;
     public static final int NEXT_ENTRY_OFFSET = offset += 4;
@@ -41,16 +41,6 @@ public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
     @Override
     public boolean isEmpty() {
         return size == 0;
-    }
-
-    @Override
-    public boolean containsKey(Object key) {
-        return false;
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return false;
     }
 
     @Override
@@ -93,40 +83,9 @@ public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
                 break;
             }
         }
-
-        int endOfBuffer = buf.capacity();
-        buf.writerIndex(endOfBuffer);
-        buf.writeIntLE(hashCode);
-        buf.writeIntLE(buf.getIntLE(bucketOffset));
-        buf.writeIntLE(key.size());
-        buf.writeIntLE(valueSize);
-        buf.writeBytes(key.toByteArray());
-        buf.writeBytes(value.toByteArray());
-        buf.setIntLE(bucketOffset, endOfBuffer);
-
+        writeNewEntry(bucketOffset, key, value, hashCode);
         size++;
         return value;
-    }
-
-    private void freeEntry(int entryOffset) {
-        int keySize =  buf.getIntLE(entryOffset + KEY_SIZE_OFFSET);
-        int valueSize =  buf.getIntLE(entryOffset + VALUE_SIZE_OFFSET);
-        buf.setZero(entryOffset, VALUE_SIZE_OFFSET + keySize + valueSize - Integer.BYTES);
-    }
-
-    private boolean canOverwrite(int bucketOffset, int newValueSize) {
-        return newValueSize <= sizeOf(bucketOffset);
-    }
-
-    private int sizeOf(int bucketOffset) {
-        return buf.getIntLE(bucketOffset + VALUE_SIZE_OFFSET);
-    }
-
-    private void setValue(int entry, ByteString value) {
-        int keySize =  buf.getIntLE(entry + KEY_SIZE_OFFSET);
-        buf.setIntLE(entry + VALUE_SIZE_OFFSET, value.size());
-        buf.writerIndex(entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES);
-        buf.writeBytes(value.toByteArray());
     }
 
     private boolean equals(int entry, ByteString key) {
@@ -143,8 +102,33 @@ public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
         return true;
     }
 
-    private int getBucketFor(int hashCode) {
-        return (hashCode & Integer.MAX_VALUE) % capacity * Integer.BYTES;
+    private boolean canOverwrite(int bucketOffset, int newValueSize) {
+        return newValueSize <= buf.getIntLE(bucketOffset + VALUE_SIZE_OFFSET);
+    }
+
+    private void setValue(int entry, ByteString value) {
+        int keySize =  buf.getIntLE(entry + KEY_SIZE_OFFSET);
+        buf.setIntLE(entry + VALUE_SIZE_OFFSET, value.size());
+        buf.writerIndex(entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES);
+        buf.writeBytes(value.toByteArray());
+    }
+
+    private void freeEntry(int entryOffset) {
+        int keySize =  buf.getIntLE(entryOffset + KEY_SIZE_OFFSET);
+        int valueSize =  buf.getIntLE(entryOffset + VALUE_SIZE_OFFSET);
+        buf.setZero(entryOffset, VALUE_SIZE_OFFSET + keySize + valueSize - Integer.BYTES);
+    }
+
+    private void writeNewEntry(int bucketOffset, ByteString key, ByteString value, int hashCode) {
+        int endOfBuffer = buf.capacity();
+        buf.writerIndex(endOfBuffer);
+        buf.writeIntLE(hashCode);
+        buf.writeIntLE(buf.getIntLE(bucketOffset));
+        buf.writeIntLE(key.size());
+        buf.writeIntLE(value.size());
+        buf.writeBytes(key.toByteArray());
+        buf.writeBytes(value.toByteArray());
+        buf.setIntLE(bucketOffset, endOfBuffer);
     }
 
     @Override
@@ -168,6 +152,10 @@ public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
         freeEntry(entryOffset);
         size--;
         return removedValue;
+    }
+
+    private int getBucketFor(int hashCode) {
+        return (hashCode & Integer.MAX_VALUE) % capacity * Integer.BYTES;
     }
 
     @Override

@@ -47,21 +47,6 @@ class EntrySet extends AbstractSet<Map.Entry<ByteString, ByteString>> {
     }
 
     @Override
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
     public boolean addAll(Collection<? extends Map.Entry<ByteString, ByteString>> c) {
         throw new UnsupportedOperationException();
     }

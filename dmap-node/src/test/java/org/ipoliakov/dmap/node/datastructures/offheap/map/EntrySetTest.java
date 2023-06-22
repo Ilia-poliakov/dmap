@@ -2,11 +2,14 @@ package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.AbstractMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -72,14 +75,9 @@ class EntrySetTest {
 
     @Test
     void iterator() {
-    }
-
-    @Test
-    void toArray() {
-    }
-
-    @Test
-    void testToArray() {
+        OffHeapHashMap map = new OffHeapHashMap();
+        Iterator<Map.Entry<ByteString, ByteString>> iterator = map.entrySet().iterator();
+        assertNotNull(iterator);
     }
 
     @Test
@@ -90,10 +88,6 @@ class EntrySetTest {
         assertTrue(map.isEmpty());
         assertTrue(map.entrySet().isEmpty());
         assertEquals(map.size(), map.entrySet().size());
-    }
-
-    @Test
-    void containsAll() {
     }
 
     @Test
