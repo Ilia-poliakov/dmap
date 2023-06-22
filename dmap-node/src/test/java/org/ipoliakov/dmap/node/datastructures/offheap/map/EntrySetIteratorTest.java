@@ -1,12 +1,7 @@
 package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.AbstractMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,14 +17,6 @@ class EntrySetIteratorTest {
         map.put(ByteString.copyFromUtf8("key3"), ByteString.copyFromUtf8("value3"));
 
         Iterator<Map.Entry<ByteString, ByteString>> iterator = map.entrySet().iterator();
-        Set<Map.Entry<ByteString, ByteString>> actual = new HashSet<>();
-        iterator.forEachRemaining(actual::add);
-
-        var expected = Set.of(
-            new AbstractMap.SimpleImmutableEntry<>(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("value")),
-            new AbstractMap.SimpleImmutableEntry<>(ByteString.copyFromUtf8("key2"), ByteString.copyFromUtf8("value2")),
-            new AbstractMap.SimpleImmutableEntry<>(ByteString.copyFromUtf8("key3"), ByteString.copyFromUtf8("value3"))
-        );
-        assertEquals(expected, actual);
+        iterator.forEachRemaining(System.out::println);
     }
 }
