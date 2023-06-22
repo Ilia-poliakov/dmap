@@ -1,6 +1,6 @@
-package org.ipoliakov.dmap.node.datastructures;
+package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
-import java.util.Collection;
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,7 +9,7 @@ import com.google.protobuf.ByteString;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public class OffHeapHashMap implements Map<ByteString, ByteString> {
+public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
 
     private static int offset = 0;
 
@@ -18,10 +18,15 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     public static final int KEY_SIZE_OFFSET = offset += 4;
     public static final int VALUE_SIZE_OFFSET = offset += 4;
 
-    private final ByteBuf buf;
-    private final int capacity;
+    final ByteBuf buf;
+    final int capacity;
 
     private int size;
+    private EntrySet entrySet;
+
+    public OffHeapHashMap() {
+        this(16);
+    }
 
     public OffHeapHashMap(int capacity) {
         this.buf = Unpooled.directBuffer(capacity * Integer.BYTES, Integer.MAX_VALUE);
@@ -63,8 +68,8 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     private ByteString getValue(int entry) {
-        int keySize =  buf.getIntLE(entry + KEY_SIZE_OFFSET);
-        int valueSize =  buf.getIntLE(entry + VALUE_SIZE_OFFSET);
+        int keySize = buf.getIntLE(entry + KEY_SIZE_OFFSET);
+        int valueSize = buf.getIntLE(entry + VALUE_SIZE_OFFSET);
         byte[] dst = new byte[valueSize];
         buf.getBytes(entry + VALUE_SIZE_OFFSET + keySize + Integer.BYTES, dst);
         return ByteString.copyFrom(dst);
@@ -166,11 +171,6 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     @Override
-    public void putAll(Map<? extends ByteString, ? extends ByteString> m) {
-
-    }
-
-    @Override
     public void clear() {
         buf.capacity(capacity * Integer.BYTES);
         buf.setZero(0, buf.capacity());
@@ -178,17 +178,8 @@ public class OffHeapHashMap implements Map<ByteString, ByteString> {
     }
 
     @Override
-    public Set<ByteString> keySet() {
-        return null;
-    }
-
-    @Override
-    public Collection<ByteString> values() {
-        return null;
-    }
-
-    @Override
     public Set<Entry<ByteString, ByteString>> entrySet() {
-        return null;
+        Set<Map.Entry<ByteString, ByteString>> es;
+        return (es = entrySet) == null ? (entrySet = new EntrySet(this)) : es;
     }
 }
