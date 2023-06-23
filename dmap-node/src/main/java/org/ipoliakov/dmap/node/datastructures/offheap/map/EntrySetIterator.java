@@ -7,7 +7,6 @@ import static org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap.
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import com.google.protobuf.ByteString;
 
@@ -29,7 +28,7 @@ public class EntrySetIterator implements Iterator<Map.Entry<ByteString, ByteStri
     @Override
     public Map.Entry<ByteString, ByteString> next() {
         if (currentPtr == 0) {
-            throw new NoSuchElementException();
+            throw new IllegalStateException("You have to call hasNext() before");
         }
         int keySize = map.buf.getIntLE(currentPtr + KEY_SIZE_OFFSET);
         int valueSize = map.buf.getIntLE(currentPtr + VALUE_SIZE_OFFSET);

@@ -1,6 +1,7 @@
 package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.AbstractMap;
 import java.util.HashSet;
@@ -31,5 +32,12 @@ class EntrySetIteratorTest {
             new AbstractMap.SimpleImmutableEntry<>(ByteString.copyFromUtf8("key3"), ByteString.copyFromUtf8("value3"))
         );
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void next_noSuchElementException_onEmpty() {
+        OffHeapHashMap map = new OffHeapHashMap();
+        Iterator<Map.Entry<ByteString, ByteString>> iterator = map.entrySet().iterator();
+        assertThrows(IllegalStateException.class, iterator::next);
     }
 }
