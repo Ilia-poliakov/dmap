@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.datastructures;
+package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Map;
 import java.util.Set;
 
-import org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.google.protobuf.ByteString;
 
@@ -174,5 +174,35 @@ class OffHeapHashMapTest {
         Set<Map.Entry<ByteString, ByteString>> entrySet2 = map.entrySet();
 
         assertTrue(entrySet1 == entrySet2, "Should be reference equals");
+    }
+
+    @Test
+    void get_doesNotKeysEqualsWithDifferentSizes() {
+        ByteString key = ByteString.copyFromUtf8("key");
+        ByteString key2 = ByteString.copyFromUtf8("key2");
+
+        ReflectionTestUtils.setField(key, "hash", 42);
+        ReflectionTestUtils.setField(key2, "hash", 42);
+
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(key, ByteString.copyFromUtf8("value"));
+
+        ByteString val = map.get(key2);
+        assertNull(val);
+    }
+
+    @Test
+    void get_equalsKeySizes_butDiffByte() {
+        ByteString key = ByteString.copyFromUtf8("key");
+        ByteString key2 = ByteString.copyFromUtf8("keY");
+
+        ReflectionTestUtils.setField(key, "hash", 42);
+        ReflectionTestUtils.setField(key2, "hash", 42);
+
+        Map<ByteString, ByteString> map = new OffHeapHashMap(16);
+        map.put(key, ByteString.copyFromUtf8("value"));
+
+        ByteString val = map.get(key2);
+        assertNull(val);
     }
 }
