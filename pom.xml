@@ -20,17 +20,17 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <netty.version>4.1.93.Final</netty.version>
-        <protobuf.version>3.23.2</protobuf.version>
-        <logback.version>1.4.7</logback.version>
+        <netty.version>4.1.94.Final</netty.version>
+        <protobuf.version>3.23.3</protobuf.version>
+        <logback.version>1.4.8</logback.version>
         <lombok.version>1.18.28</lombok.version>
         <reflections.version>0.10.2</reflections.version>
         <commons-io.version>2.13.0</commons-io.version>
-        <spring.version>6.0.9</spring.version>
+        <spring.version>6.0.10</spring.version>
 
         <awaitility.version>4.2.0</awaitility.version>
         <junit.version>5.9.3</junit.version>
-        <mockito.version>5.3.1</mockito.version>
+        <mockito.version>5.4.0</mockito.version>
     </properties>
 
     <dependencyManagement>

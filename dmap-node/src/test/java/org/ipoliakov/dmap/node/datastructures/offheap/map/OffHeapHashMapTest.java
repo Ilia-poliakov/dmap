@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.datastructures;
+package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Map;
 import java.util.Set;
 
-import org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap;
 import org.junit.jupiter.api.Test;
 
 import com.google.protobuf.ByteString;
