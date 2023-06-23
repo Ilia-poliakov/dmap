@@ -14,9 +14,9 @@ public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
     private static int offset;
 
     public static final int HASH_CODE_OFFSET = offset += 0;
-    public static final int NEXT_ENTRY_OFFSET = offset += 4;
-    public static final int KEY_SIZE_OFFSET = offset += 4;
-    public static final int VALUE_SIZE_OFFSET = offset += 4;
+    public static final int NEXT_ENTRY_OFFSET = offset += Integer.BYTES;
+    public static final int KEY_SIZE_OFFSET = offset += Integer.BYTES;
+    public static final int VALUE_SIZE_OFFSET = offset += Integer.BYTES;
 
     final ByteBuf buf;
     final int capacity;
