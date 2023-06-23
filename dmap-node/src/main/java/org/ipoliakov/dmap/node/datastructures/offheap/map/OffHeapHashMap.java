@@ -1,5 +1,6 @@
 package org.ipoliakov.dmap.node.datastructures.offheap.map;
 
+import java.lang.ref.Cleaner;
 import java.util.AbstractMap;
 import java.util.Set;
 
@@ -9,6 +10,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
+
+    private static final Cleaner CLEANER = Cleaner.create();
 
     private static int offset;
 
@@ -30,6 +33,7 @@ public final class OffHeapHashMap extends AbstractMap<ByteString, ByteString> {
     public OffHeapHashMap(int capacity) {
         this.buf = Unpooled.directBuffer(capacity * Integer.BYTES, Integer.MAX_VALUE);
         this.capacity = capacity;
+        CLEANER.register(this, new ByteBufCleanAction(buf));
     }
 
     @Override
