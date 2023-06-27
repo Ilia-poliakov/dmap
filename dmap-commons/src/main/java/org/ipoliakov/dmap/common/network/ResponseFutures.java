@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.client.internal;
+package org.ipoliakov.dmap.common.network;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.client.internal.MessageSender;
-import org.ipoliakov.dmap.client.internal.ResponseFutures;
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
-import org.ipoliakov.dmap.common.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;

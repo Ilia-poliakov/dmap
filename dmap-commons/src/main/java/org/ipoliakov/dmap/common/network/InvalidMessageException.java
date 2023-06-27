@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.common;
+package org.ipoliakov.dmap.common.network;
 
 public class InvalidMessageException extends RuntimeException {
 

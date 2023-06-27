@@ -1,5 +1,7 @@
 package org.ipoliakov.dmap.node;
 
+import static org.ipoliakov.dmap.node.config.NetworkBaseConfig.threadEventLoopGroup;
+
 import org.ipoliakov.dmap.node.network.MainPipelineInitializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,9 +12,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ServerChannel;
 import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,9 +61,5 @@ public class Server {
 
     private static Class<? extends ServerChannel> channel() {
         return Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class;
-    }
-
-    private static EventLoopGroup threadEventLoopGroup(int threadNumber) {
-        return Epoll.isAvailable() ? new EpollEventLoopGroup(threadNumber) : new NioEventLoopGroup(threadNumber);
     }
 }

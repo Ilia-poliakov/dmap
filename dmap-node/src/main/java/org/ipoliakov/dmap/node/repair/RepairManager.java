@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
-import org.ipoliakov.dmap.common.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.node.tx.log.TxLogReader;
 import org.ipoliakov.dmap.node.tx.operation.MutationOperation;
 import org.ipoliakov.dmap.protocol.Operation;

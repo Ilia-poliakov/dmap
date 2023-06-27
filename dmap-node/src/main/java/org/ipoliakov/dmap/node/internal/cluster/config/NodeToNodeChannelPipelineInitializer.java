@@ -1,13 +1,13 @@
-package org.ipoliakov.dmap.client.internal;
+package org.ipoliakov.dmap.node.internal.cluster.config;
 
 import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.common.network.ResponseHandler;
 import org.ipoliakov.dmap.protocol.DMapMessage;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
@@ -15,13 +15,13 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ClientPipelineInitializer extends ChannelInitializer<SocketChannel> {
+public class NodeToNodeChannelPipelineInitializer extends ChannelInitializer<Channel> {
 
     private final ResponseFutures responseFutures;
     private final ProtoMessageFactory messageFactory;
 
     @Override
-    protected void initChannel(SocketChannel channel) {
+    protected void initChannel(Channel channel) {
         ChannelPipeline p = channel.pipeline();
 
         p.addLast(new ProtobufVarint32FrameDecoder());
