@@ -3,8 +3,8 @@ package org.ipoliakov.dmap.client;
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.client.internal.MessageSender;
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
+import org.ipoliakov.dmap.common.network.MessageSender;
 import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.protocol.GetReq;

@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.repair;
+package org.ipoliakov.dmap.node.tx.repair;
 
 import java.io.FileNotFoundException;
 import java.util.EnumMap;

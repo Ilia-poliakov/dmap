@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.node.IntegrationTest;
 import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
+import org.ipoliakov.dmap.node.tx.repair.RepairManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

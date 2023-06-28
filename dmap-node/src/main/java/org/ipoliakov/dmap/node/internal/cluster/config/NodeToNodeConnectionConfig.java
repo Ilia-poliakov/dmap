@@ -2,7 +2,6 @@ package org.ipoliakov.dmap.node.internal.cluster.config;
 
 import static org.ipoliakov.dmap.node.config.NetworkBaseConfig.threadEventLoopGroup;
 
-import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -28,15 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class NodeToNodeConnectionConfig implements InitializingBean {
 
-    @Value("${server.port}")
-    private int ownPort;
     @Value("${server.bossThreadNumber}")
     private int bossThreadNumber;
     @Value("${node.reconnectIntervalMillis}")
     private long networkReconnectIntervalMillis;
-
-    @Value("#{'${node.ports}'.split(',')}")
-    private List<String> ports;
+    @Value("${node.addresses}")
+    private String addresses;
 
     @Autowired
     private EventLoopGroup nodeToNodeEventLoopGroup;
@@ -47,37 +43,38 @@ public class NodeToNodeConnectionConfig implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        for (String port : ports) {
-            int p = Integer.parseInt(port);
-            if (p != ownPort) {
-                connect(p);
-            }
+        for (String address : addresses.split(",")) {
+            String[] idHostPort = address.split("[$:]");
+            int id = Integer.parseInt(idHostPort[0]);
+            String host = idHostPort[1];
+            int port = Integer.parseInt(idHostPort[2]);
+            connect(id, host, port);
         }
     }
 
-    private void connect(int port) {
+    private void connect(int id, String host, int port) {
         new Bootstrap().group(nodeToNodeEventLoopGroup)
                 .channel(channel())
                 .handler(nodeToNodeChannelPipelineInitializer)
-                .connect("localhost", port)
+                .connect(host, port)
                 .addListener((ChannelFutureListener) future -> {
                     if (future.isSuccess()) {
                         Channel channel = future.channel();
                         log.debug("Successfully connected to channel = {}", channel);
                         channel.closeFuture().addListener((ChannelFutureListener) future1 -> {
                             log.debug("Channel {} closed", future1.channel());
-                            scheduleConnect(port);
+                            scheduleConnect(id, host, port);
                         });
                     } else {
                         log.warn("Failed to connect to {}", future.channel(), future.cause());
-                        scheduleConnect(port);
+                        scheduleConnect(id, host, port);
                     }
                 });
     }
 
-    private void scheduleConnect(int port) {
+    private void scheduleConnect(int id, String host, int port) {
         log.warn("Scheduling reconnect to node on port {} in {} ms", port, networkReconnectIntervalMillis);
-        reconnectionExecutor.schedule(() -> connect(port), networkReconnectIntervalMillis, TimeUnit.MILLISECONDS);
+        reconnectionExecutor.schedule(() -> connect(id, host, port), networkReconnectIntervalMillis, TimeUnit.MILLISECONDS);
     }
 
     @Bean
@@ -86,8 +83,13 @@ public class NodeToNodeConnectionConfig implements InitializingBean {
     }
 
     @Bean
-    public NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer() {
-        return new NodeToNodeChannelPipelineInitializer(new ResponseFutures(), new ProtoMessageFactory());
+    public NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer(ResponseFutures responseFutures, ProtoMessageFactory protoMessageFactory) {
+        return new NodeToNodeChannelPipelineInitializer(responseFutures, protoMessageFactory);
+    }
+
+    @Bean
+    public ResponseFutures responseFutures() {
+        return new ResponseFutures();
     }
 
     private static Class<? extends SocketChannel> channel() {

@@ -1,8 +1,7 @@
-package org.ipoliakov.dmap.node;
+package org.ipoliakov.dmap.node.server;
 
 import static org.ipoliakov.dmap.node.config.NetworkBaseConfig.threadEventLoopGroup;
 
-import org.ipoliakov.dmap.node.network.MainPipelineInitializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.network;
+package org.ipoliakov.dmap.node.server;
 
 import static io.netty.channel.ChannelHandler.Sharable;
 

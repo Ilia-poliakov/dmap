@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.network;
+package org.ipoliakov.dmap.node.server;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
 import org.springframework.stereotype.Component;
@@ -28,6 +28,5 @@ public class MainPipelineInitializer extends ChannelInitializer<Channel> {
         pipeline.addLast("protobufEncoder", new ProtobufEncoder());
 
         pipeline.addLast("dispatchingCommand", dispatcherCommandHandler);
-
     }
 }
