@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
-import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PayloadType;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.reflections.Reflections;
 
 import com.google.protobuf.ByteString;

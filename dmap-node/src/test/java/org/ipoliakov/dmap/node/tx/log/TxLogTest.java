@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

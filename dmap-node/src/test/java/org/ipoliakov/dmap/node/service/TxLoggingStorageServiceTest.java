@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
-import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

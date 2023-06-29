@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PayloadType;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;

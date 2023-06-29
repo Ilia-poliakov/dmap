@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
-import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.PutRes;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

@@ -9,7 +9,7 @@ import java.nio.channels.FileChannel;
 
 import org.ipoliakov.dmap.common.ByteBufferUnmapper;
 import org.ipoliakov.dmap.common.OS;
-import org.ipoliakov.dmap.protocol.Operation;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 
 import com.google.protobuf.ByteString;
 

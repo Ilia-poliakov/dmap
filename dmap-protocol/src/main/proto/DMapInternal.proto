@@ -4,7 +4,7 @@ import "DMapMessages.proto";
 
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
-option java_package = "org.ipoliakov.dmap.protocol";
+option java_package = "org.ipoliakov.dmap.protocol.internal";
 option java_outer_classname = "ContainerDMapInternal";
 option optimize_for = SPEED;
 

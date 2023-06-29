@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.node.tx.log.TxLogReader;
 import org.ipoliakov.dmap.node.tx.operation.MutationOperation;
-import org.ipoliakov.dmap.protocol.Operation;
 import org.ipoliakov.dmap.protocol.PayloadType;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;
