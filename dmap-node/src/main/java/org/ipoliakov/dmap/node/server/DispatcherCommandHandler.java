@@ -1,10 +1,10 @@
-package org.ipoliakov.dmap.node.network;
+package org.ipoliakov.dmap.node.server;
 
 import static io.netty.channel.ChannelHandler.Sharable;
 
 import java.util.EnumMap;
 
-import org.ipoliakov.dmap.common.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.command.DefaultCommand;
 import org.ipoliakov.dmap.protocol.DMapMessage;

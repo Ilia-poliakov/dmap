@@ -1,8 +1,7 @@
-package org.ipoliakov.dmap.client.internal;
+package org.ipoliakov.dmap.common.network;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.common.ProtoMessageFactory;
 import org.ipoliakov.dmap.protocol.DMapMessage;
 
 import com.google.protobuf.MessageLite;

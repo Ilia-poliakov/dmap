@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import org.ipoliakov.dmap.client.ClientBuilder;
 import org.ipoliakov.dmap.client.DMapClient;
 import org.ipoliakov.dmap.client.serializer.StringSerializer;
+import org.ipoliakov.dmap.node.server.Server;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -3,8 +3,8 @@ package org.ipoliakov.dmap.client;
 import java.io.Serializable;
 
 import org.ipoliakov.dmap.client.internal.ClientPipelineInitializer;
-import org.ipoliakov.dmap.client.internal.ResponseFutures;
-import org.ipoliakov.dmap.common.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ResponseFutures;
 
 import com.google.protobuf.ByteString;
 

@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.common;
+package org.ipoliakov.dmap.common.network;
 
 import java.lang.reflect.Method;
 import java.util.EnumMap;
