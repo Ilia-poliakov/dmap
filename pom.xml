@@ -29,7 +29,7 @@
         <spring.version>6.0.13</spring.version>
 
         <awaitility.version>4.2.0</awaitility.version>
-        <junit.version>5.10.0</junit.version>
+        <junit.version>5.10.1</junit.version>
         <mockito.version>5.7.0</mockito.version>
     </properties>
 
