@@ -1,5 +1,7 @@
 package org.ipoliakov.dmap.node.service;
 
+import java.util.Objects;
+
 import org.ipoliakov.dmap.node.storage.Storage;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,12 @@ public class StorageServiceImpl implements StorageMutationService, StorageReadOn
 
     public ByteString put(PutReq putReq) {
         ByteString prevVal = storage.put(putReq.getKey(), putReq.getValue());
-        return prevVal != null ? prevVal : ByteString.EMPTY;
+        return Objects.requireNonNullElse(prevVal, ByteString.EMPTY);
     }
 
     @Override
     public ByteString get(ByteString key) {
         ByteString value = storage.get(key);
-        return value != null ? value : ByteString.EMPTY;
+        return Objects.requireNonNullElse(value, ByteString.EMPTY);
     }
 }
