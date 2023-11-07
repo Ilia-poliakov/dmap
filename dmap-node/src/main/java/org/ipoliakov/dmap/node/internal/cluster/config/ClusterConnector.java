@@ -23,7 +23,7 @@ public class ClusterConnector implements InitializingBean {
 
     @Value("${node.reconnectIntervalMillis}")
     private long networkReconnectIntervalMillis;
-    @Value("${node.addresses}")
+    @Value("${node.addresses:}")
     private String addresses;
 
     @Autowired
@@ -37,6 +37,9 @@ public class ClusterConnector implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
+        if (addresses.isBlank()) {
+            return;
+        }
         for (String address : addresses.split(",")) {
             String[] idHostPort = address.split("[$:]");
             int id = Integer.parseInt(idHostPort[0]);
