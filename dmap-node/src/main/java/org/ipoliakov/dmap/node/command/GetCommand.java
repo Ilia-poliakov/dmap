@@ -14,14 +14,13 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class GetCommand implements Command {
+public class GetCommand implements Command<GetReq> {
 
     private final Storage storage;
 
     @Override
-    public MessageLite execute(ChannelHandlerContext ctx, MessageLite message) {
-        GetReq getReq = (GetReq) message;
-        ByteString value = storage.get(getReq.getKey());
+    public MessageLite execute(ChannelHandlerContext ctx, GetReq message) {
+        ByteString value = storage.get(message.getKey());
         return GetRes.newBuilder()
                 .setValue(value != null ? value : ByteString.EMPTY)
                 .setPayloadType(PayloadType.GET_RES)

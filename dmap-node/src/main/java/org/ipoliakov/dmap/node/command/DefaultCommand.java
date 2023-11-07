@@ -10,7 +10,7 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DefaultCommand implements Command {
+public class DefaultCommand implements Command<MessageLite> {
 
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, MessageLite message) {

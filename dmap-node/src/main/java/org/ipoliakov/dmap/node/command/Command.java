@@ -6,9 +6,9 @@ import com.google.protobuf.MessageLite;
 
 import io.netty.channel.ChannelHandlerContext;
 
-public interface Command {
+public interface Command<M extends MessageLite>  {
 
-    MessageLite execute(ChannelHandlerContext ctx, MessageLite message);
+    MessageLite execute(ChannelHandlerContext ctx, M message);
 
     PayloadType getPayloadType();
 }

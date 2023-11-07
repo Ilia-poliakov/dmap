@@ -1,6 +1,6 @@
 package org.ipoliakov.dmap.node.txlog.operation;
 
-import org.ipoliakov.dmap.node.service.StorageService;
+import org.ipoliakov.dmap.node.service.StorageMutationService;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PutOperation implements MutationOperation<PutReq> {
 
-    private final StorageService storageService;
+    private final StorageMutationService storageService;
 
     @Override
     public void execute(PutReq message) {

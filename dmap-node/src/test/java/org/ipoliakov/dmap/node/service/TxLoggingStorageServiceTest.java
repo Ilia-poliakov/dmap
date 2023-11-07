@@ -25,7 +25,7 @@ class TxLoggingStorageServiceTest {
     @Mock
     private TxLogWriter txLogWriter;
     @Mock
-    private StorageService storageService;
+    private StorageMutationService storageService;
 
     @InjectMocks
     private TxLoggingStorageService txLoggingStorageService;
