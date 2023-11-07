@@ -5,21 +5,22 @@ import java.io.UncheckedIOException;
 
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.PutRes;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Service;
+
+import com.google.protobuf.ByteString;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TxLoggingStorageService implements StorageService {
+public class TxLoggingStorageService implements StorageMutationService {
 
     private final TxLogWriter txLogWriter;
-    private final StorageService storageService;
+    private final StorageMutationService storageService;
 
     @Override
-    public PutRes put(PutReq putReq) {
+    public ByteString put(PutReq putReq) {
         try {
             var operation = Operation.newBuilder()
                     .setPayloadType(putReq.getPayloadType())
