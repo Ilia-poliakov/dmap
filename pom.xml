@@ -16,12 +16,14 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <netty.version>4.1.100.Final</netty.version>
         <protobuf.version>3.25.0</protobuf.version>
+        <slf4j.version>2.0.9</slf4j.version>
         <logback.version>1.4.11</logback.version>
         <lombok.version>1.18.30</lombok.version>
         <reflections.version>0.10.2</reflections.version>
@@ -73,6 +75,11 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
