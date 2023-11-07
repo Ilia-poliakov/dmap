@@ -1,5 +1,7 @@
 package org.ipoliakov.dmap.node;
 
+import java.io.File;
+
 import org.ipoliakov.dmap.client.DMapClient;
 import org.ipoliakov.dmap.node.storage.SimpleMapStorage;
 import org.junit.jupiter.api.AfterEach;
@@ -18,9 +20,12 @@ public abstract class IntegrationTest {
     protected SimpleMapStorage storage;
     @Autowired
     protected DMapClient<String, String> client;
+    @Autowired
+    private File txLogFile;
 
     @AfterEach
     void tearDown() {
         storage.clear();
+        txLogFile.deleteOnExit();
     }
 }
