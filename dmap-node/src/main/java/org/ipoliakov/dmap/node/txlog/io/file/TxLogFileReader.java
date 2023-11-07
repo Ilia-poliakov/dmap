@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.tx.log;
+package org.ipoliakov.dmap.node.txlog.io.file;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -11,6 +11,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.ipoliakov.dmap.node.txlog.exception.TxLogReadingException;
+import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 
@@ -22,15 +24,21 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class TxLogReader {
+public class TxLogFileReader implements TxLogReader {
 
     private final File logFile;
 
-    public Stream<Operation> read() throws FileNotFoundException {
-        BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(logFile));
-        CodedInputStream in = CodedInputStream.newInstance(inputStream);
-        return StreamSupport.stream(new TxLogSpliterator(in), false)
-                .onClose(() -> close(inputStream));
+    @Override
+    public Stream<Operation> readAll() {
+        try {
+            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(logFile));
+            CodedInputStream in = CodedInputStream.newInstance(inputStream);
+            return StreamSupport.stream(new TxLogSpliterator(in), false)
+                    .onClose(() -> close(inputStream));
+        } catch (FileNotFoundException e) {
+            log.error("Could not open log file", e);
+            throw new TxLogReadingException(e);
+        }
     }
 
     private void close(InputStream inputStream) {

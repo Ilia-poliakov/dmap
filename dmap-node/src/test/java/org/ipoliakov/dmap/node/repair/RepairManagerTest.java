@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.node.IntegrationTest;
-import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
-import org.ipoliakov.dmap.node.tx.repair.RepairManager;
+import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
+import org.ipoliakov.dmap.node.txlog.repair.RepairManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +17,7 @@ class RepairManagerTest extends IntegrationTest {
     @Autowired
     private RepairManager repairManager;
     @Autowired
-    private TxLogWriter txLogWriter;
+    private TxLogFileWriter txLogWriter;
 
     @Test
     void repairAll() throws Exception {

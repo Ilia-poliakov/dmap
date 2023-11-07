@@ -1,12 +1,11 @@
-package org.ipoliakov.dmap.node.tx.repair;
+package org.ipoliakov.dmap.node.txlog.repair;
 
-import java.io.FileNotFoundException;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
 import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
-import org.ipoliakov.dmap.node.tx.log.TxLogReader;
-import org.ipoliakov.dmap.node.tx.operation.MutationOperation;
+import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
+import org.ipoliakov.dmap.node.txlog.operation.MutationOperation;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Component;
@@ -28,14 +27,12 @@ public class RepairManager {
     public void repairAll() {
         log.info("Repairing start");
 
-        try (Stream<Operation> operations = txLogReader.read()) {
+        try (Stream<Operation> operations = txLogReader.readAll()) {
             operations.forEach(operation -> {
                 MessageLite messageLite = protoMessageFactory.parsePayload(operation);
                 MutationOperation op = operationMap.get(operation.getPayloadType());
                 op.execute(messageLite);
             });
-        } catch (FileNotFoundException e) {
-            throw new IllegalStateException("Transaction log file not found", e);
         }
 
         log.info("Repairing finished");

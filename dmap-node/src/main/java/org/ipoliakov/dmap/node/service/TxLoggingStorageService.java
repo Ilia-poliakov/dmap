@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.service;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
+import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.PutRes;
 import org.ipoliakov.dmap.protocol.internal.Operation;

@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.tx.config;
+package org.ipoliakov.dmap.node.txlog.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.ipoliakov.dmap.node.tx.log.TxLogReader;
-import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
-import org.ipoliakov.dmap.node.tx.operation.MutationOperation;
+import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
+import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
+import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileReader;
+import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
+import org.ipoliakov.dmap.node.txlog.operation.MutationOperation;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,13 +32,13 @@ public class TxConfig {
 
     @Bean
     public TxLogReader txLogReader(File txLogFile) {
-        return new TxLogReader(txLogFile);
+        return new TxLogFileReader(txLogFile);
     }
 
     @Bean
     public TxLogWriter txLogWriter(File txLogFile) throws IOException {
         txLogFile.createNewFile();
-        return new TxLogWriter(txLogFile, growSize);
+        return new TxLogFileWriter(txLogFile, growSize);
     }
 
     @Bean

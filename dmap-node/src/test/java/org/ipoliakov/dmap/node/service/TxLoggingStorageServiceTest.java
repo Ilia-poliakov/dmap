@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.ipoliakov.dmap.node.tx.log.TxLogWriter;
+import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.junit.jupiter.api.Test;

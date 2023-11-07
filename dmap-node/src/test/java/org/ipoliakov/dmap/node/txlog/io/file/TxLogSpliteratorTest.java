@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.tx.log;
+package org.ipoliakov.dmap.node.txlog.io.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -22,7 +22,7 @@ class TxLogSpliteratorTest {
 
     @Test
     void characteristicsTest() {
-        TxLogReader.TxLogSpliterator spliterator = new TxLogReader.TxLogSpliterator(CodedInputStream.newInstance(new byte[0]));
+        TxLogFileReader.TxLogSpliterator spliterator = new TxLogFileReader.TxLogSpliterator(CodedInputStream.newInstance(new byte[0]));
         assertEquals(Spliterator.ORDERED, spliterator.characteristics(), "TxLogSpliterator must be ORDERED");
         assertNull(spliterator.trySplit(), "TxLogSpliterator cannot be split");
         assertEquals(Long.MAX_VALUE, spliterator.estimateSize());
@@ -39,7 +39,7 @@ class TxLogSpliteratorTest {
                 .setTimestamp(System.currentTimeMillis())
                 .setMessage(req.toByteString())
                 .build();
-        TxLogReader.TxLogSpliterator spliterator = new TxLogReader.TxLogSpliterator(CodedInputStream.newInstance(operation.toByteArray()));
+        TxLogFileReader.TxLogSpliterator spliterator = new TxLogFileReader.TxLogSpliterator(CodedInputStream.newInstance(operation.toByteArray()));
 
         final List<Operation> operations = new ArrayList<>(1);
         spliterator.tryAdvance(operations::add);
@@ -51,7 +51,7 @@ class TxLogSpliteratorTest {
     void readOne_exception() throws IOException {
         CodedInputStream codedInputStream = Mockito.mock(CodedInputStream.class);
         Mockito.when(codedInputStream.readTag()).thenThrow(new IOException());
-        TxLogReader.TxLogSpliterator spliterator = new TxLogReader.TxLogSpliterator(codedInputStream);
+        TxLogFileReader.TxLogSpliterator spliterator = new TxLogFileReader.TxLogSpliterator(codedInputStream);
         assertThrows(RuntimeException.class, () -> spliterator.tryAdvance(op -> {}));
     }
 }

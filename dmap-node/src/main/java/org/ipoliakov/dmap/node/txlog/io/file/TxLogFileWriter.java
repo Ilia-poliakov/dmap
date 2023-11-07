@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.tx.log;
+package org.ipoliakov.dmap.node.txlog.io.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 
 import org.ipoliakov.dmap.common.ByteBufferUnmapper;
 import org.ipoliakov.dmap.common.OS;
+import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 
 import com.google.protobuf.ByteString;
@@ -16,13 +17,14 @@ import com.google.protobuf.ByteString;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class TxLogWriter implements AutoCloseable {
+public class TxLogFileWriter implements TxLogWriter {
 
     private final File logFile;
     private final long growSize;
 
     private ByteBuffer mmap = ByteBuffer.allocate(0);
 
+    @Override
     public void write(Operation operation) throws IOException {
         ByteString bytes = operation.toByteString();
         if (mmap.remaining() < bytes.size()) {
@@ -41,6 +43,7 @@ public class TxLogWriter implements AutoCloseable {
         mmap = null;
     }
 
+    @Override
     public void flush() throws IOException {
         ((MappedByteBuffer) mmap).force();
         resize(mmap.position() - mmap.limit());

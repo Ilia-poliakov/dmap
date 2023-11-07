@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.tx.operation;
+package org.ipoliakov.dmap.node.txlog.operation;
 
 import org.ipoliakov.dmap.protocol.PayloadType;
 

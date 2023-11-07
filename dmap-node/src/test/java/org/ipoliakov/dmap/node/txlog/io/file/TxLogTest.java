@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.tx.log;
+package org.ipoliakov.dmap.node.txlog.io.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.internal.Operation;
@@ -35,7 +36,7 @@ class TxLogTest {
 
     @Test
     void writeRead() throws IOException {
-        TxLogWriter txLogWriter = new TxLogWriter(tempFile, 64);
+        TxLogFileWriter txLogWriter = new TxLogFileWriter(tempFile, 64);
         List<Operation> expected = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             PutReq req = PutReq.newBuilder()
@@ -52,9 +53,9 @@ class TxLogTest {
         }
         txLogWriter.close();
 
-        TxLogReader txLogReader = new TxLogReader(tempFile);
+        TxLogReader txLogReader = new TxLogFileReader(tempFile);
         List<Operation> actual;
-        try (Stream<Operation> operations = txLogReader.read()) {
+        try (Stream<Operation> operations = txLogReader.readAll()) {
             actual = operations.collect(Collectors.toList());
         }
 
