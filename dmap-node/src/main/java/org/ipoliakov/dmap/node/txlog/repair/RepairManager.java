@@ -22,7 +22,7 @@ public class RepairManager {
 
     private final TxLogReader txLogReader;
     private final ProtoMessageFactory protoMessageFactory;
-    private final EnumMap<PayloadType, MutationOperation> operationMap;
+    private final EnumMap<PayloadType, MutationOperation<MessageLite>> operationMap;
 
     public void repairAll() {
         log.info("Repairing start");
@@ -30,7 +30,7 @@ public class RepairManager {
         try (Stream<Operation> operations = txLogReader.readAll()) {
             operations.forEach(operation -> {
                 MessageLite messageLite = protoMessageFactory.parsePayload(operation);
-                MutationOperation op = operationMap.get(operation.getPayloadType());
+                MutationOperation<MessageLite> op = operationMap.get(operation.getPayloadType());
                 op.execute(messageLite);
             });
         }
