@@ -13,6 +13,8 @@ enum PayloadType {
   PUT_RES = 2;
   GET_REQ = 3;
   GET_RES = 4;
+  REMOVE_REQ = 5;
+  REMOVE_RES = 6;
 }
 
 message DMapMessage {
@@ -40,6 +42,17 @@ message GetReq {
 message GetRes {
   PayloadType payloadType = 1;
   bytes value = 2;
+}
+
+message RemoveReq {
+  PayloadType payloadType = 1;
+  bytes key = 2;
+  bytes value = 3;
+}
+
+message RemoveRes {
+  PayloadType payloadType = 1;
+  bytes removedValue = 2;
 }
 
 message ErrorMessage {

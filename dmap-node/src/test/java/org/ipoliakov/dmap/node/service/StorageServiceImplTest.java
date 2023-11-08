@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 
 import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.RemoveReq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,4 +67,27 @@ class StorageServiceImplTest {
         assertEquals(ByteString.EMPTY, actualValue);
     }
 
+    @Test
+    @DisplayName("remove - remove value and return it")
+    void remove_returnRemovedValue() {
+        storageService.put(PutReq.newBuilder()
+                .setKey(KEY)
+                .setValue(VALUE)
+                .build());
+        RemoveReq req = RemoveReq.newBuilder()
+                .setKey(KEY)
+                .build();
+        ByteString removedValue = storageService.remove(req);
+        assertEquals(VALUE, removedValue);
+    }
+
+    @Test
+    @DisplayName("remove - return empty value if nothing to delete")
+    void remove_returnEmpty_ifNotExists() {
+        RemoveReq req = RemoveReq.newBuilder()
+                .setKey(KEY)
+                .build();
+        ByteString removedValue = storageService.remove(req);
+        assertEquals(ByteString.EMPTY, removedValue);
+    }
 }

@@ -12,6 +12,8 @@ import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.PutRes;
+import org.ipoliakov.dmap.protocol.RemoveReq;
+import org.ipoliakov.dmap.protocol.RemoveRes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
@@ -57,6 +59,19 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                 .build();
         return messageSender.send(req, PutRes.class)
                 .thenApply(PutRes::getValue)
+                .thenApply(valueSerializer::dserialize)
+                .exceptionally(t -> handleError(req, t));
+    }
+
+    @Override
+    public CompletableFuture<V> remove(K key, V value) {
+        RemoveReq req = RemoveReq.newBuilder()
+                .setPayloadType(PayloadType.REMOVE_REQ)
+                .setKey(keySerializer.serialize(key))
+                .setValue(valueSerializer.serialize(value))
+                .build();
+        return messageSender.send(req, RemoveRes.class)
+                .thenApply(RemoveRes::getRemovedValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));
     }

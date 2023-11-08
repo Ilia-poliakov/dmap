@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.RemoveReq;
 import org.springframework.stereotype.Service;
 
 import com.google.protobuf.ByteString;
@@ -16,9 +17,16 @@ public class StorageServiceImpl implements StorageMutationService, StorageReadOn
 
     private final Map<ByteString, ByteString> dataStorage;
 
-    public ByteString put(PutReq putReq) {
-        ByteString prevVal = dataStorage.put(putReq.getKey(), putReq.getValue());
+    @Override
+    public ByteString put(PutReq req) {
+        ByteString prevVal = dataStorage.put(req.getKey(), req.getValue());
         return Objects.requireNonNullElse(prevVal, ByteString.EMPTY);
+    }
+
+    @Override
+    public ByteString remove(RemoveReq req) {
+        ByteString removed = dataStorage.remove(req.getKey());
+        return Objects.requireNonNullElse(removed, ByteString.EMPTY);
     }
 
     @Override

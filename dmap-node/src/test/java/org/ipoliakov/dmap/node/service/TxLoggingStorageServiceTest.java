@@ -1,15 +1,18 @@
 package org.ipoliakov.dmap.node.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.RemoveReq;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +43,23 @@ class TxLoggingStorageServiceTest {
 
         verify(txLogWriter).write(any(Operation.class));
         verify(storageService).put(putReq);
+    }
+
+    @Test
+    void remove() throws IOException {
+        ByteString expectedRemovedValue = ByteString.copyFromUtf8("removed");
+        when(storageService.remove(any(RemoveReq.class)))
+                .thenReturn(expectedRemovedValue);
+
+        RemoveReq req = RemoveReq.newBuilder()
+                .setKey(ByteString.copyFromUtf8("key"))
+                .setValue(ByteString.copyFromUtf8("val"))
+                .build();
+        ByteString actualRemovedValue = txLoggingStorageService.remove(req);
+
+        assertEquals(expectedRemovedValue, actualRemovedValue);
+        verify(txLogWriter).write(any(Operation.class));
+        verify(storageService).remove(req);
     }
 
     @Test
