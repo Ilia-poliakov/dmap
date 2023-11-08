@@ -53,7 +53,6 @@ class TxLoggingStorageServiceTest {
 
         RemoveReq req = RemoveReq.newBuilder()
                 .setKey(ByteString.copyFromUtf8("key"))
-                .setValue(ByteString.copyFromUtf8("val"))
                 .build();
         ByteString actualRemovedValue = txLoggingStorageService.remove(req);
 

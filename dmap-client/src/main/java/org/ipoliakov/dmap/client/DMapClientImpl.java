@@ -66,7 +66,6 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
         RemoveReq req = RemoveReq.newBuilder()
                 .setPayloadType(PayloadType.REMOVE_REQ)
                 .setKey(keySerializer.serialize(key))
-                .setValue(valueSerializer.serialize(value))
                 .build();
         return messageSender.send(req, ValueRes.class)
                 .thenApply(ValueRes::getValue)
