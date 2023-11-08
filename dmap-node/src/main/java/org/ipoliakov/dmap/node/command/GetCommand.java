@@ -1,6 +1,6 @@
 package org.ipoliakov.dmap.node.command;
 
-import org.ipoliakov.dmap.node.storage.Storage;
+import org.ipoliakov.dmap.node.service.StorageReadOnlyService;
 import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -16,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetCommand implements Command<GetReq> {
 
-    private final Storage storage;
+    private final StorageReadOnlyService storageService;
 
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, GetReq message) {
-        ByteString value = storage.get(message.getKey());
+        ByteString value = storageService.get(message.getKey());
         return GetRes.newBuilder()
-                .setValue(value != null ? value : ByteString.EMPTY)
+                .setValue(value)
                 .setPayloadType(PayloadType.GET_RES)
                 .build();
     }

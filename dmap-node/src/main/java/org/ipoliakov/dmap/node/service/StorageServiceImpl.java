@@ -1,8 +1,8 @@
 package org.ipoliakov.dmap.node.service;
 
+import java.util.Map;
 import java.util.Objects;
 
-import org.ipoliakov.dmap.node.storage.Storage;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +14,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StorageServiceImpl implements StorageMutationService, StorageReadOnlyService {
 
-    private final Storage storage;
+    private final Map<ByteString, ByteString> dataStorage;
 
     public ByteString put(PutReq putReq) {
-        ByteString prevVal = storage.put(putReq.getKey(), putReq.getValue());
+        ByteString prevVal = dataStorage.put(putReq.getKey(), putReq.getValue());
         return Objects.requireNonNullElse(prevVal, ByteString.EMPTY);
     }
 
     @Override
     public ByteString get(ByteString key) {
-        ByteString value = storage.get(key);
-        return Objects.requireNonNullElse(value, ByteString.EMPTY);
+        return dataStorage.getOrDefault(key, ByteString.EMPTY);
     }
 }

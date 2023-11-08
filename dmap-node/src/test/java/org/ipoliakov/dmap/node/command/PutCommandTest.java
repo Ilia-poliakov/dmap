@@ -14,7 +14,7 @@ class PutCommandTest extends IntegrationTest {
     void execute() throws Exception {
         String prev = client.put("key", "value").get();
 
-        ByteString actualVal = storage.get(ByteString.copyFromUtf8("key"));
+        ByteString actualVal = dataStorage.get(ByteString.copyFromUtf8("key"));
         ByteString expectedVal = ByteString.copyFromUtf8("value");
         assertEquals(expectedVal, actualVal);
 
@@ -26,7 +26,7 @@ class PutCommandTest extends IntegrationTest {
         client.put("key", "value1").get();
         String prev = client.put("key", "value2").get();
 
-        ByteString actualVal = storage.get(ByteString.copyFromUtf8("key"));
+        ByteString actualVal = dataStorage.get(ByteString.copyFromUtf8("key"));
         assertEquals("value2", actualVal.toStringUtf8());
         assertEquals("value1", prev);
     }

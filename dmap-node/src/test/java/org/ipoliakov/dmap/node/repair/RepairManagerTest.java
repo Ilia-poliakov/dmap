@@ -26,12 +26,12 @@ class RepairManagerTest extends IntegrationTest {
             client.put("key" + i, "value" + i).get(10, TimeUnit.SECONDS);
         }
         txLogWriter.flush();
-        storage.clear();
+        dataStorage.clear();
 
         repairManager.repairAll();
 
         for (int i = 0; i < operationCount; i++) {
-            ByteString bytes = storage.get(ByteString.copyFromUtf8("key" + i));
+            ByteString bytes = dataStorage.get(ByteString.copyFromUtf8("key" + i));
             assertEquals(bytes.toStringUtf8(), "value" + i);
         }
     }
