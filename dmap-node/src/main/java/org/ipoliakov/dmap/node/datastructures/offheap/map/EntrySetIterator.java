@@ -21,7 +21,7 @@ public class EntrySetIterator implements Iterator<Map.Entry<ByteString, ByteStri
 
     @Override
     public boolean hasNext() {
-        while ((currentPtr = map.buf.readIntLE()) == 0) { }
+        while ((currentPtr = map.buf.readIntLE()) == 0);
         return currentPtr < map.buf.capacity();
     }
 

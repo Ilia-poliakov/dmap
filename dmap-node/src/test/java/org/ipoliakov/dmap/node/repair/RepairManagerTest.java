@@ -1,6 +1,7 @@
 package org.ipoliakov.dmap.node.repair;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,12 +26,14 @@ class RepairManagerTest extends IntegrationTest {
         for (int i = 0; i < operationCount; i++) {
             client.put("key" + i, "value" + i).get(10, TimeUnit.SECONDS);
         }
+        client.remove("key0", "value0").get(10, TimeUnit.SECONDS);
         txLogWriter.flush();
         dataStorage.clear();
 
         repairManager.repairAll();
 
-        for (int i = 0; i < operationCount; i++) {
+        assertFalse(dataStorage.containsKey(ByteString.copyFromUtf8("key0")));
+        for (int i = 1; i < operationCount; i++) {
             ByteString bytes = dataStorage.get(ByteString.copyFromUtf8("key" + i));
             assertEquals(bytes.toStringUtf8(), "value" + i);
         }
