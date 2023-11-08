@@ -1,8 +1,8 @@
 package org.ipoliakov.dmap.node.command;
 
 import org.ipoliakov.dmap.node.service.StorageReadOnlyService;
+import org.ipoliakov.dmap.node.utils.ProtoUtils;
 import org.ipoliakov.dmap.protocol.GetReq;
-import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +21,7 @@ public class GetCommand implements Command<GetReq> {
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, GetReq message) {
         ByteString value = storageService.get(message.getKey());
-        return GetRes.newBuilder()
-                .setValue(value)
-                .setPayloadType(PayloadType.GET_RES)
-                .build();
+        return ProtoUtils.valueRes(value);
     }
 
     @Override

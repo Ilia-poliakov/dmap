@@ -8,12 +8,10 @@ import org.ipoliakov.dmap.common.network.MessageSender;
 import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.protocol.GetReq;
-import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.PutRes;
 import org.ipoliakov.dmap.protocol.RemoveReq;
-import org.ipoliakov.dmap.protocol.RemoveRes;
+import org.ipoliakov.dmap.protocol.ValueRes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
@@ -44,8 +42,8 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                 .setPayloadType(PayloadType.GET_REQ)
                 .setKey(keySerializer.serialize(key))
                 .build();
-        return messageSender.send(req, GetRes.class)
-                .thenApply(GetRes::getValue)
+        return messageSender.send(req, ValueRes.class)
+                .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));
     }
@@ -57,8 +55,8 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                 .setKey(keySerializer.serialize(key))
                 .setValue(valueSerializer.serialize(value))
                 .build();
-        return messageSender.send(req, PutRes.class)
-                .thenApply(PutRes::getValue)
+        return messageSender.send(req, ValueRes.class)
+                .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));
     }
@@ -70,8 +68,8 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                 .setKey(keySerializer.serialize(key))
                 .setValue(valueSerializer.serialize(value))
                 .build();
-        return messageSender.send(req, RemoveRes.class)
-                .thenApply(RemoveRes::getRemovedValue)
+        return messageSender.send(req, ValueRes.class)
+                .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));
     }

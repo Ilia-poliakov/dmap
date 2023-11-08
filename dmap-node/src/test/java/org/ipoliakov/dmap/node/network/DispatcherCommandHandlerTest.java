@@ -13,9 +13,9 @@ import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.server.DispatcherCommandHandler;
 import org.ipoliakov.dmap.protocol.DMapMessage;
-import org.ipoliakov.dmap.protocol.GetRes;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.ValueRes;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -40,7 +40,7 @@ class DispatcherCommandHandlerTest {
                 .setMessageId(1)
                 .setPayload(PutReq.getDefaultInstance().toByteString())
                 .build();
-        when(protoMessageFactory.parsePayload(message)).thenReturn(GetRes.getDefaultInstance());
+        when(protoMessageFactory.parsePayload(message)).thenReturn(ValueRes.getDefaultInstance());
 
         EnumMap<PayloadType, Command> commandMap = new EnumMap<>(Map.of(PayloadType.GET_REQ, command));
         var dispatcher = new DispatcherCommandHandler(protoMessageFactory, commandMap);

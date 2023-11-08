@@ -1,9 +1,9 @@
 package org.ipoliakov.dmap.node.command;
 
 import org.ipoliakov.dmap.node.service.StorageMutationService;
+import org.ipoliakov.dmap.node.utils.ProtoUtils;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.RemoveReq;
-import org.ipoliakov.dmap.protocol.RemoveRes;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.ByteString;
@@ -21,10 +21,7 @@ public class RemoveCommand implements Command<RemoveReq> {
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, RemoveReq req) {
         ByteString removedValue = txLoggingStorageService.remove(req);
-        return RemoveRes.newBuilder()
-                .setRemovedValue(removedValue)
-                .setPayloadType(PayloadType.REMOVE_RES)
-                .build();
+        return ProtoUtils.valueRes(removedValue);
     }
 
     @Override
