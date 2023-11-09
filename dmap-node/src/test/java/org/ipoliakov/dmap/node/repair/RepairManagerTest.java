@@ -22,18 +22,18 @@ class RepairManagerTest extends IntegrationTest {
 
     @Test
     void repairAll() throws Exception {
-        int operationCount = 5;
-        for (int i = 0; i < operationCount; i++) {
+        int operationCount = 6;
+        for (int i = 1; i < operationCount; i++) {
             client.put("key" + i, "value" + i).get(10, TimeUnit.SECONDS);
         }
-        client.remove("key0", "value0").get(10, TimeUnit.SECONDS);
+        client.remove("key1", "value1").get(10, TimeUnit.SECONDS);
         txLogWriter.flush();
         dataStorage.clear();
 
         repairManager.repairAll();
 
-        assertFalse(dataStorage.containsKey(ByteString.copyFromUtf8("key0")));
-        for (int i = 1; i < operationCount; i++) {
+        assertFalse(dataStorage.containsKey(ByteString.copyFromUtf8("key1")));
+        for (int i = 2; i < operationCount; i++) {
             ByteString bytes = dataStorage.get(ByteString.copyFromUtf8("key" + i));
             assertEquals(bytes.toStringUtf8(), "value" + i);
         }
