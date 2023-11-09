@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.ipoliakov.dmap.node.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileReader;
@@ -19,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TxConfig {
+public class TxLogConfig {
 
     @Value("${tx.log.file.growSize}")
     private Long growSize;
@@ -39,6 +40,11 @@ public class TxConfig {
     public TxLogWriter txLogWriter(File txLogFile) throws IOException {
         txLogFile.createNewFile();
         return new TxLogFileWriter(txLogFile, growSize);
+    }
+
+    @Bean
+    public IntRingBuffer txLogFileIndex(@Value("${tx.log.index.capacity:4096}") int capacity) {
+        return new IntRingBuffer(capacity);
     }
 
     @Bean

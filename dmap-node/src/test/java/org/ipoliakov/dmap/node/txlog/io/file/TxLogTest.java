@@ -38,14 +38,14 @@ class TxLogTest {
     void writeRead() throws IOException {
         TxLogFileWriter txLogWriter = new TxLogFileWriter(tempFile, 64);
         List<Operation> expected = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             PutReq req = PutReq.newBuilder()
                     .setKey(ByteString.copyFromUtf8("key" + i))
                     .setValue(ByteString.copyFromUtf8("value" + i))
                     .build();
             Operation operation = Operation.newBuilder()
                     .setPayloadType(PayloadType.PUT_REQ)
-                    .setTimestamp(System.currentTimeMillis())
+                    .setLogIndex(i)
                     .setMessage(req.toByteString())
                     .build();
             txLogWriter.write(operation);

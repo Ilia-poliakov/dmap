@@ -2,6 +2,7 @@ package org.ipoliakov.dmap.node.service;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -18,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TxLoggingStorageService implements StorageMutationService {
+
+    private static final AtomicLong index = new AtomicLong();
 
     private final TxLogWriter txLogWriter;
     private final StorageMutationService storageService;
@@ -38,7 +41,8 @@ public class TxLoggingStorageService implements StorageMutationService {
         try {
             var operation = Operation.newBuilder()
                     .setPayloadType(payloadType)
-                    .setTimestamp(System.currentTimeMillis())
+                    //TODO: User last index when raft implementing. Should start from 1, not 0
+                    .setLogIndex(index.incrementAndGet())
                     .setMessage(messageLite.toByteString())
                     .build();
             txLogWriter.write(operation);

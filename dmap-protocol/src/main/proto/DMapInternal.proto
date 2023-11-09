@@ -10,6 +10,6 @@ option optimize_for = SPEED;
 
 message Operation {
   PayloadType payloadType = 1;
-  int64 timestamp = 2;
+  int64 logIndex = 2;
   bytes message = 3;
 }

@@ -25,12 +25,14 @@ public class TxLogFileWriter implements TxLogWriter {
     private ByteBuffer mmap = ByteBuffer.allocate(0);
 
     @Override
-    public void write(Operation operation) throws IOException {
+    public int write(Operation operation) throws IOException {
         ByteString bytes = operation.toByteString();
         if (mmap.remaining() < bytes.size()) {
             resize(growSize);
         }
+        int address = mmap.position();
         bytes.copyTo(mmap);
+        return address;
     }
 
     @Override

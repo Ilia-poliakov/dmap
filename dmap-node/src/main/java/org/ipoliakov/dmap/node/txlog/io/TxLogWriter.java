@@ -6,7 +6,7 @@ import org.ipoliakov.dmap.protocol.internal.Operation;
 
 public interface TxLogWriter extends AutoCloseable {
 
-    void write(Operation operation) throws IOException;
+    int write(Operation operation) throws IOException;
 
     void flush() throws IOException;
 }
