@@ -7,12 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.ipoliakov.dmap.node.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import com.google.protobuf.ByteString;
 
 class RemoveCommandTest extends IntegrationTest {
 
     @Test
+    @Timeout(10)
     void execute() throws Exception {
         String value = "value";
         dataStorage.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8(value));
@@ -22,6 +24,7 @@ class RemoveCommandTest extends IntegrationTest {
     }
 
     @Test
+    @Timeout(10)
     @DisplayName("execute - return empty when nothing to remove")
     void execute_returnEmptyWhenNothingToRemove() throws Exception {
         String removedValue = client.remove("key", "value").get();

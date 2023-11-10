@@ -19,10 +19,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TxLogFileWriter implements TxLogWriter {
 
+    private static final ByteBuffer EMPTY_BUFFER = ByteBuffer.allocate(0);
+
     private final File logFile;
     private final long growSize;
 
-    private ByteBuffer mmap = ByteBuffer.allocate(0);
+    private ByteBuffer mmap = EMPTY_BUFFER;
 
     @Override
     public int write(Operation operation) throws IOException {
@@ -42,13 +44,15 @@ public class TxLogFileWriter implements TxLogWriter {
         }
         flush();
         forceUnmapOnWindows();
-        mmap = null;
+        mmap = EMPTY_BUFFER;
     }
 
     @Override
     public void flush() throws IOException {
-        ((MappedByteBuffer) mmap).force();
-        resize(mmap.position() - mmap.limit());
+        if (mmap.remaining() > 0) {
+            ((MappedByteBuffer) mmap).force();
+            resize(mmap.position() - mmap.limit());
+        }
     }
 
     private void resize(long deltaSize) throws IOException {

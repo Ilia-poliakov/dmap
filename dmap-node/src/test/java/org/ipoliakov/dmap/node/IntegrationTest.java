@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import org.ipoliakov.dmap.client.DMapClient;
+import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,13 @@ public abstract class IntegrationTest {
     protected DMapClient<String, String> client;
     @Autowired
     private File txLogFile;
+    @Autowired
+    private TxLogWriter txLogWriter;
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
         dataStorage.clear();
-        txLogFile.deleteOnExit();
+        txLogWriter.close();
+        txLogFile.delete();
     }
 }
