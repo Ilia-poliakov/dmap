@@ -5,6 +5,10 @@ import static org.ipoliakov.dmap.node.internal.cluster.config.NodeToNodeConnecti
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.ipoliakov.dmap.common.network.MessageSender;
+import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ResponseFutures;
+import org.ipoliakov.dmap.node.internal.cluster.RaftCluster;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +18,6 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.group.ChannelGroup;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,7 +36,11 @@ public class ClusterConnector implements InitializingBean {
     @Autowired
     private NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer;
     @Autowired
-    private ChannelGroup clusterChannelGroup;
+    private RaftCluster raftCluster;
+    @Autowired
+    private ResponseFutures responseFutures;
+    @Autowired
+    private ProtoMessageFactory protoMessageFactory;
 
     @Override
     public void afterPropertiesSet() {
@@ -49,7 +56,7 @@ public class ClusterConnector implements InitializingBean {
         }
     }
 
-    private void connect(int id, String host, int port) {
+    private void connect(int nodeId, String host, int port) {
         new Bootstrap().group(nodeToNodeEventLoopGroup)
                 .channel(channel())
                 .handler(nodeToNodeChannelPipelineInitializer)
@@ -57,19 +64,19 @@ public class ClusterConnector implements InitializingBean {
                 .addListener((ChannelFutureListener) future -> {
                     if (future.isSuccess()) {
                         Channel channel = future.channel();
-                        clusterChannelGroup.add(channel);
+                        raftCluster.addMessageSender(nodeId, new MessageSender(channel, responseFutures, protoMessageFactory));
                         log.debug("Successfully connected to channel = {}", channel);
                         channel.closeFuture().addListener((ChannelFutureListener) future1 -> {
                             Channel c = future1.channel();
-                            clusterChannelGroup.remove(c);
+                            raftCluster.remove(nodeId);
                             log.debug("Channel {} closed", c);
-                            scheduleConnect(id, host, port);
+                            scheduleConnect(nodeId, host, port);
                         });
                     } else {
                         Channel c = future.channel();
-                        clusterChannelGroup.remove(c);
+                        raftCluster.remove(nodeId);
                         log.warn("Failed to connect to {}", c, future.cause());
-                        scheduleConnect(id, host, port);
+                        scheduleConnect(nodeId, host, port);
                     }
                 });
     }

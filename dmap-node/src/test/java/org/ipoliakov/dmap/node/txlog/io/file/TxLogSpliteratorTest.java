@@ -37,6 +37,7 @@ class TxLogSpliteratorTest {
         Operation operation = Operation.newBuilder()
                 .setPayloadType(PayloadType.PUT_REQ)
                 .setLogIndex(1)
+                .setTerm(1)
                 .setMessage(req.toByteString())
                 .build();
         TxLogFileReader.TxLogSpliterator spliterator = new TxLogFileReader.TxLogSpliterator(CodedInputStream.newInstance(operation.toByteArray()));

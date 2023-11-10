@@ -10,6 +10,43 @@ option optimize_for = SPEED;
 
 message Operation {
   PayloadType payloadType = 1;
-  int64 logIndex = 2;
-  bytes message = 3;
+
+  int32 term = 2;
+  int64 logIndex = 3;
+  bytes message = 4;
+}
+
+message RequestVoteReq {
+  PayloadType payloadType = 1;
+
+  int32 term = 2;
+  int32 candidateId = 3;
+  int64 lastLogIndex = 4;
+  int32 lastLogTerm = 5;
+}
+
+message RequestVoteRes {
+  PayloadType payloadType = 1;
+
+  int32 voterId = 2;
+  int32 term = 3;
+  bool voteGranted = 4;
+}
+
+message AppendEntriesReq {
+  PayloadType payloadType = 1;
+
+  int32 term = 2;
+  int32 leaderId = 3;
+  int64 prevLogIndex = 4;
+  int64 prevLogTerm = 5;
+  repeated Operation entries = 6;
+  int64 leaderCommit = 7;
+}
+
+message AppendEntriesRes {
+  PayloadType payloadType = 1;
+
+  int32 term = 2;
+  bool success = 3;
 }

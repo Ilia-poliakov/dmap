@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftState;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
@@ -22,6 +23,7 @@ public class TxLoggingStorageService implements StorageMutationService {
 
     private static final AtomicLong index = new AtomicLong();
 
+    private final RaftState raftState;
     private final TxLogWriter txLogWriter;
     private final StorageMutationService storageService;
 
@@ -43,6 +45,7 @@ public class TxLoggingStorageService implements StorageMutationService {
                     .setPayloadType(payloadType)
                     //TODO: User last index when raft implementing. Should start from 1, not 0
                     .setLogIndex(index.incrementAndGet())
+                    .setTerm(raftState.getCurrentTerm())
                     .setMessage(messageLite.toByteString())
                     .build();
             txLogWriter.write(operation);

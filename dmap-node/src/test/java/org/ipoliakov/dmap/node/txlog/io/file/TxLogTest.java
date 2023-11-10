@@ -45,6 +45,7 @@ class TxLogTest {
                     .build();
             Operation operation = Operation.newBuilder()
                     .setPayloadType(PayloadType.PUT_REQ)
+                    .setTerm(1)
                     .setLogIndex(i)
                     .setMessage(req.toByteString())
                     .build();

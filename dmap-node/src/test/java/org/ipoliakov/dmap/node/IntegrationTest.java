@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.Map;
 
 import org.ipoliakov.dmap.client.DMapClient;
+import org.ipoliakov.dmap.node.internal.cluster.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftState;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,10 +30,19 @@ public abstract class IntegrationTest {
     private File txLogFile;
     @Autowired
     private TxLogWriter txLogWriter;
+    @Autowired
+    protected RaftCluster raftCluster;
+    @Autowired
+    protected RaftLog raftLog;
+    @Autowired
+    protected RaftState raftState;
 
     @AfterEach
     void tearDown() throws Exception {
         dataStorage.clear();
+        raftState.reset();
+        raftLog.setLastTerm(1);
+        raftLog.setLastIndex(1);
         txLogWriter.close();
         txLogFile.delete();
     }

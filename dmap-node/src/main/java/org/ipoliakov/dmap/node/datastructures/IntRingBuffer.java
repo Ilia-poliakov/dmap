@@ -30,6 +30,10 @@ public class IntRingBuffer {
         return elements[getIndex(sequence)];
     }
 
+    public int getLast() {
+        return get(tailSequence);
+    }
+
     private int getIndex(long sequence) {
         return (int) (sequence % elements.length);
     }

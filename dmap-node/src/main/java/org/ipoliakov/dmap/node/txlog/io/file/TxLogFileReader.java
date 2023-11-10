@@ -53,15 +53,19 @@ public class TxLogFileReader implements TxLogReader {
         }
     }
 
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     private static Operation read(CodedInputStream in) throws IOException {
         if (in.readTag() != 0) {
             int payloadType = in.readEnum();
+            in.readTag();
+            int term = in.readInt32();
             in.readTag();
             long logIndex = in.readInt64();
             in.readTag();
             ByteString message = in.readBytes();
             return Operation.newBuilder()
                     .setPayloadType(PayloadType.forNumber(payloadType))
+                    .setTerm(term)
                     .setLogIndex(logIndex)
                     .setMessage(message)
                     .build();

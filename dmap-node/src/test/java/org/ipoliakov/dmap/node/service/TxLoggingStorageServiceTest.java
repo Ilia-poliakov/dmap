@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftState;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.RemoveReq;
@@ -25,6 +26,8 @@ import com.google.protobuf.ByteString;
 @ExtendWith(MockitoExtension.class)
 class TxLoggingStorageServiceTest {
 
+    @Mock
+    private RaftState raftState;
     @Mock
     private TxLogWriter txLogWriter;
     @Mock
