@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import org.ipoliakov.dmap.node.datastructures.IntRingBuffer;
-import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileReader;
-import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
+import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
+import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TxLogService {
 
+    private final TxLogWriter txLogFileWriter;
+    private final TxLogReader txLogFileReader;
     private final IntRingBuffer txLogFileIndex;
-    private final TxLogFileWriter txLogFileWriter;
-    private final TxLogFileReader txLogFileReader;
 
     public void append(Operation operation) {
         try {

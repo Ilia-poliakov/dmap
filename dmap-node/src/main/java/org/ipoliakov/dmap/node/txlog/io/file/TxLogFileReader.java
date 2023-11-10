@@ -43,6 +43,7 @@ public class TxLogFileReader implements TxLogReader {
         }
     }
 
+    @Override
     public Operation read(int address) throws IOException {
         byte[] buf = new byte[8 * 1024];
         try (RandomAccessFile raf = new RandomAccessFile(logFile, "r")) {
