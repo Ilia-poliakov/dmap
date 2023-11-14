@@ -25,6 +25,15 @@ public class LeaderElectionTask implements Runnable {
 
     @Override
     public void run() {
+        try {
+            runInternal();
+        } catch (Throwable t) {
+            log.error("Request vote failed", t);
+        }
+    }
+
+    private void runInternal() {
+        log.debug("LeaderElectionTask - start");
         if (raftState.haveLeader()) {
             log.warn("We already have a leader with id = " + raftState.getLeaderId());
             return;

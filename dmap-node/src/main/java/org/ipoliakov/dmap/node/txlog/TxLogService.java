@@ -2,6 +2,7 @@ package org.ipoliakov.dmap.node.txlog;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Optional;
 
 import org.ipoliakov.dmap.node.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
@@ -41,9 +42,12 @@ public class TxLogService {
         }
     }
 
-    public Operation readLastEntry() {
+    public Optional<Operation> readLastEntry() {
         try {
-            return txLogFileReader.read(txLogFileIndex.getLast());
+            if (txLogFileIndex.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(txLogFileReader.read(txLogFileIndex.getLast()));
         } catch (IOException e) {
             log.error("Can't read last operation from log", e);
             throw new UncheckedIOException(e);

@@ -41,7 +41,8 @@ public class RaftLog {
     }
 
     private Operation readFromFile() {
-        Operation operation = txLogService.readLastEntry();
+        Operation operation = txLogService.readLastEntry()
+                .orElseGet(Operation::getDefaultInstance);
         lastIndex = operation.getLogIndex();
         lastTerm = operation.getTerm();
         return operation;

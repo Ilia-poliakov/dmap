@@ -3,6 +3,8 @@ package org.ipoliakov.dmap.node.internal.cluster.raft;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.ipoliakov.dmap.node.txlog.TxLogService;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.internal.Operation;
@@ -44,12 +46,14 @@ class RaftLogTest {
 
     @Test
     void getLastIndex_readFromFileWhenZero() {
-        when(txLogService.readLastEntry()).thenReturn(Operation.newBuilder()
-                .setPayloadType(PayloadType.PUT_REQ)
-                .setTerm(2)
-                .setLogIndex(2)
-                .setMessage(ByteString.EMPTY)
-                .build());
+        when(txLogService.readLastEntry()).thenReturn(
+                Optional.of(Operation.newBuilder()
+                        .setPayloadType(PayloadType.PUT_REQ)
+                        .setTerm(2)
+                        .setLogIndex(2)
+                        .setMessage(ByteString.EMPTY)
+                        .build())
+        );
         assertEquals(2, raftLog.getLastIndex());
     }
 
@@ -67,12 +71,14 @@ class RaftLogTest {
 
     @Test
     void getLastTerm_readFromFileWhenZero() {
-        when(txLogService.readLastEntry()).thenReturn(Operation.newBuilder()
-                .setPayloadType(PayloadType.PUT_REQ)
-                .setTerm(2)
-                .setLogIndex(2)
-                .setMessage(ByteString.EMPTY)
-                .build());
+        when(txLogService.readLastEntry()).thenReturn(
+                Optional.of(Operation.newBuilder()
+                        .setPayloadType(PayloadType.PUT_REQ)
+                        .setTerm(2)
+                        .setLogIndex(2)
+                        .setMessage(ByteString.EMPTY)
+                        .build())
+        );
         assertEquals(2, raftLog.getLastTerm());
     }
 }

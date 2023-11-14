@@ -18,6 +18,8 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class RaftState {
 
+    //TODO: maby possible plain semantic instead of volatile for all fields
+
     private volatile int leaderId = -1;
 
     @Value("${node.id}")
@@ -25,6 +27,7 @@ public class RaftState {
     private volatile Role role = Role.FOLLOWER;
     private volatile int currentTerm = 1;
     private int votedFor = -1;
+    private volatile long index;
 
     private final Set<Integer> votedServers = new HashSet<>();
 
@@ -44,6 +47,10 @@ public class RaftState {
         currentTerm++;
     }
 
+    public long nextIndex() {
+        return ++index;
+    }
+
     public void becomeFollower(int term) {
         role = Role.FOLLOWER;
         this.currentTerm = term;
@@ -56,6 +63,7 @@ public class RaftState {
         votedServers.clear();
         currentTerm = 1;
         leaderId = -1;
+        index = 0;
     }
 
     public boolean grantVote(int voterId) {

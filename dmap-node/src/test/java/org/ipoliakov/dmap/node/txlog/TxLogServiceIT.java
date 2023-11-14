@@ -80,6 +80,6 @@ class TxLogServiceIT extends IntegrationTest {
                 .setTerm(index)
                 .build();
 
-        assertEquals(expected, service.readLastEntry());
+        assertEquals(expected, service.readLastEntry().get());
     }
 }

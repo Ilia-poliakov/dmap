@@ -37,5 +37,8 @@ class RepairManagerTest extends IntegrationTest {
             ByteString bytes = dataStorage.get(ByteString.copyFromUtf8("key" + i));
             assertEquals(bytes.toStringUtf8(), "value" + i);
         }
+
+        assertEquals(1, raftLog.getLastTerm());
+        assertEquals(operationCount, raftLog.getLastIndex());
     }
 }

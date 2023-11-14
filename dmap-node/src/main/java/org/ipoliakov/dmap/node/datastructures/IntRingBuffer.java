@@ -34,8 +34,22 @@ public class IntRingBuffer {
         return get(tailSequence);
     }
 
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    public long size() {
+        return tailSequence - headSequence + 1;
+    }
+
     private int getIndex(long sequence) {
         return (int) (sequence % elements.length);
+    }
+
+    public void clear() {
+        Arrays.fill(elements, 0);
+        tailSequence = -1;
+        headSequence = tailSequence + 1;
     }
 
     @Override

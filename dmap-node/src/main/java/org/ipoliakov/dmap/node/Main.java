@@ -17,6 +17,10 @@ public class Main {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
+
+        InitializerRunner initializerRunner = context.getBean(InitializerRunner.class);
+        initializerRunner.run();
+
         Server server = context.getBean(Server.class);
         server.start();
     }

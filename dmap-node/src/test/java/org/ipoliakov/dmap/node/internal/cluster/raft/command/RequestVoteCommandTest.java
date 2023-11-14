@@ -42,9 +42,9 @@ class RequestVoteCommandTest extends IntegrationTest {
     @DisplayName("Rules for all Servers. If RPC request or response contains term T > currentTerm: set currentTerm = T, convert to follower (§5.1)")
     void execute_toFollowerWhenCurrentTermLessThanRequest() throws Exception {
         RequestVoteReq req = RequestVoteReq.newBuilder()
-                .setTerm(1)
+                .setTerm(0)
                 .setLastLogTerm(10)
-                .setCandidateId(1)
+                .setCandidateId(Integer.MAX_VALUE)
                 .setLastLogIndex(1)
                 .setPayloadType(PayloadType.REQUEST_VOTE_REQ)
                 .build();

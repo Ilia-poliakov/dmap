@@ -1,11 +1,7 @@
 package org.ipoliakov.dmap.node.service;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.concurrent.atomic.AtomicLong;
-
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftState;
-import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.RemoveReq;
@@ -21,10 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TxLoggingStorageService implements StorageMutationService {
 
-    private static final AtomicLong index = new AtomicLong();
-
+    private final RaftLog raftLog;
     private final RaftState raftState;
-    private final TxLogWriter txLogWriter;
     private final StorageMutationService storageService;
 
     @Override
@@ -40,17 +34,12 @@ public class TxLoggingStorageService implements StorageMutationService {
     }
 
     private void writeOperation(PayloadType payloadType, MessageLite messageLite) {
-        try {
-            var operation = Operation.newBuilder()
-                    .setPayloadType(payloadType)
-                    //TODO: User last index when raft implementing. Should start from 1, not 0
-                    .setLogIndex(index.incrementAndGet())
-                    .setTerm(raftState.getCurrentTerm())
-                    .setMessage(messageLite.toByteString())
-                    .build();
-            txLogWriter.write(operation);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        var operation = Operation.newBuilder()
+                .setPayloadType(payloadType)
+                .setLogIndex(raftState.nextIndex())
+                .setTerm(raftState.getCurrentTerm())
+                .setMessage(messageLite.toByteString())
+                .build();
+        raftLog.append(operation);
     }
 }
