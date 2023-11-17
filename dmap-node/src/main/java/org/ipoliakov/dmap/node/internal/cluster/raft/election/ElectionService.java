@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.internal.cluster.raft;
+package org.ipoliakov.dmap.node.internal.cluster.raft.election;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -6,7 +6,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.ipoliakov.dmap.node.internal.cluster.raft.task.LeaderElectionTask;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 

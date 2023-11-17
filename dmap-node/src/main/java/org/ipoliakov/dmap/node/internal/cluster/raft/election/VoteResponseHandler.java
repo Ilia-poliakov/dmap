@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.internal.cluster.raft.task;
+package org.ipoliakov.dmap.node.internal.cluster.raft.election;
 
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftState;
 import org.ipoliakov.dmap.node.internal.cluster.raft.Role;

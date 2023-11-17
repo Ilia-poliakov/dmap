@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.internal.cluster.raft.task;
+package org.ipoliakov.dmap.node.internal.cluster.raft.election;
 
 import java.util.concurrent.CompletableFuture;
 

@@ -40,6 +40,10 @@ public class RaftLog {
         return readFromFile().getTerm();
     }
 
+    public Operation getPrevOperation() {
+        return txLogService.readByLogIndex(lastIndex - 1);
+    }
+
     private Operation readFromFile() {
         Operation operation = txLogService.readLastEntry()
                 .orElseGet(Operation::getDefaultInstance);

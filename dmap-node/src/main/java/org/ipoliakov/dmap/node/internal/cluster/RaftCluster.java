@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import org.ipoliakov.dmap.common.network.MessageSender;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,7 @@ public class RaftCluster {
         return messageSenders.values()
                 .stream()
                 .map(sender -> sender.send(messages, responseType))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void addMessageSender(int nodeId, MessageSender messageSender) {

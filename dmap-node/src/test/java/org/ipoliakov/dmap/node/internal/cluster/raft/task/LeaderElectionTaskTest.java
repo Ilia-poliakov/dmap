@@ -10,6 +10,8 @@ import java.util.concurrent.CompletableFuture;
 import org.ipoliakov.dmap.node.internal.cluster.RaftCluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftState;
+import org.ipoliakov.dmap.node.internal.cluster.raft.election.LeaderElectionTask;
+import org.ipoliakov.dmap.node.internal.cluster.raft.election.VoteResponseHandler;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.internal.RequestVoteReq;
 import org.ipoliakov.dmap.protocol.internal.RequestVoteRes;
