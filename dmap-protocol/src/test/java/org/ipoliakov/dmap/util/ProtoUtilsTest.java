@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.utils;
+package org.ipoliakov.dmap.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
