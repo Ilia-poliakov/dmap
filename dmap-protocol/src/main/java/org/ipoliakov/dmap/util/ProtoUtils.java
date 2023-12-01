@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.utils;
+package org.ipoliakov.dmap.util;
 
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.ValueRes;

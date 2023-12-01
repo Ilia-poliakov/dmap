@@ -1,9 +1,9 @@
 package org.ipoliakov.dmap.node.command;
 
 import org.ipoliakov.dmap.node.service.StorageReadOnlyService;
-import org.ipoliakov.dmap.node.utils.ProtoUtils;
 import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
+import org.ipoliakov.dmap.util.ProtoUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.ByteString;

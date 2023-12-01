@@ -3,6 +3,7 @@ package org.ipoliakov.dmap.node.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.ipoliakov.dmap.node.datastructures.ConcurrentOptimisticMap;
 import org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,11 +24,13 @@ public class StorageConfig {
         return switch (storageType) {
             case CHM -> new ConcurrentHashMap<>(initialCapacity);
             case OFF_HEAP -> new OffHeapHashMap(initialCapacity);
+            case OFF_HEAP_OPTIMISTIC -> new ConcurrentOptimisticMap<>(new OffHeapHashMap(initialCapacity));
         };
     }
 
     private enum StorageType {
         CHM,
-        OFF_HEAP
+        OFF_HEAP,
+        OFF_HEAP_OPTIMISTIC
     }
 }
