@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.txlog;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.ipoliakov.dmap.node.datastructures.IntRingBuffer;
+import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.protocol.internal.Operation;
