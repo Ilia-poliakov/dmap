@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
-import org.ipoliakov.dmap.node.datastructures.IntRingBuffer;
+import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileReader;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
 import org.ipoliakov.dmap.protocol.internal.Operation;

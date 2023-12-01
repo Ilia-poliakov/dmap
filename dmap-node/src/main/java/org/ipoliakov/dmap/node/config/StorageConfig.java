@@ -3,8 +3,8 @@ package org.ipoliakov.dmap.node.config;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.ipoliakov.dmap.node.datastructures.ConcurrentOptimisticMap;
-import org.ipoliakov.dmap.node.datastructures.offheap.map.OffHeapHashMap;
+import org.ipoliakov.dmap.datastructures.ConcurrentOptimisticMap;
+import org.ipoliakov.dmap.datastructures.offheap.map.OffHeapHashMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

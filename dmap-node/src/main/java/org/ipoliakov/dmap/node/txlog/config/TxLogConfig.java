@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
-import org.ipoliakov.dmap.node.datastructures.IntRingBuffer;
+import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileReader;

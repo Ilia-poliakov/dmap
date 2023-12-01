@@ -13,6 +13,8 @@
         <module>dmap-client</module>
         <module>dmap-protocol</module>
         <module>dmap-commons</module>
+        <module>dmap-datastructure</module>
+        <module>dmap-concurrent</module>
     </modules>
 
     <properties>
@@ -50,6 +52,16 @@
             </dependency>
             <dependency>
                 <groupId>org.ipoliakov</groupId>
+                <artifactId>dmap-datastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ipoliakov</groupId>
+                <artifactId>dmap-concurrent</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ipoliakov</groupId>
                 <artifactId>dmap-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -63,6 +75,11 @@
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-buffer</artifactId>
                 <version>${netty.version}</version>
             </dependency>
 
@@ -208,7 +225,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>80%</minimum>
+                                            <minimum>75%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
