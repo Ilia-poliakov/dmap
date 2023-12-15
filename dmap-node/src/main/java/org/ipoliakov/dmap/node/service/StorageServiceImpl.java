@@ -5,12 +5,14 @@ import java.util.Objects;
 
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.RemoveReq;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.google.protobuf.ByteString;
 
 import lombok.RequiredArgsConstructor;
 
+@Primary
 @Service("storageService")
 @RequiredArgsConstructor
 public class StorageServiceImpl implements StorageMutationService, StorageReadOnlyService {

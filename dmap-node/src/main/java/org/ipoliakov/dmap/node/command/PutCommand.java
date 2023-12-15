@@ -4,6 +4,7 @@ import org.ipoliakov.dmap.node.service.StorageMutationService;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.util.ProtoUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.ByteString;
@@ -16,11 +17,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PutCommand implements Command<PutReq> {
 
-    private final StorageMutationService txLoggingStorageService;
+    @Qualifier("txLoggingStorageService")
+    private final StorageMutationService storageService;
 
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, PutReq message) {
-        ByteString prevVal = txLoggingStorageService.put(message);
+        ByteString prevVal = storageService.put(message);
         return ProtoUtils.valueRes(prevVal);
     }
 

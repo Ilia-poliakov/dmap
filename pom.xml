@@ -30,7 +30,7 @@
         <lombok.version>1.18.30</lombok.version>
         <reflections.version>0.10.2</reflections.version>
         <commons-io.version>2.15.1</commons-io.version>
-        <spring.version>6.0.13</spring.version>
+        <spring.version>6.1.2</spring.version>
 
         <awaitility.version>4.2.0</awaitility.version>
         <junit.version>5.10.1</junit.version>
