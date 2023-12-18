@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  node1:
+    image: ilia-poliakov/dmap-node:latest
+    build:
+      context: ../../
+      dockerfile: /deploy/docker/Dockerfile
+    container_name: node1
+    networks:
+      dmap-network:
+        aliases:
+          - node1
+    environment:
+      - MEMBERS=2#node2:9090,3#node3:9090
+      - PORT_TO_EXPOSE=2#node2:9090,3#node3:9090
+    ports:
+      - "9090:${PORT_TO_EXPOSE}" # protobuf tcp client port
+    stdin_open: true # docker run -i
+    external_links:
+      - "node2"
+      - "node3"
+
+  node2:
+    image: ilia-poliakov/dmap-node:latest
+    container_name: node2
+    networks:
+      dmap-network:
+        aliases:
+          - node2
+    environment:
+      - MEMBERS=1#node1:9090,3#node3:9090
+    ports:
+      - "9091:${PORT_TO_EXPOSE}" # protobuf tcp client port
+    stdin_open: true # docker run -i
+    external_links:
+      - "node1"
+      - "node3"
+
+  node3:
+    image: ilia-poliakov/dmap-node:latest
+    container_name: node3
+    networks:
+      dmap-network:
+        aliases:
+          - node3
+    environment:
+      - MEMBERS=1#node1:9090,2#node2:9090
+    ports:
+      - "9092:${PORT_TO_EXPOSE}" # protobuf tcp client port
+    stdin_open: true # docker run -i
+    external_links:
+      - "node1"
+      - "node2"
+
+networks:
+  dmap-network:
+    name: dmap-network
+    driver: bridge
