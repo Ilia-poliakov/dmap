@@ -13,8 +13,8 @@ services:
         aliases:
           - node1
     environment:
-      - MEMBERS=2#node2:9090,3#node3:9090
-      - PORT_TO_EXPOSE=2#node2:9090,3#node3:9090
+      - MEMBERS=2#node2:${PORT_TO_EXPOSE},3#node3:${PORT_TO_EXPOSE}
+      - PORT=${PORT_TO_EXPOSE}
     ports:
       - "9090:${PORT_TO_EXPOSE}" # protobuf tcp client port
     stdin_open: true # docker run -i
@@ -30,7 +30,8 @@ services:
         aliases:
           - node2
     environment:
-      - MEMBERS=1#node1:9090,3#node3:9090
+      - MEMBERS=1#node1:${PORT_TO_EXPOSE},3#node3:${PORT_TO_EXPOSE}
+      - PORT=${PORT_TO_EXPOSE}
     ports:
       - "9091:${PORT_TO_EXPOSE}" # protobuf tcp client port
     stdin_open: true # docker run -i
@@ -46,7 +47,8 @@ services:
         aliases:
           - node3
     environment:
-      - MEMBERS=1#node1:9090,2#node2:9090
+      - MEMBERS=1#node1:${PORT_TO_EXPOSE},2#node2:${PORT_TO_EXPOSE}
+      - PORT=${PORT_TO_EXPOSE}
     ports:
       - "9092:${PORT_TO_EXPOSE}" # protobuf tcp client port
     stdin_open: true # docker run -i

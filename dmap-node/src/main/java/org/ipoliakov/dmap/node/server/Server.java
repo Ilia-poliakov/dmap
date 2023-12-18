@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class Server {
 
-    @Value("${PORT:9090}")
+    @Value("${PORT:${server.port:9090}}")
     private final int port;
     @Value("${server.bossThreadNumber}")
     private final int bossThreadNumber;
