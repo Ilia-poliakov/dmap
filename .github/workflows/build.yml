@@ -29,7 +29,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           workdir: ./
-          checkstyle_config: checkstyle.xml
+          checkstyle_config: checkstyle/checkstyle.xml
           filter_mode: diff_context
           fail_on_error: true
           reporter: github-pr-review
