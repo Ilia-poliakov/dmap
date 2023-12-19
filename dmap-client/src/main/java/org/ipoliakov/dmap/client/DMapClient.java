@@ -5,6 +5,10 @@ import java.util.concurrent.CompletableFuture;
 
 public interface DMapClient<K extends Serializable, V extends Serializable> {
 
+    static ClientBuilder builder() {
+        return new ClientBuilder();
+    }
+
     CompletableFuture<V> get(K key);
 
     CompletableFuture<V> put(K key, V value);

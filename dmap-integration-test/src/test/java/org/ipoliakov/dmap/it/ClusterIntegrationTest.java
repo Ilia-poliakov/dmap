@@ -5,7 +5,6 @@ import static org.awaitility.Awaitility.await;
 import java.io.File;
 import java.time.Duration;
 
-import org.ipoliakov.dmap.client.ClientBuilder;
 import org.ipoliakov.dmap.client.DMapClient;
 import org.ipoliakov.dmap.client.serializer.StringSerializer;
 import org.junit.jupiter.api.AfterEach;
@@ -36,7 +35,7 @@ public abstract class ClusterIntegrationTest {
         Integer nodePort = environment.getServicePort("node1", DEFAULT_PORT);
         client = await()
                 .ignoreExceptions()
-                .until(() -> new ClientBuilder()
+                .until(() -> DMapClient.builder()
                                 .setHost(nodeHost)
                                 .setPort(nodePort)
                                 .build(new StringSerializer(), new StringSerializer()),

@@ -5,7 +5,6 @@ import static org.awaitility.Awaitility.await;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.ipoliakov.dmap.client.ClientBuilder;
 import org.ipoliakov.dmap.client.DMapClient;
 import org.ipoliakov.dmap.client.serializer.StringSerializer;
 import org.ipoliakov.dmap.node.server.Server;
@@ -32,7 +31,7 @@ public class TestConfig implements InitializingBean {
     DMapClient<String, String> client() {
         return await()
                 .ignoreExceptions()
-                .until(() -> new ClientBuilder()
+                .until(() -> DMapClient.builder()
                         .setPort(9090)
                         .setHost("localhost")
                         .setThreadCount(1)
