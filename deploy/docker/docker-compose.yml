@@ -7,7 +7,6 @@ services:
     build:
       context: ../../
       dockerfile: /deploy/docker/Dockerfile
-    container_name: node1
     networks:
       dmap-network:
         aliases:
@@ -16,7 +15,7 @@ services:
       - MEMBERS=2#node2:${PORT_TO_EXPOSE},3#node3:${PORT_TO_EXPOSE}
       - PORT=${PORT_TO_EXPOSE}
     ports:
-      - "9090:${PORT_TO_EXPOSE}" # protobuf tcp client port
+      - "9090:${PORT_TO_EXPOSE}"
     stdin_open: true # docker run -i
     external_links:
       - "node2"
@@ -24,7 +23,6 @@ services:
 
   node2:
     image: ilia-poliakov/dmap-node:latest
-    container_name: node2
     networks:
       dmap-network:
         aliases:
@@ -33,7 +31,7 @@ services:
       - MEMBERS=1#node1:${PORT_TO_EXPOSE},3#node3:${PORT_TO_EXPOSE}
       - PORT=${PORT_TO_EXPOSE}
     ports:
-      - "9091:${PORT_TO_EXPOSE}" # protobuf tcp client port
+      - "9091:${PORT_TO_EXPOSE}"
     stdin_open: true # docker run -i
     external_links:
       - "node1"
@@ -41,7 +39,6 @@ services:
 
   node3:
     image: ilia-poliakov/dmap-node:latest
-    container_name: node3
     networks:
       dmap-network:
         aliases:
@@ -50,7 +47,7 @@ services:
       - MEMBERS=1#node1:${PORT_TO_EXPOSE},2#node2:${PORT_TO_EXPOSE}
       - PORT=${PORT_TO_EXPOSE}
     ports:
-      - "9092:${PORT_TO_EXPOSE}" # protobuf tcp client port
+      - "9092:${PORT_TO_EXPOSE}"
     stdin_open: true # docker run -i
     external_links:
       - "node1"
