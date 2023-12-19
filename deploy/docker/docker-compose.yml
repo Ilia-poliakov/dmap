@@ -6,7 +6,7 @@ services:
     image: ilia-poliakov/dmap-node:latest
     build:
       context: ../../
-      dockerfile: /deploy/docker/Dockerfile
+      dockerfile: deploy/docker/Dockerfile
     networks:
       dmap-network:
         aliases:
