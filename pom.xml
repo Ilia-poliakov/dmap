@@ -15,6 +15,7 @@
         <module>dmap-commons</module>
         <module>dmap-datastructure</module>
         <module>dmap-concurrent</module>
+        <module>dmap-integration-test</module>
     </modules>
 
     <properties>
@@ -35,6 +36,7 @@
         <awaitility.version>4.2.0</awaitility.version>
         <junit.version>5.10.1</junit.version>
         <mockito.version>5.8.0</mockito.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
         <jmh.version>1.37</jmh.version>
     </properties>
 
@@ -145,6 +147,12 @@
                 <groupId>org.awaitility</groupId>
                 <artifactId>awaitility</artifactId>
                 <version>${awaitility.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${testcontainers.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
