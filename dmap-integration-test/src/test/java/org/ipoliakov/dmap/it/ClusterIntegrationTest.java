@@ -3,6 +3,7 @@ package org.ipoliakov.dmap.it;
 import static org.awaitility.Awaitility.await;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 
 import org.ipoliakov.dmap.client.ClientBuilder;
@@ -23,8 +24,8 @@ public abstract class ClusterIntegrationTest {
     protected DMapClient<String, String> client;
 
     @BeforeEach
-    void setUp() {
-        environment = new DockerComposeContainer(new File("../deploy/docker/docker-compose.yml"))
+    void setUp() throws IOException {
+        environment = new DockerComposeContainer(new File("../deploy/docker/docker-compose.yml").getCanonicalFile())
                 .withExposedService("node1", DEFAULT_PORT, WAIT_FOR_CONNECTED)
                 .withExposedService("node2", DEFAULT_PORT, WAIT_FOR_CONNECTED)
                 .withExposedService("node3", DEFAULT_PORT, WAIT_FOR_CONNECTED)
