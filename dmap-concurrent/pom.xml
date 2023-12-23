@@ -11,4 +11,11 @@
 
     <artifactId>dmap-concurrent</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.ipoliakov</groupId>
+            <artifactId>dmap-commons</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
