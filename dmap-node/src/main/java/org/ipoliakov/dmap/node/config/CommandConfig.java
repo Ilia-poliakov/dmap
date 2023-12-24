@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class CommandConfig {
 
     @Bean
-    public ProtoMessageFactory protoMessageFactory() {
-        return new ProtoMessageFactory();
+    public ProtoMessageRegistry protoMessageFactory() {
+        return new ProtoMessageRegistry();
     }
 
     @Bean

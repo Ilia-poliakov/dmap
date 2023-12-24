@@ -1,5 +1,7 @@
 package org.ipoliakov.dmap.common.network;
 
+import static org.reflections.scanners.Scanners.SubTypes;
+
 import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -20,7 +22,7 @@ import com.google.protobuf.Message;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 
-public class ProtoMessageFactory {
+public class ProtoMessageRegistry {
 
     private static final Map<Class<?>, PayloadType> classPayloadTypeMap;
     private static final Map<PayloadType, Parser<? extends MessageLite>> payloadTypeOnParser;
@@ -29,8 +31,7 @@ public class ProtoMessageFactory {
         Map<PayloadType, Parser<? extends MessageLite>> payloadParser = new EnumMap<>(PayloadType.class);
         Map<Class<?>, PayloadType> classOnPayloadType = new IdentityHashMap<>();
         try {
-            Set<Class<? extends MessageLite>> allClasses = collectRequestsAndResponses();
-            Set<MessageLite> defaultInstances = getProtoClassesDefaultInstances(allClasses);
+            Set<MessageLite> defaultInstances = getProtoClassesDefaultInstances();
             Pattern toSnakeCasePattern = Pattern.compile("([a-z])([A-Z]+)");
             for (MessageLite messageLite : defaultInstances) {
                 if (messageLite instanceof Message message) {
@@ -51,21 +52,24 @@ public class ProtoMessageFactory {
         }
     }
 
-    private static Set<Class<? extends MessageLite>> collectRequestsAndResponses() {
-        Reflections reflections = new Reflections(DMapMessage.class.getPackageName());
-        Set<Class<? extends MessageLite>> allClasses = reflections.getSubTypesOf(MessageLite.class);
-        allClasses.removeIf(clazz -> !(clazz.getName().endsWith("Res") || clazz.getName().endsWith("Req")));
-        return allClasses;
-    }
-
-    private static Set<MessageLite> getProtoClassesDefaultInstances(Set<Class<? extends MessageLite>> protoClasses) throws Exception {
+    private static Set<MessageLite> getProtoClassesDefaultInstances() throws Exception {
+        Set<Class> allClasses = collectRequestsAndResponses();
         Set<MessageLite> instances = new HashSet<>();
-        for (Class<?> clazz : protoClasses) {
+        for (Class<?> clazz : allClasses) {
             Method factoryMethod = clazz.getDeclaredMethod("getDefaultInstance");
             MessageLite messageLite = (MessageLite) factoryMethod.invoke(clazz);
             instances.add(messageLite);
         }
         return instances;
+    }
+
+    private static Set<Class> collectRequestsAndResponses() {
+        return new Reflections(DMapMessage.class.getPackageName())
+            .get(
+                SubTypes.of(MessageLite.class)
+                    .as(Class.class, DMapMessage.class.getClassLoader())
+                    .filter(clazz -> clazz.getName().endsWith("Res") || clazz.getName().endsWith("Req"))
+            );
     }
 
     public MessageLite parsePayload(DMapMessage protoMessage) {
@@ -83,7 +87,7 @@ public class ProtoMessageFactory {
             Parser<? extends MessageLite> parser = payloadTypeOnParser.get(payloadType);
             return parser.parseFrom(payload);
         } catch (InvalidProtocolBufferException e) {
-            throw new InvalidMessageException("Cannot parse proto message", e);
+            throw new IllegalArgumentException("Cannot parse proto message", e);
         }
     }
 
