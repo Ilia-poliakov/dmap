@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.EnumMap;
 import java.util.Map;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.server.DispatcherCommandHandler;
 import org.ipoliakov.dmap.protocol.DMapMessage;
@@ -30,7 +30,7 @@ class DispatcherCommandHandlerTest {
     @Test
     void unknownCommand() {
         Command command = Mockito.mock(Command.class);
-        ProtoMessageFactory protoMessageFactory = Mockito.mock(ProtoMessageFactory.class);
+        ProtoMessageRegistry protoMessageFactory = Mockito.mock(ProtoMessageRegistry.class);
         ChannelHandlerContext channelHandlerContext = Mockito.mock(ChannelHandlerContext.class);
         Channel channel = Mockito.mock(Channel.class);
         when(channelHandlerContext.channel()).thenReturn(channel);

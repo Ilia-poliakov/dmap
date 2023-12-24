@@ -4,7 +4,7 @@ import static io.netty.channel.ChannelHandler.Sharable;
 
 import java.util.EnumMap;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.command.DefaultCommand;
 import org.ipoliakov.dmap.protocol.DMapMessage;
@@ -27,7 +27,7 @@ public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
 
     private static final DefaultCommand DEFAULT_COMMAND = new DefaultCommand();
 
-    private final ProtoMessageFactory messageFactory;
+    private final ProtoMessageRegistry messageFactory;
     private final EnumMap<PayloadType, Command> commandMap;
 
     @Override

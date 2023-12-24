@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.txlog.repair;
 import java.util.EnumMap;
 import java.util.stream.Stream;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.operation.MutationOperation;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RepairManager {
 
     private final TxLogReader txLogReader;
-    private final ProtoMessageFactory protoMessageFactory;
+    private final ProtoMessageRegistry protoMessageFactory;
     private final EnumMap<PayloadType, MutationOperation<MessageLite>> operationMap;
 
     public void repairAll() {

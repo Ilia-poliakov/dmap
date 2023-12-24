@@ -17,7 +17,7 @@ public class MessageSender {
 
     private final Channel channel;
     private final ResponseFutures responseFutures;
-    private final ProtoMessageFactory messageFactory;
+    private final ProtoMessageRegistry messageFactory;
 
     public <R extends MessageLite> CompletableFuture<R> send(MessageLite message, Class<R> responseType) {
         CompletableFuture<R> future = new CompletableFuture<>();

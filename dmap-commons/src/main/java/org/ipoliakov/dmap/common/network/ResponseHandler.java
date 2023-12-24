@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class ResponseHandler extends SimpleChannelInboundHandler<DMapMessage> {
 
     private final ResponseFutures responseFutures;
-    private final ProtoMessageFactory messageFactory;
+    private final ProtoMessageRegistry messageFactory;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DMapMessage message) {

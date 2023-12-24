@@ -9,7 +9,7 @@ public class ResponseFutures {
     private final ConcurrentMap<Long, CompletableFuture<?>> responseFutures = new ConcurrentHashMap<>();
 
     public CompletableFuture<?> get(Long messageId) {
-        return responseFutures.get(messageId);
+        return responseFutures.remove(messageId);
     }
 
     public void add(Long messageId, CompletableFuture<?> completableFuture) {

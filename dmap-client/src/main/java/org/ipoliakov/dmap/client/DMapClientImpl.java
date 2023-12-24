@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
 import org.ipoliakov.dmap.common.network.MessageSender;
-import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -28,10 +28,10 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
 
     DMapClientImpl(Channel channel,
                    ResponseFutures responseFutures,
-                   ProtoMessageFactory protoMessageFactory,
+                   ProtoMessageRegistry protoMessageRegistry,
                    Serializer<K, ByteString> keySerializer,
                    Serializer<V, ByteString> valueSerializer) {
-        messageSender = new MessageSender(channel, responseFutures, protoMessageFactory);
+        messageSender = new MessageSender(channel, responseFutures, protoMessageRegistry);
         this.keySerializer = keySerializer;
         this.valueSerializer = valueSerializer;
     }

@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.client;
 import java.io.Serializable;
 
 import org.ipoliakov.dmap.client.internal.ClientPipelineInitializer;
-import org.ipoliakov.dmap.common.network.ProtoMessageFactory;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
 
 import com.google.protobuf.ByteString;
@@ -30,7 +30,7 @@ public class ClientBuilder {
                                                                                    Serializer<V, ByteString> valueSerializer) {
         EventLoopGroup group = singleThreadEventLoopGroup();
         ResponseFutures responseFutures = new ResponseFutures();
-        ProtoMessageFactory messageFactory = new ProtoMessageFactory();
+        ProtoMessageRegistry messageFactory = new ProtoMessageRegistry();
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group)

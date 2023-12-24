@@ -1,7 +1,5 @@
 package org.ipoliakov.dmap.node.internal.cluster.config;
 
-import static org.ipoliakov.dmap.node.internal.cluster.config.NodeToNodeConnectionConfig.channel;
-
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +12,11 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -77,5 +79,9 @@ public class ClusterConnector implements InitializingBean {
     private void scheduleConnect(int id, String host, int port) {
         log.warn("Scheduling reconnect to node on port {} in {} ms", port, networkReconnectIntervalMillis);
         reconnectionExecutor.schedule(() -> connect(id, host, port), networkReconnectIntervalMillis, TimeUnit.MILLISECONDS);
+    }
+
+    private static Class<? extends SocketChannel> channel() {
+        return Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class;
     }
 }
