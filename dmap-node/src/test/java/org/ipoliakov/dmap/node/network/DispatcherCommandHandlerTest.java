@@ -48,6 +48,6 @@ class DispatcherCommandHandlerTest {
         dispatcher.channelRead(channelHandlerContext, message);
 
         verify(command, never()).execute(any(), any());
-        verify(channel, only()).writeAndFlush(any(DMapMessage.Builder.class));
+        verify(channel, only()).writeAndFlush(any(DMapMessage.Builder.class), any());
     }
 }
