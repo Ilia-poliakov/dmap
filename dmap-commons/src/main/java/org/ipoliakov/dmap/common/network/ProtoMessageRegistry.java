@@ -16,9 +16,7 @@ import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.reflections.Reflections;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.Descriptors;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
 import com.google.protobuf.MessageLite;
 import com.google.protobuf.Parser;
 
@@ -31,19 +29,14 @@ public class ProtoMessageRegistry {
         Map<PayloadType, Parser<? extends MessageLite>> payloadParser = new EnumMap<>(PayloadType.class);
         Map<Class<?>, PayloadType> classOnPayloadType = new IdentityHashMap<>();
         try {
-            Set<MessageLite> defaultInstances = getProtoClassesDefaultInstances();
+            Set<MessageLite> defaultInstances = getProtoReqAndResDefaultInstances();
             Pattern toSnakeCasePattern = Pattern.compile("([a-z])([A-Z]+)");
             for (MessageLite messageLite : defaultInstances) {
-                if (messageLite instanceof Message message) {
-                    Descriptors.FieldDescriptor payloadType = message.getDescriptorForType().findFieldByName("payloadType");
-                    if (payloadType != null) {
-                        String name = message.getClass().getSimpleName();
-                        name = toSnakeCasePattern.matcher(name).replaceAll("$1_$2").toUpperCase();
-                        PayloadType pt = PayloadType.valueOf(name);
-                        payloadParser.put(pt, message.getParserForType());
-                        classOnPayloadType.put(message.getClass(), pt);
-                    }
-                }
+                String name = messageLite.getClass().getSimpleName();
+                name = toSnakeCasePattern.matcher(name).replaceAll("$1_$2").toUpperCase();
+                PayloadType pt = PayloadType.valueOf(name);
+                payloadParser.put(pt, messageLite.getParserForType());
+                classOnPayloadType.put(messageLite.getClass(), pt);
             }
             payloadTypeOnParser = payloadParser;
             classPayloadTypeMap = classOnPayloadType;
@@ -52,7 +45,7 @@ public class ProtoMessageRegistry {
         }
     }
 
-    private static Set<MessageLite> getProtoClassesDefaultInstances() throws Exception {
+    private static Set<MessageLite> getProtoReqAndResDefaultInstances() throws Exception {
         Set<Class> allClasses = collectRequestsAndResponses();
         Set<MessageLite> instances = new HashSet<>();
         for (Class<?> clazz : allClasses) {

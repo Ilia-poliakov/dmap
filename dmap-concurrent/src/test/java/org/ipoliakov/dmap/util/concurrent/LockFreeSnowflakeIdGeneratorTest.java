@@ -58,8 +58,6 @@ class LockFreeSnowflakeIdGeneratorTest {
         thread.setDaemon(true);
         thread.start();
 
-        clock.incrementTime();
-
         thread.join();
         assertEquals(423665664L, generatedId.get());
     }
@@ -82,10 +80,6 @@ class LockFreeSnowflakeIdGeneratorTest {
     private static abstract class ClockAdapter extends Clock {
 
         AtomicLong time = new AtomicLong(100);
-
-        public void incrementTime() {
-            time.incrementAndGet();
-        }
 
         @Override
         public ZoneId getZone() {
