@@ -28,7 +28,7 @@ class LockFreeSnowflakeIdGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should increment sequence when same timestamp and node id")
+    @DisplayName("next - should increment sequence when same timestamp and node id")
     void next() {
         var idGenerator = new LockFreeSnowflakeIdGenerator(CLOCK, 10);
         assertAll(
@@ -40,30 +40,38 @@ class LockFreeSnowflakeIdGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should wait next timestamp when max sequence overflow")
+    @DisplayName("next - should wait next timestamp when max sequence overflow")
     void shouldWait_whenMaxSequenceOverflow() throws InterruptedException {
+        int maxSequence = 4095;
         ClockAdapter clock = new ClockAdapter() {
+
+            int currentIteration;
+
             @Override
             public Instant instant() {
-                return Instant.ofEpochMilli(time.get());
+                if (currentIteration <= maxSequence + 1) {
+                    currentIteration++;
+                    return Instant.ofEpochMilli(time.get());
+                }
+                return Instant.ofEpochMilli(time.incrementAndGet());
             }
         };
 
         var idGenerator = new LockFreeSnowflakeIdGenerator(clock, 10);
-        for (int i = 0; i <= 4095; i++) {
+        for (int i = 0; i <= maxSequence; i++) {
             idGenerator.next();
         }
         AtomicLong generatedId = new AtomicLong();
         Thread thread = new Thread(() -> generatedId.set(idGenerator.next()));
         thread.setDaemon(true);
         thread.start();
-
         thread.join();
+
         assertEquals(423665664L, generatedId.get());
     }
 
     @Test
-    @DisplayName("Should throw IllegalStateException when time gone backwards")
+    @DisplayName("next - should throw IllegalStateException when time gone backwards")
     void next_timeGoneBackwards() {
         Clock backwardClock = new ClockAdapter() {
 

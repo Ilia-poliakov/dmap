@@ -53,7 +53,7 @@ public class LockFreeSnowflakeIdGenerator implements IdGenerator {
                 }
             } else {
                 throw new IllegalStateException(
-                    "Clock moved backwards: timestampMs=" + timestampMs + " < oldTimestampMs=" + oldTimestampMs);
+                    "Clock moved backwards: timestampMs = " + timestampMs + " < oldTimestampMs = " + oldTimestampMs);
             }
 
             Thread.onSpinWait();
