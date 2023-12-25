@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
+import org.ipoliakov.dmap.common.MonotonicallyIdGenerator;
 import org.ipoliakov.dmap.common.network.MessageSender;
 import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
@@ -31,7 +32,7 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                    ProtoMessageRegistry protoMessageRegistry,
                    Serializer<K, ByteString> keySerializer,
                    Serializer<V, ByteString> valueSerializer) {
-        messageSender = new MessageSender(channel, responseFutures, protoMessageRegistry);
+        this.messageSender = new MessageSender(channel, new MonotonicallyIdGenerator(), responseFutures, protoMessageRegistry);
         this.keySerializer = keySerializer;
         this.valueSerializer = valueSerializer;
     }
