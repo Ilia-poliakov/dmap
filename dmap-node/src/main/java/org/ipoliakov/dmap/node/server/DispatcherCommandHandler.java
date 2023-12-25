@@ -39,7 +39,8 @@ public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
             DMapMessage.newBuilder()
                 .setMessageId(message.getMessageId())
                 .setPayloadType(getPayloadType(response))
-                .setPayload(response.toByteString())
+                .setPayload(response.toByteString()),
+            ctx.voidPromise()
         );
     }
 
