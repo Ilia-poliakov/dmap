@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-class RingBufferTest {
+class IntRingBufferTest {
 
     @Test
     void add() {
@@ -26,6 +26,13 @@ class RingBufferTest {
         IntRingBuffer buffer = fullBuffer();
         buffer.add(200);
         assertEquals(200, buffer.get(buffer.getHeadSequence() - 1));
+    }
+
+    @Test
+    void getLast() {
+        IntRingBuffer buffer = fullBuffer();
+        buffer.add(100);
+        assertEquals(100, buffer.getLast());
     }
 
     private static IntRingBuffer fullBuffer() {

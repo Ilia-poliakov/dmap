@@ -9,7 +9,9 @@ import com.google.protobuf.MessageLite;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ResponseHandler extends SimpleChannelInboundHandler<DMapMessage> {
 

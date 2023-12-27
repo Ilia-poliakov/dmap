@@ -40,7 +40,7 @@ public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
                 .setMessageId(message.getMessageId())
                 .setPayloadType(getPayloadType(response))
                 .setPayload(response.toByteString()),
-            ctx.voidPromise()
+                ctx.voidPromise()
         );
     }
 
