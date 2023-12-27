@@ -3,8 +3,14 @@ package org.ipoliakov.dmap.node.internal.cluster.config;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.ipoliakov.dmap.common.IdGenerator;
+import org.ipoliakov.dmap.common.network.MessageSender;
+import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
+import org.ipoliakov.dmap.common.network.ResponseFutures;
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +20,6 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +30,7 @@ public class ClusterConnector implements InitializingBean {
 
     @Value("${node.reconnectIntervalMillis}")
     private long networkReconnectIntervalMillis;
-    @Value("${MEMBERS:}")
+    @Value("${MEMBERS:${node.members:}}")
     private String members;
 
     @Autowired
@@ -35,7 +40,14 @@ public class ClusterConnector implements InitializingBean {
     @Autowired
     private NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer;
     @Autowired
-    private ChannelGroup clusterChannelGroup;
+    private RaftCluster raftCluster;
+    @Autowired
+    private ResponseFutures responseFutures;
+    @Autowired
+    private ProtoMessageRegistry protoMessageRegistry;
+    @Autowired
+    @Qualifier("lockFreeSnowflakeIdGenerator")
+    private IdGenerator idGenerator;
 
     @Override
     public void afterPropertiesSet() {
@@ -51,7 +63,7 @@ public class ClusterConnector implements InitializingBean {
         }
     }
 
-    private void connect(int id, String host, int port) {
+    private void connect(int nodeId, String host, int port) {
         new Bootstrap().group(nodeToNodeEventLoopGroup)
                 .channel(channel())
                 .handler(nodeToNodeChannelPipelineInitializer)
@@ -59,19 +71,19 @@ public class ClusterConnector implements InitializingBean {
                 .addListener((ChannelFutureListener) future -> {
                     if (future.isSuccess()) {
                         Channel channel = future.channel();
-                        clusterChannelGroup.add(channel);
+                        raftCluster.addMessageSender(nodeId, new MessageSender(channel, idGenerator, responseFutures, protoMessageRegistry));
                         log.debug("Successfully connected to channel = {}", channel);
                         channel.closeFuture().addListener((ChannelFutureListener) future1 -> {
                             Channel c = future1.channel();
-                            clusterChannelGroup.remove(c);
+                            raftCluster.remove(nodeId);
                             log.debug("Channel {} closed", c);
-                            scheduleConnect(id, host, port);
+                            scheduleConnect(nodeId, host, port);
                         });
                     } else {
                         Channel c = future.channel();
-                        clusterChannelGroup.remove(c);
+                        raftCluster.remove(nodeId);
                         log.warn("Failed to connect to {}", c, future.cause());
-                        scheduleConnect(id, host, port);
+                        scheduleConnect(nodeId, host, port);
                     }
                 });
     }

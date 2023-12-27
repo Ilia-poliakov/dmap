@@ -1,8 +1,11 @@
 package org.ipoliakov.dmap.node;
 
+import java.time.Clock;
+
 import org.ipoliakov.dmap.node.server.Server;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -17,7 +20,16 @@ public class Main {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
+
+        InitializerRunner initializerRunner = context.getBean(InitializerRunner.class);
+        initializerRunner.run();
+
         Server server = context.getBean(Server.class);
         server.start();
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
     }
 }

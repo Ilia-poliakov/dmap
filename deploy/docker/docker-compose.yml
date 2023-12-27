@@ -12,6 +12,7 @@ services:
         aliases:
           - node1
     environment:
+      - MEMBER_ID=1
       - MEMBERS=2#node2:${PORT_TO_EXPOSE},3#node3:${PORT_TO_EXPOSE}
       - PORT=${PORT_TO_EXPOSE}
     ports:
@@ -28,6 +29,7 @@ services:
         aliases:
           - node2
     environment:
+      - MEMBER_ID=2
       - MEMBERS=1#node1:${PORT_TO_EXPOSE},3#node3:${PORT_TO_EXPOSE}
       - PORT=${PORT_TO_EXPOSE}
     ports:
@@ -44,6 +46,7 @@ services:
         aliases:
           - node3
     environment:
+      - MEMBER_ID=3
       - MEMBERS=1#node1:${PORT_TO_EXPOSE},2#node2:${PORT_TO_EXPOSE}
       - PORT=${PORT_TO_EXPOSE}
     ports:

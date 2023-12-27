@@ -1,16 +1,12 @@
 package org.ipoliakov.dmap.node.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-
-import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
+import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.RemoveReq;
 import org.ipoliakov.dmap.protocol.internal.Operation;
@@ -26,7 +22,9 @@ import com.google.protobuf.ByteString;
 class TxLoggingStorageServiceTest {
 
     @Mock
-    private TxLogWriter txLogWriter;
+    private RaftLog raftLog;
+    @Mock
+    private RaftState raftState;
     @Mock
     private StorageMutationService storageService;
 
@@ -34,19 +32,19 @@ class TxLoggingStorageServiceTest {
     private TxLoggingStorageService txLoggingStorageService;
 
     @Test
-    void put() throws IOException {
+    void put() {
         PutReq putReq = PutReq.newBuilder()
                 .setKey(ByteString.copyFromUtf8("key"))
                 .setValue(ByteString.copyFromUtf8("val"))
                 .build();
         txLoggingStorageService.put(putReq);
 
-        verify(txLogWriter).write(any(Operation.class));
+        verify(raftLog).append(any(Operation.class));
         verify(storageService).put(putReq);
     }
 
     @Test
-    void remove() throws IOException {
+    void remove() {
         ByteString expectedRemovedValue = ByteString.copyFromUtf8("removed");
         when(storageService.remove(any(RemoveReq.class)))
                 .thenReturn(expectedRemovedValue);
@@ -57,16 +55,7 @@ class TxLoggingStorageServiceTest {
         ByteString actualRemovedValue = txLoggingStorageService.remove(req);
 
         assertEquals(expectedRemovedValue, actualRemovedValue);
-        verify(txLogWriter).write(any(Operation.class));
+        verify(raftLog).append(any(Operation.class));
         verify(storageService).remove(req);
-    }
-
-    @Test
-    void put_RethrowAsUncheckedIOException() throws IOException {
-        doThrow(IOException.class)
-                .when(txLogWriter).write(any(Operation.class));
-
-        assertThrows(UncheckedIOException.class, () -> txLoggingStorageService.put(PutReq.getDefaultInstance()));
-
     }
 }

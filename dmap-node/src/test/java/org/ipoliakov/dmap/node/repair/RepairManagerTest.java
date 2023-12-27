@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.ipoliakov.dmap.node.IntegrationTest;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
 import org.ipoliakov.dmap.node.txlog.repair.RepairManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,11 @@ class RepairManagerTest extends IntegrationTest {
     private RepairManager repairManager;
     @Autowired
     private TxLogFileWriter txLogWriter;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        resetState();
+    }
 
     @Test
     void repairAll() throws Exception {
@@ -37,5 +43,8 @@ class RepairManagerTest extends IntegrationTest {
             ByteString bytes = dataStorage.get(ByteString.copyFromUtf8("key" + i));
             assertEquals(bytes.toStringUtf8(), "value" + i);
         }
+
+        assertEquals(1, raftLog.getLastTerm());
+        assertEquals(operationCount, raftLog.getLastIndex());
     }
 }

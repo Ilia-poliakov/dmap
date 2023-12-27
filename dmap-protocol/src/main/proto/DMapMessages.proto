@@ -13,6 +13,11 @@ enum PayloadType {
   PUT_REQ = 2;
   GET_REQ = 3;
   REMOVE_REQ = 4;
+
+  REQUEST_VOTE_REQ = 5;
+  REQUEST_VOTE_RES = 6;
+  APPEND_ENTRIES_REQ = 7;
+  APPEND_ENTRIES_RES = 8;
 }
 
 message DMapMessage {

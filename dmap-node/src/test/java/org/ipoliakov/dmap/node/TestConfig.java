@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
 @Profile("test")
 @Configuration
+@PropertySource({"classpath:dmap.properties", "classpath:dmap-test.properties"})
 public class TestConfig implements InitializingBean {
 
     @Autowired
@@ -32,10 +34,10 @@ public class TestConfig implements InitializingBean {
         return await()
                 .ignoreExceptions()
                 .until(() -> DMapClient.builder()
-                        .setPort(9090)
-                        .setHost("localhost")
-                        .setThreadCount(1)
-                        .build(new StringSerializer(), new StringSerializer()),
+                                .setPort(9090)
+                                .setHost("localhost")
+                                .setThreadCount(1)
+                                .build(new StringSerializer(), new StringSerializer()),
                         client -> true
                 );
     }
