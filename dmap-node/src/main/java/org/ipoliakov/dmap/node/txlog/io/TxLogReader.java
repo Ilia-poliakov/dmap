@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.ipoliakov.dmap.node.txlog.exception.TxLogReadingException;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 
 public interface TxLogReader {
 

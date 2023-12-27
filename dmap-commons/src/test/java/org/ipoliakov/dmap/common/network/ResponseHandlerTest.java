@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.client.ValueRes;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -22,7 +22,7 @@ class ResponseHandlerTest {
         var responseFutures = new ResponseFutures();
         CompletableFuture<MessageLite> future = new CompletableFuture<>();
         responseFutures.add(messageId, future);
-        ResponseHandler responseHandler = new ResponseHandler(responseFutures, new ProtoMessageRegistry());
+        ResponseHandler responseHandler = new ResponseHandler(responseFutures, MessageScanner.scan(DMapMessage.class));
         ByteString expectedPayload = ValueRes.newBuilder().setValue(ByteString.copyFromUtf8("value")).build().toByteString();
         DMapMessage message = DMapMessage.newBuilder()
             .setMessageId(messageId)

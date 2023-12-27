@@ -44,6 +44,7 @@ public class ClusterConnector implements InitializingBean {
     @Autowired
     private ResponseFutures responseFutures;
     @Autowired
+    @Qualifier("raftMessageRegistry")
     private ProtoMessageRegistry protoMessageRegistry;
     @Autowired
     @Qualifier("lockFreeSnowflakeIdGenerator")

@@ -6,7 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.client.ValueRes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Spliterator;
 
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.client.PutReq;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

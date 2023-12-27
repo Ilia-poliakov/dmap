@@ -8,11 +8,11 @@ import org.ipoliakov.dmap.common.MonotonicallyIdGenerator;
 import org.ipoliakov.dmap.common.network.MessageSender;
 import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
-import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.RemoveReq;
-import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.client.GetReq;
+import org.ipoliakov.dmap.protocol.client.PutReq;
+import org.ipoliakov.dmap.protocol.client.RemoveReq;
+import org.ipoliakov.dmap.protocol.client.ValueRes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;

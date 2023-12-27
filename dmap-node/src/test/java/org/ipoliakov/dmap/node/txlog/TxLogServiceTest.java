@@ -11,7 +11,7 @@ import java.io.UncheckedIOException;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileReader;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

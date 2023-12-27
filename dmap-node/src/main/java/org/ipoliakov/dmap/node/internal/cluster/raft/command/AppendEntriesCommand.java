@@ -5,8 +5,8 @@ import org.ipoliakov.dmap.node.internal.cluster.raft.Role;
 import org.ipoliakov.dmap.node.internal.cluster.raft.election.ElectionService;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
-import org.ipoliakov.dmap.protocol.internal.AppendEntriesRes;
+import org.ipoliakov.dmap.protocol.internal.raft.AppendEntriesReq;
+import org.ipoliakov.dmap.protocol.internal.raft.AppendEntriesRes;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;

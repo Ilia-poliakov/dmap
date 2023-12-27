@@ -1,7 +1,7 @@
 package org.ipoliakov.dmap.util;
 
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.client.ValueRes;
 
 import com.google.protobuf.ByteString;
 

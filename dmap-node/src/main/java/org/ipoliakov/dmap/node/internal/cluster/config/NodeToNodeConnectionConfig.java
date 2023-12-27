@@ -4,8 +4,10 @@ import static org.ipoliakov.dmap.node.config.NetworkBaseConfig.threadEventLoopGr
 
 import java.time.Clock;
 
+import org.ipoliakov.dmap.common.network.MessageScanner;
 import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
+import org.ipoliakov.dmap.protocol.DMapMessage;
 import org.ipoliakov.dmap.util.concurrent.LockFreeSnowflakeIdGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,12 +31,6 @@ public class NodeToNodeConnectionConfig {
     }
 
     @Bean
-    public NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer(ResponseFutures responseFutures,
-                                                                                     ProtoMessageRegistry protoMessageRegistry) {
-        return new NodeToNodeChannelPipelineInitializer(responseFutures, protoMessageRegistry);
-    }
-
-    @Bean
     public ResponseFutures responseFutures() {
         return new ResponseFutures();
     }
@@ -42,5 +38,10 @@ public class NodeToNodeConnectionConfig {
     @Bean
     public LockFreeSnowflakeIdGenerator lockFreeSnowflakeIdGenerator(Clock clock) {
         return new LockFreeSnowflakeIdGenerator(clock, memberId);
+    }
+
+    @Bean
+    public ProtoMessageRegistry raftMessageRegistry() {
+        return MessageScanner.scan(DMapMessage.class);
     }
 }

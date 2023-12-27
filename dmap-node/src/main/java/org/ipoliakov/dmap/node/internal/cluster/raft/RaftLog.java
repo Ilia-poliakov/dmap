@@ -1,7 +1,7 @@
 package org.ipoliakov.dmap.node.internal.cluster.raft;
 
 import org.ipoliakov.dmap.node.txlog.TxLogService;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;

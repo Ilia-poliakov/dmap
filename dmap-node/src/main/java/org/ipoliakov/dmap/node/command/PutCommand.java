@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.command;
 
 import org.ipoliakov.dmap.node.service.StorageMutationService;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
+import org.ipoliakov.dmap.protocol.client.PutReq;
 import org.ipoliakov.dmap.util.ProtoUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

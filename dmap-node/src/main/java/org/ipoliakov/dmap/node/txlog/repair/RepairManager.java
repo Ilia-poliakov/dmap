@@ -8,7 +8,8 @@ import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.operation.MutationOperation;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;
@@ -23,7 +24,8 @@ public class RepairManager {
 
     private final RaftLog raftLog;
     private final TxLogReader txLogReader;
-    private final ProtoMessageRegistry protoMessageFactory;
+    @Qualifier("raftMessageRegistry")
+    private final ProtoMessageRegistry messageRegistry;
     private final EnumMap<PayloadType, MutationOperation<MessageLite>> operationMap;
 
     public void repairAll() {
@@ -31,7 +33,7 @@ public class RepairManager {
 
         try (Stream<Operation> operations = txLogReader.readAll()) {
             operations.forEach(operation -> {
-                MessageLite messageLite = protoMessageFactory.parsePayload(operation);
+                MessageLite messageLite = messageRegistry.parsePayload(operation);
                 MutationOperation<MessageLite> op = operationMap.get(operation.getPayloadType());
                 op.execute(messageLite);
                 raftLog.setLastTerm(operation.getTerm());

@@ -6,8 +6,8 @@ import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.RequestVoteReq;
-import org.ipoliakov.dmap.protocol.internal.RequestVoteRes;
+import org.ipoliakov.dmap.protocol.internal.raft.RequestVoteReq;
+import org.ipoliakov.dmap.protocol.internal.raft.RequestVoteRes;
 import org.ipoliakov.dmap.util.concurrent.ScheduledTask;
 import org.springframework.stereotype.Component;
 

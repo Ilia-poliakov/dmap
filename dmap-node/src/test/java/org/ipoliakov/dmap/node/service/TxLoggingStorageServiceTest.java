@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.RemoveReq;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.client.PutReq;
+import org.ipoliakov.dmap.protocol.client.RemoveReq;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

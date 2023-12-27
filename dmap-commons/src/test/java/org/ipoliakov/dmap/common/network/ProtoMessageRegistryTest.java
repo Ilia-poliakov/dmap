@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.charset.StandardCharsets;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
-import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.client.GetReq;
+import org.ipoliakov.dmap.protocol.client.PutReq;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 import org.junit.jupiter.api.Test;
 
 import com.google.protobuf.ByteString;
@@ -17,7 +17,7 @@ import com.google.protobuf.MessageLite;
 
 class ProtoMessageRegistryTest {
 
-    private static final ProtoMessageRegistry messageFactory = new ProtoMessageRegistry();
+    private static final ProtoMessageRegistry messageFactory = MessageScanner.scan(DMapMessage.class);
 
     @Test
     void parsePayload() {

@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.internal.raft.Operation;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

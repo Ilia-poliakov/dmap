@@ -9,42 +9,21 @@ option optimize_for = SPEED;
 enum PayloadType {
   ERROR_RES = 0;
 
-  VALUE_RES = 1;
-  PUT_REQ = 2;
-  GET_REQ = 3;
-  REMOVE_REQ = 4;
+  REQUEST_VOTE_REQ = 1;
+  REQUEST_VOTE_RES = 2;
+  APPEND_ENTRIES_REQ = 3;
+  APPEND_ENTRIES_RES = 4;
 
-  REQUEST_VOTE_REQ = 5;
-  REQUEST_VOTE_RES = 6;
-  APPEND_ENTRIES_REQ = 7;
-  APPEND_ENTRIES_RES = 8;
+  VALUE_RES = 1000;
+  PUT_REQ = 1001;
+  GET_REQ = 1002;
+  REMOVE_REQ = 1003;
 }
 
 message DMapMessage {
   PayloadType payloadType = 1;
   int64 messageId = 2;
   bytes payload = 3;
-}
-
-message PutReq {
-  PayloadType payloadType = 1;
-  bytes key = 2;
-  bytes value = 3;
-}
-
-message GetReq {
-  PayloadType payloadType = 1;
-  bytes key = 2;
-}
-
-message RemoveReq {
-  PayloadType payloadType = 1;
-  bytes key = 2;
-}
-
-message ValueRes {
-  PayloadType payloadType = 1;
-  bytes value = 2;
 }
 
 message ErrorMessage {

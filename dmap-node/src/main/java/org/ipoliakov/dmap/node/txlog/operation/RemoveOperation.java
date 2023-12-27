@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.txlog.operation;
 
 import org.ipoliakov.dmap.node.service.StorageMutationService;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.RemoveReq;
+import org.ipoliakov.dmap.protocol.client.RemoveReq;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;

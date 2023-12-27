@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft.election;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.protocol.internal.RequestVoteRes;
+import org.ipoliakov.dmap.protocol.internal.raft.RequestVoteRes;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
