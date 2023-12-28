@@ -27,6 +27,7 @@ public class RaftLog {
     }
 
     public long getLastIndex() {
+        long lastIndex = this.lastIndex;
         if (lastIndex > 0) {
             return lastIndex;
         }
@@ -34,6 +35,7 @@ public class RaftLog {
     }
 
     public int getLastTerm() {
+        int lastTerm = this.lastTerm;
         if (lastTerm > 0) {
             return lastTerm;
         }

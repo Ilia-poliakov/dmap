@@ -24,7 +24,7 @@ public class HeartbeatTask implements ScheduledTask {
     @Override
     public void runInternal() {
         log.debug("HeartbeatTask - start");
-        AppendEntriesReq req = AppendEntriesReq.newBuilder()
+        var req = AppendEntriesReq.newBuilder()
                 .setTerm(raftState.getCurrentTerm())
                 .setLeaderId(raftState.getLeaderId())
                 .build();

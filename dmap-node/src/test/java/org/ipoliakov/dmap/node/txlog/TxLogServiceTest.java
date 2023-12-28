@@ -42,4 +42,10 @@ class TxLogServiceTest {
         when(txLogFileReader.read(anyInt())).thenThrow(IOException.class);
         assertThrows(UncheckedIOException.class, () -> service.readByLogIndex(1));
     }
+
+    @Test
+    void readLastEntry_rethrowIOException() throws IOException {
+        when(txLogFileReader.read(anyInt())).thenThrow(IOException.class);
+        assertThrows(UncheckedIOException.class, () -> service.readLastEntry());
+    }
 }

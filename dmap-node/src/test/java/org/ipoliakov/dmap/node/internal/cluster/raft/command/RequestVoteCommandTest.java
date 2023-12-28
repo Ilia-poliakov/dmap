@@ -107,21 +107,20 @@ class RequestVoteCommandTest extends IntegrationTest {
 
     @Test
     void execute_grantWhenAlreadyVotedForCandidate() throws Exception {
-        raftState.setVotedFor(2);
         RequestVoteReq req = RequestVoteReq.newBuilder()
-                .setTerm(1)
+                .setTerm(raftState.getCurrentTerm())
                 .setLastLogTerm(10)
                 .setCandidateId(2)
                 .setLastLogIndex(1)
                 .setPayloadType(PayloadType.REQUEST_VOTE_REQ)
                 .build();
-
         RequestVoteRes expected = RequestVoteRes.newBuilder()
                 .setVoteGranted(true)
                 .setVoterId(1)
                 .setTerm(raftState.getCurrentTerm())
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
+        raftState.setVotedFor(2);
         List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
