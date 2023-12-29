@@ -2,6 +2,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft.state;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
@@ -91,6 +92,20 @@ class RaftStateTest {
     @Test
     void testHashCode() {
         candidateState().hashCode();
+    }
+
+    @Test
+    void testToString() {
+        assertFalse(candidateState().toString().contains("applicationEventPublisher"));
+    }
+
+    @Test
+    void testEquals() {
+        assertEquals(candidateState(), candidateState());
+        assertEquals(followerState(1), followerState(1));
+        assertNotEquals(candidateState().setRole(Role.LEADER), candidateState());
+        assertNotEquals(followerState(1), followerState(2));
+        assertNotEquals(followerState(1), candidateState());
     }
 
     private RaftState candidateState() {

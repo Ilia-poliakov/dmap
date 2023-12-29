@@ -9,11 +9,11 @@ public interface ScheduledTask extends Runnable {
 
     default void run() {
         try {
-            runInternal();
+            execute();
         } catch (Exception e) {
             log.error("Error while running scheduled task", e);
         }
     }
 
-    void runInternal();
+    void execute();
 }

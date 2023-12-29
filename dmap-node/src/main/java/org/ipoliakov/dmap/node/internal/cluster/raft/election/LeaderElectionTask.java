@@ -25,7 +25,7 @@ public class LeaderElectionTask implements ScheduledTask {
     private final VoteResponseHandler voteResponseHandler;
 
     @Override
-    public void runInternal() {
+    public void execute() {
         log.debug("LeaderElectionTask - start");
 
         raftState.becomeCandidate();

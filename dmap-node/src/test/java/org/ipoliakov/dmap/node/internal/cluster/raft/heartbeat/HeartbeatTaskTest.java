@@ -31,7 +31,7 @@ class HeartbeatTaskTest {
         raftState.setCurrentTerm(term);
         raftState.becomeLeader();
         HeartbeatTask heartbeatTask = new HeartbeatTask(raftState, raftCluster);
-        heartbeatTask.runInternal();
+        heartbeatTask.execute();
 
         Mockito.verify(raftCluster).sendToAll(req, AppendEntriesRes.class);
     }

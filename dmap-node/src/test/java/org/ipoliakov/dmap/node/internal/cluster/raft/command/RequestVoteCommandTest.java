@@ -23,7 +23,7 @@ class RequestVoteCommandTest extends IntegrationTest {
         RequestVoteReq req = RequestVoteReq.newBuilder()
                 .setTerm(1)
                 .setLastLogTerm(10)
-                .setCandidateId(1)
+                .setCandidateId(2)
                 .setLastLogIndex(1)
                 .setPayloadType(PayloadType.REQUEST_VOTE_REQ)
                 .build();
@@ -128,11 +128,33 @@ class RequestVoteCommandTest extends IntegrationTest {
     }
 
     @Test
+    void execute_rejectWhenAlreadyVotedForAnotherCandidate() throws Exception {
+        RequestVoteReq req = RequestVoteReq.newBuilder()
+                .setTerm(raftState.getCurrentTerm())
+                .setLastLogTerm(10)
+                .setCandidateId(2)
+                .setLastLogIndex(1)
+                .setPayloadType(PayloadType.REQUEST_VOTE_REQ)
+                .build();
+        RequestVoteRes expected = RequestVoteRes.newBuilder()
+                .setVoteGranted(false)
+                .setVoterId(1)
+                .setTerm(raftState.getCurrentTerm())
+                .setPayloadType(PayloadType.REQUEST_VOTE_RES)
+                .build();
+        raftState.setVotedFor(100);
+        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+
+        assertEquals(1, resp.size());
+        assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
+    }
+
+    @Test
     void execute_rejectWhenCurrentLogTermGreaterThanRequest() throws Exception {
         raftLog.setLastTerm(100);
         RequestVoteReq req = RequestVoteReq.newBuilder()
                 .setTerm(1)
-                .setLastLogTerm(10)
+                .setLastLogTerm(raftLog.getLastTerm() - 1)
                 .setCandidateId(2)
                 .setLastLogIndex(1)
                 .setPayloadType(PayloadType.REQUEST_VOTE_REQ)

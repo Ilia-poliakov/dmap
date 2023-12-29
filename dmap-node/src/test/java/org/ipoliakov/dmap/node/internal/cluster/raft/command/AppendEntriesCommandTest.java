@@ -78,4 +78,25 @@ class AppendEntriesCommandTest extends IntegrationTest {
         assertEquals(Role.FOLLOWER, raftState.getRole());
         assertEquals(req.getLeaderId(), raftState.getLeaderId());
     }
+
+    @Test
+    @DisplayName("Skip updating leader id when it is actual")
+    void execute_updateLeaderId() throws Exception {
+        raftState.setCurrentTerm(1);
+        raftState.setLeaderId(10);
+        AppendEntriesReq req = AppendEntriesReq.newBuilder()
+                .setPayloadType(PayloadType.APPEND_ENTRIES_REQ)
+                .setTerm(1)
+                .setLeaderId(10)
+                .build();
+        AppendEntriesRes expected = AppendEntriesRes.newBuilder()
+                .setPayloadType(PayloadType.APPEND_ENTRIES_RES)
+                .setTerm(raftState.getCurrentTerm())
+                .setSuccess(true)
+                .build();
+
+        List<CompletableFuture<AppendEntriesRes>> resp = raftCluster.sendToAll(req, AppendEntriesRes.class);
+        assertEquals(1, resp.size());
+        assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
+    }
 }

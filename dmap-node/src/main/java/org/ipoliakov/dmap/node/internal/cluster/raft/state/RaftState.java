@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class RaftState {
+public final class RaftState {
 
     @Value("${MEMBER_ID:${member.id}}")
     private final int selfId;
