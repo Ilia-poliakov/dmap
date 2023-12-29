@@ -22,7 +22,7 @@ public class HeartbeatTask implements ScheduledTask {
     private final RaftCluster raftCluster;
 
     @Override
-    public void runInternal() {
+    public void execute() {
         log.debug("HeartbeatTask - start");
         var req = AppendEntriesReq.newBuilder()
                 .setTerm(raftState.getCurrentTerm())

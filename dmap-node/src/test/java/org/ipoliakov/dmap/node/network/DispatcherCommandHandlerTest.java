@@ -30,7 +30,7 @@ class DispatcherCommandHandlerTest {
     @Test
     void unknownCommand() {
         Command command = Mockito.mock(Command.class);
-        ProtoMessageRegistry protoMessageFactory = Mockito.mock(ProtoMessageRegistry.class);
+        ProtoMessageRegistry protoMessageRegistry = Mockito.mock(ProtoMessageRegistry.class);
         ChannelHandlerContext channelHandlerContext = Mockito.mock(ChannelHandlerContext.class);
         Channel channel = Mockito.mock(Channel.class);
         when(channelHandlerContext.channel()).thenReturn(channel);
@@ -40,10 +40,10 @@ class DispatcherCommandHandlerTest {
                 .setMessageId(1)
                 .setPayload(PutReq.getDefaultInstance().toByteString())
                 .build();
-        when(protoMessageFactory.parsePayload(message)).thenReturn(ValueRes.getDefaultInstance());
+        when(protoMessageRegistry.parsePayload(message)).thenReturn(ValueRes.getDefaultInstance());
 
         EnumMap<PayloadType, Command> commandMap = new EnumMap<>(Map.of(PayloadType.GET_REQ, command));
-        var dispatcher = new DispatcherCommandHandler(protoMessageFactory, commandMap);
+        var dispatcher = new DispatcherCommandHandler(protoMessageRegistry, commandMap);
 
         dispatcher.channelRead(channelHandlerContext, message);
 

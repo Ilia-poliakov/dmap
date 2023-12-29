@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class CommandConfig {
 
     @Bean
-    public ProtoMessageRegistry protoMessageFactory() {
+    public ProtoMessageRegistry protoMessageRegistry() {
         return new ProtoMessageRegistry();
     }
 

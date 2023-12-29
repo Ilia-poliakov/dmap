@@ -68,7 +68,7 @@ class HeartbeatServiceTest {
         final AtomicInteger counter = new AtomicInteger();
 
         @Override
-        public void runInternal() {
+        public void execute() {
             counter.incrementAndGet();
         }
     }

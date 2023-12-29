@@ -16,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 public class ResponseHandler extends SimpleChannelInboundHandler<DMapMessage> {
 
     private final ResponseFutures responseFutures;
-    private final ProtoMessageRegistry messageFactory;
+    private final ProtoMessageRegistry messageRegistry;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, DMapMessage message) {
         long messageId = message.getMessageId();
         CompletableFuture future = responseFutures.get(messageId);
-        MessageLite payload = messageFactory.parsePayload(message);
+        MessageLite payload = messageRegistry.parsePayload(message);
         future.complete(payload);
     }
 }

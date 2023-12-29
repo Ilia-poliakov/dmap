@@ -40,9 +40,7 @@ public class AppendEntriesCommand implements Command<AppendEntriesReq> {
             log.info("Updating leader id: " + req.getLeaderId());
             raftState.setLeaderId(req.getLeaderId());
         }
-        if (raftState.getRole() != Role.LEADER) {
-            electionService.restartElectionTask();
-        }
+        electionService.restartElectionTask();
         return response(true);
     }
 

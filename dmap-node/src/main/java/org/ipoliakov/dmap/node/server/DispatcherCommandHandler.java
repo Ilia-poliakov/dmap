@@ -27,14 +27,14 @@ public class DispatcherCommandHandler extends ChannelInboundHandlerAdapter {
 
     private static final DefaultCommand DEFAULT_COMMAND = new DefaultCommand();
 
-    private final ProtoMessageRegistry messageFactory;
+    private final ProtoMessageRegistry messageRegistry;
     private final EnumMap<PayloadType, Command> commandMap;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         DMapMessage message = (DMapMessage) msg;
         Command command = commandMap.getOrDefault(message.getPayloadType(), DEFAULT_COMMAND);
-        Message response = (Message) command.execute(ctx, messageFactory.parsePayload(message));
+        Message response = (Message) command.execute(ctx, messageRegistry.parsePayload(message));
         ctx.channel().writeAndFlush(
             DMapMessage.newBuilder()
                 .setMessageId(message.getMessageId())
