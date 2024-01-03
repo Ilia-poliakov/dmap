@@ -71,7 +71,7 @@ public class ClusterConnector implements InitializingBean {
                 .addListener((ChannelFutureListener) future -> {
                     if (future.isSuccess()) {
                         Channel channel = future.channel();
-                        raftCluster.addMessageSender(nodeId, new MessageSender(channel, idGenerator, responseFutures, protoMessageRegistry));
+                        raftCluster.addMessageSender(nodeId, new MessageSender(idGenerator, responseFutures, protoMessageRegistry, channel));
                         log.debug("Successfully connected to channel = {}", channel);
                         channel.closeFuture().addListener((ChannelFutureListener) future1 -> {
                             Channel c = future1.channel();

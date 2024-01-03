@@ -3,11 +3,8 @@ package org.ipoliakov.dmap.client;
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
+import org.ipoliakov.dmap.client.internal.ClientMessageSender;
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
-import org.ipoliakov.dmap.common.MonotonicallyIdGenerator;
-import org.ipoliakov.dmap.common.network.MessageSender;
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
@@ -17,25 +14,16 @@ import org.ipoliakov.dmap.protocol.ValueRes;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
 
-import io.netty.channel.Channel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 class DMapClientImpl<K extends Serializable, V extends Serializable> implements DMapClient<K, V> {
 
-    private final MessageSender messageSender;
+    private final ClientMessageSender messageSender;
     private final Serializer<K, ByteString> keySerializer;
     private final Serializer<V, ByteString> valueSerializer;
-
-    DMapClientImpl(Channel channel,
-                   ResponseFutures responseFutures,
-                   ProtoMessageRegistry protoMessageRegistry,
-                   Serializer<K, ByteString> keySerializer,
-                   Serializer<V, ByteString> valueSerializer) {
-        this.messageSender = new MessageSender(channel, new MonotonicallyIdGenerator(), responseFutures, protoMessageRegistry);
-        this.keySerializer = keySerializer;
-        this.valueSerializer = valueSerializer;
-    }
 
     @Override
     public CompletableFuture<V> get(K key) {
@@ -56,7 +44,7 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                 .setKey(keySerializer.serialize(key))
                 .setValue(valueSerializer.serialize(value))
                 .build();
-        return messageSender.send(req, ValueRes.class)
+        return messageSender.sendToLeader(req, ValueRes.class)
                 .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));
@@ -68,7 +56,7 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
                 .setPayloadType(PayloadType.REMOVE_REQ)
                 .setKey(keySerializer.serialize(key))
                 .build();
-        return messageSender.send(req, ValueRes.class)
+        return messageSender.sendToLeader(req, ValueRes.class)
                 .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));

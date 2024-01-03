@@ -1,8 +1,5 @@
 package org.ipoliakov.dmap.client.internal;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.network.ResponseFutures;
-import org.ipoliakov.dmap.common.network.ResponseHandler;
 import org.ipoliakov.dmap.protocol.DMapMessage;
 
 import io.netty.channel.ChannelInitializer;
@@ -17,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClientPipelineInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final ResponseFutures responseFutures;
-    private final ProtoMessageRegistry messageFactory;
+    private final ClientResponseHandler responseHandler;
 
     @Override
     protected void initChannel(SocketChannel channel) {
@@ -29,6 +25,6 @@ public class ClientPipelineInitializer extends ChannelInitializer<SocketChannel>
 
         p.addLast(new ProtobufVarint32LengthFieldPrepender());
         p.addLast(new ProtobufEncoder());
-        p.addLast(new ResponseHandler(responseFutures, messageFactory));
+        p.addLast(responseHandler);
     }
 }

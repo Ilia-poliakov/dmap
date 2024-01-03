@@ -23,7 +23,7 @@ public class RepairManager {
 
     private final RaftLog raftLog;
     private final TxLogReader txLogReader;
-    private final ProtoMessageRegistry protoMessageFactory;
+    private final ProtoMessageRegistry protoMessageRegistry;
     private final EnumMap<PayloadType, MutationOperation<MessageLite>> operationMap;
 
     public void repairAll() {
@@ -31,7 +31,7 @@ public class RepairManager {
 
         try (Stream<Operation> operations = txLogReader.readAll()) {
             operations.forEach(operation -> {
-                MessageLite messageLite = protoMessageFactory.parsePayload(operation);
+                MessageLite messageLite = protoMessageRegistry.parsePayload(operation);
                 MutationOperation<MessageLite> op = operationMap.get(operation.getPayloadType());
                 op.execute(messageLite);
                 raftLog.setLastTerm(operation.getTerm());

@@ -34,8 +34,7 @@ public class TestConfig implements InitializingBean {
         return await()
                 .ignoreExceptions()
                 .until(() -> DMapClient.builder()
-                                .setPort(9090)
-                                .setHost("localhost")
+                                .addNode("localhost", 9090)
                                 .setThreadCount(1)
                                 .build(new StringSerializer(), new StringSerializer()),
                         client -> true

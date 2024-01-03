@@ -17,7 +17,7 @@ class MessageSenderTest {
     @Test
     void send() {
         Channel channel = Mockito.mock(Channel.class);
-        var sender = new MessageSender(channel, new MonotonicallyIdGenerator(1), new ResponseFutures(), new ProtoMessageRegistry());
+        var sender = new MessageSender(new MonotonicallyIdGenerator(1), new ResponseFutures(), new ProtoMessageRegistry(), channel);
         PutReq putReq = PutReq.newBuilder()
             .setPayloadType(PayloadType.PUT_REQ)
             .setKey(ByteString.copyFromUtf8("key"))
