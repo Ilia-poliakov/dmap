@@ -17,13 +17,13 @@ import com.google.protobuf.MessageLite;
 
 class ProtoMessageRegistryTest {
 
-    private static final ProtoMessageRegistry messageFactory = new ProtoMessageRegistry();
+    private static final ProtoMessageRegistry messageRegistry = new ProtoMessageRegistry();
 
     @Test
     void parsePayload() {
         GetReq getReq = GetReq.newBuilder()
             .setKey(ByteString.copyFrom("key", StandardCharsets.UTF_8))
-            .setPayloadType(messageFactory.getPayloadType(GetReq.class))
+            .setPayloadType(messageRegistry.getPayloadType(GetReq.class))
             .build();
         assertEquals(PayloadType.GET_REQ, getReq.getPayloadType());
     }
@@ -32,7 +32,7 @@ class ProtoMessageRegistryTest {
     void getPayloadType() {
         GetReq getReq = GetReq.newBuilder()
             .setKey(ByteString.copyFrom("key", StandardCharsets.UTF_8))
-            .setPayloadType(messageFactory.getPayloadType(GetReq.class))
+            .setPayloadType(messageRegistry.getPayloadType(GetReq.class))
             .build();
         DMapMessage message = DMapMessage.newBuilder()
             .setMessageId(1)
@@ -40,7 +40,7 @@ class ProtoMessageRegistryTest {
             .setPayload(getReq.toByteString())
             .build();
 
-        GetReq getReqActual = (GetReq) messageFactory.parsePayload(message);
+        GetReq getReqActual = (GetReq) messageRegistry.parsePayload(message);
 
         assertEquals(getReq, getReqActual);
     }
@@ -52,7 +52,7 @@ class ProtoMessageRegistryTest {
             .setKey(ByteString.copyFromUtf8("key"))
             .setValue(ByteString.copyFromUtf8("value"))
             .build();
-        MessageLite parsedOperation = messageFactory.parsePayload(
+        MessageLite parsedOperation = messageRegistry.parsePayload(
             Operation.newBuilder()
                 .setPayloadType(PayloadType.PUT_REQ)
                 .setMessage(putReq.toByteString())
@@ -64,7 +64,7 @@ class ProtoMessageRegistryTest {
     @Test
     void parsePayloadOperation_incorrectProto() {
         assertThrows(IllegalArgumentException.class, () ->
-            messageFactory.parsePayload(
+            messageRegistry.parsePayload(
                 Operation.newBuilder()
                     .setPayloadType(PayloadType.PUT_REQ)
                     .setMessage(ByteString.copyFromUtf8("incorrect proto"))

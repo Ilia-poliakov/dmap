@@ -37,8 +37,8 @@ public class Server {
     private final MainPipelineInitializer pipelineInitializer;
 
     public void start() {
-        EventLoopGroup bossGroup = threadEventLoopGroup(bossThreadNumber);
-        EventLoopGroup workerGroup = threadEventLoopGroup(workerThreadNumber);
+        EventLoopGroup bossGroup = threadEventLoopGroup(bossThreadNumber, "boss-");
+        EventLoopGroup workerGroup = threadEventLoopGroup(workerThreadNumber, "worker-");
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)

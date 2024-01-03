@@ -16,7 +16,7 @@ public class MessageSender {
     private final Channel channel;
     private final IdGenerator idGenerator;
     private final ResponseFutures responseFutures;
-    private final ProtoMessageRegistry messageFactory;
+    private final ProtoMessageRegistry messageRegistry;
 
     public <R extends MessageLite> CompletableFuture<R> send(MessageLite message, Class<R> responseType) {
         CompletableFuture<R> future = new CompletableFuture<>();
@@ -26,7 +26,7 @@ public class MessageSender {
         DMapMessage dMapMessage = DMapMessage.newBuilder()
                 .setMessageId(messageId)
                 .setPayload(message.toByteString())
-                .setPayloadType(messageFactory.getPayloadType(message.getClass()))
+                .setPayloadType(messageRegistry.getPayloadType(message.getClass()))
                 .build();
         channel.writeAndFlush(dMapMessage, channel.voidPromise());
         return future;

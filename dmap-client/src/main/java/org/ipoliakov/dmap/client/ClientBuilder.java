@@ -30,14 +30,14 @@ public class ClientBuilder {
                                                                                    Serializer<V, ByteString> valueSerializer) {
         EventLoopGroup group = singleThreadEventLoopGroup();
         ResponseFutures responseFutures = new ResponseFutures();
-        ProtoMessageRegistry messageFactory = new ProtoMessageRegistry();
+        ProtoMessageRegistry messageRegistry = new ProtoMessageRegistry();
         try {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group)
                     .channel(channel())
-                    .handler(new ClientPipelineInitializer(responseFutures, messageFactory));
+                    .handler(new ClientPipelineInitializer(responseFutures, messageRegistry));
             Channel c = bootstrap.connect(host, port).sync().channel();
-            return new DMapClientImpl<>(c, responseFutures, messageFactory, keySerializer, valueSerializer);
+            return new DMapClientImpl<>(c, responseFutures, messageRegistry, keySerializer, valueSerializer);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

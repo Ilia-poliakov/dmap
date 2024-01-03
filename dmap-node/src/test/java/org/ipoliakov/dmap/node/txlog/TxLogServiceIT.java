@@ -18,7 +18,7 @@ class TxLogServiceIT extends IntegrationTest {
 
     @Test
     void append() {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             service.append(
                     Operation.newBuilder()
                             .setPayloadType(PayloadType.PUT_REQ)
@@ -29,10 +29,11 @@ class TxLogServiceIT extends IntegrationTest {
                                             .build()
                                             .toByteString())
                             .setLogIndex(i)
+                            .setTerm(i)
                             .build()
             );
         }
-        int index = 3;
+        int index = 4;
         Operation expected = Operation.newBuilder()
                 .setPayloadType(PayloadType.PUT_REQ)
                 .setMessage(
@@ -42,9 +43,43 @@ class TxLogServiceIT extends IntegrationTest {
                                 .build()
                                 .toByteString())
                 .setLogIndex(index)
+                .setTerm(index)
                 .build();
 
         Operation actual = service.readByLogIndex(index);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getLastEntry() {
+        for (int i = 1; i < 6; i++) {
+            service.append(
+                    Operation.newBuilder()
+                            .setPayloadType(PayloadType.PUT_REQ)
+                            .setMessage(
+                                    PutReq.newBuilder()
+                                            .setKey(ByteString.copyFromUtf8("key" + i))
+                                            .setValue(ByteString.copyFromUtf8("value" + i))
+                                            .build()
+                                            .toByteString())
+                            .setLogIndex(i)
+                            .setTerm(i)
+                            .build()
+            );
+        }
+        int index = 5;
+        Operation expected = Operation.newBuilder()
+                .setPayloadType(PayloadType.PUT_REQ)
+                .setMessage(
+                        PutReq.newBuilder()
+                                .setKey(ByteString.copyFromUtf8("key" + index))
+                                .setValue(ByteString.copyFromUtf8("value" + index))
+                                .build()
+                                .toByteString())
+                .setLogIndex(index)
+                .setTerm(index)
+                .build();
+
+        assertEquals(expected, service.readLastEntry().get());
     }
 }

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class NodeToNodeChannelPipelineInitializer extends ChannelInitializer<Channel> {
 
     private final ResponseFutures responseFutures;
-    private final ProtoMessageRegistry messageFactory;
+    private final ProtoMessageRegistry messageRegistry;
 
     @Override
     protected void initChannel(Channel channel) {
@@ -29,6 +29,6 @@ public class NodeToNodeChannelPipelineInitializer extends ChannelInitializer<Cha
 
         p.addLast(new ProtobufVarint32LengthFieldPrepender());
         p.addLast(new ProtobufEncoder());
-        p.addLast(new ResponseHandler(responseFutures, messageFactory));
+        p.addLast(new ResponseHandler(responseFutures, messageRegistry));
     }
 }
