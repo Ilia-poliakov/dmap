@@ -46,7 +46,7 @@ class TxLogServiceIT extends IntegrationTest {
                 .setTerm(index)
                 .build();
 
-        Operation actual = service.readByLogIndex(index);
+        Operation actual = service.readByLogIndex(index).get();
         assertEquals(expected, actual);
     }
 

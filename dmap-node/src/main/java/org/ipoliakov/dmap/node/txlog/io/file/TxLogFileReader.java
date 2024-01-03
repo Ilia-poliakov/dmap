@@ -1,13 +1,14 @@
 package org.ipoliakov.dmap.node.txlog.io.file;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.nio.channels.Channels;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -44,12 +45,11 @@ public class TxLogFileReader implements TxLogReader {
     }
 
     @Override
-    public Operation read(int address) throws IOException {
-        byte[] buf = new byte[8 * 1024];
+    public Optional<Operation> read(int address) throws IOException {
         try (RandomAccessFile raf = new RandomAccessFile(logFile, "r")) {
             raf.seek(address);
-            raf.read(buf);
-            return read(CodedInputStream.newInstance(new ByteArrayInputStream(buf)));
+            InputStream inputStream = new BufferedInputStream(Channels.newInputStream(raf.getChannel()));
+            return Optional.ofNullable(read(CodedInputStream.newInstance(inputStream)));
         }
     }
 

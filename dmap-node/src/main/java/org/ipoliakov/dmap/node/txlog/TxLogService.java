@@ -32,7 +32,7 @@ public class TxLogService {
         }
     }
 
-    public Operation readByLogIndex(long logIndex) {
+    public Optional<Operation> readByLogIndex(long logIndex) {
         try {
             int address = txLogFileIndex.get(logIndex - 1);
             return txLogFileReader.read(address);
@@ -47,7 +47,7 @@ public class TxLogService {
             if (txLogFileIndex.isEmpty()) {
                 return Optional.empty();
             }
-            return Optional.of(txLogFileReader.read(txLogFileIndex.getLast()));
+            return txLogFileReader.read(txLogFileIndex.getLast());
         } catch (IOException e) {
             log.error("Can't read last operation from log", e);
             throw new UncheckedIOException(e);

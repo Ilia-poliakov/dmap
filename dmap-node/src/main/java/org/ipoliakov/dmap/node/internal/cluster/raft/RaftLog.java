@@ -1,5 +1,7 @@
 package org.ipoliakov.dmap.node.internal.cluster.raft;
 
+import java.util.Optional;
+
 import org.ipoliakov.dmap.node.txlog.TxLogService;
 import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Component;
@@ -31,7 +33,7 @@ public class RaftLog {
         if (lastIndex > 0) {
             return lastIndex;
         }
-        return readFromFile().getLogIndex();
+        return readLast().getLogIndex();
     }
 
     public int getLastTerm() {
@@ -39,14 +41,14 @@ public class RaftLog {
         if (lastTerm > 0) {
             return lastTerm;
         }
-        return readFromFile().getTerm();
+        return readLast().getTerm();
     }
 
-    public Operation getPrevOperation() {
-        return txLogService.readByLogIndex(lastIndex - 1);
+    public Optional<Operation> readByIndex(long index) {
+        return txLogService.readByLogIndex(index);
     }
 
-    private Operation readFromFile() {
+    private Operation readLast() {
         Operation operation = txLogService.readLastEntry()
                 .orElseGet(Operation::getDefaultInstance);
         lastIndex = operation.getLogIndex();
