@@ -15,17 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 public class FutureUtils {
 
     /**
-     * Wait result from the majority of futures by condition.
+     * Wait for results from the majority of futures by condition.
      * When specified condition is true then result of future is correct
      *
      * @param futures futures of which a quorum is required
      * @param condition condition for successful completion
      * @param timeout the maximum time to wait
      * @param unit time unit of the timeout argument
-     * @throws QuorumUnreachableException when quorum if not reachable
-     * @throws TimeoutException if the wait timed out
      *
      * @return Exception from unsuccessful futures
+     * @throws QuorumUnreachableException when quorum if not reachable
+     * @throws TimeoutException if the wait timed out
+     * @throws InterruptedException if the current thread was interrupted while waiting
      */
     public static <R> Set<Throwable> waitForQuorum(List<CompletableFuture<R>> futures, Predicate<R> condition, long timeout, TimeUnit unit)
             throws InterruptedException, TimeoutException {
