@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Predicate;
@@ -18,19 +17,16 @@ public class FutureUtils {
      * Wait for results from the majority of futures by condition.
      * When specified condition is true then result of future is correct
      *
-     * @param futures futures of which a quorum is required
+     * @param futures   futures of which a quorum is required
      * @param condition condition for successful completion
-     * @param timeout the maximum time to wait
-     * @param unit time unit of the timeout argument
-     *
+     * @param timeout   the maximum time to wait
+     * @param unit      time unit of the timeout argument
      * @return Exception from unsuccessful futures
      * @throws QuorumUnreachableException when quorum if not reachable
-     * @throws TimeoutException if the wait timed out
-     * @throws InterruptedException if the current thread was interrupted while waiting
+     * @throws TimeoutException           if the wait timed out
      */
-    public static <R> Set<Throwable> waitForQuorum(List<CompletableFuture<R>> futures, Predicate<R> condition, long timeout, TimeUnit unit)
-            throws InterruptedException, TimeoutException {
-
+    @SuppressWarnings("checkstyle:JavaNCSS")
+    public static <R> Set<Throwable> waitForQuorum(List<CompletableFuture<R>> futures, Predicate<R> condition, long timeout, TimeUnit unit) throws TimeoutException {
         int completedCount = 0;
         int incompleteCount = 0;
         int quorum = futures.size() / 2 + 1;
@@ -43,13 +39,9 @@ public class FutureUtils {
                     incompleteCount++;
                     aggregatedFuture = aggregatedFuture == null ? future : CompletableFuture.anyOf(aggregatedFuture, future);
                 } else if (future.isCompletedExceptionally() && !future.isCancelled()) {
-                    try {
-                        future.get();
-                    } catch (ExecutionException e) {
-                        throwables.add(e.getCause());
-                    }
+                    throwables.add(future.exceptionNow());
                 } else if (!future.isCancelled()) {
-                    R r = get(future);
+                    R r = future.getNow(null);
                     if (condition.test(r)) {
                         completedCount++;
                     }
@@ -63,13 +55,5 @@ public class FutureUtils {
             }
         }
         throw new TimeoutException("Quorum unreachable in time " + timeout + " " + unit);
-    }
-
-    private static <R> R get(CompletableFuture<R> future) throws InterruptedException {
-        try {
-            return future.get();
-        } catch (ExecutionException e) {
-            throw new IllegalStateException("Abnormal error of getting result from done future", e);
-        }
     }
 }

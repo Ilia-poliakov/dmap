@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 import org.ipoliakov.dmap.client.DMapClient;
 import org.ipoliakov.dmap.client.serializer.StringSerializer;
 import org.ipoliakov.dmap.node.server.Server;
+import org.ipoliakov.dmap.node.service.StorageServiceImpl;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,11 @@ public class TestConfig implements InitializingBean {
     public void afterPropertiesSet() {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> server.start());
+    }
+
+    @Bean
+    public StorageServiceImpl replicatedStorageService(StorageServiceImpl storageService) {
+        return storageService;
     }
 
     @Bean

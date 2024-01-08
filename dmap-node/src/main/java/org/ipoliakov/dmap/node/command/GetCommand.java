@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.command;
 import org.ipoliakov.dmap.node.service.StorageReadOnlyService;
 import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.util.ProtoUtils;
+import org.ipoliakov.dmap.util.ProtoMessages;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.ByteString;
@@ -21,7 +21,7 @@ public class GetCommand implements Command<GetReq> {
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, GetReq message) {
         ByteString value = storageService.get(message.getKey());
-        return ProtoUtils.valueRes(value);
+        return ProtoMessages.valueRes(value);
     }
 
     @Override

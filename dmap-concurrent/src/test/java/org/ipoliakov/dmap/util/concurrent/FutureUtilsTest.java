@@ -28,6 +28,13 @@ class FutureUtilsTest {
     }
 
     @Test
+    void waitForQuorum_singleFuture() throws Exception {
+        CompletableFuture<Boolean> f1 = CompletableFuture.completedFuture(true);
+        Set<Throwable> throwables = FutureUtils.waitForQuorum(List.of(f1), Boolean::booleanValue, 10, TimeUnit.SECONDS);
+        assertTrue(throwables.isEmpty());
+    }
+
+    @Test
     void waitForQuorum_unreachable() {
         CompletableFuture<Boolean> f1 = CompletableFuture.completedFuture(true);
         CompletableFuture<Boolean> f2 = CompletableFuture.completedFuture(false);
@@ -57,5 +64,16 @@ class FutureUtilsTest {
         TimeoutException timeoutException = assertThrows(TimeoutException.class,
                 () -> FutureUtils.waitForQuorum(List.of(f1, f2, f3), Boolean::booleanValue, 3, TimeUnit.SECONDS));
         assertEquals("Quorum unreachable in time 3 SECONDS", timeoutException.getMessage());
+    }
+
+    @Test
+    void waitForQuorum_unreachable_withCanceledFuture() {
+        CompletableFuture<Boolean> f1 = CompletableFuture.supplyAsync(() -> true, CompletableFuture.delayedExecutor(5, TimeUnit.SECONDS));
+        CompletableFuture<Boolean> f2 = CompletableFuture.completedFuture(false);
+        CompletableFuture<Boolean> f3 = CompletableFuture.completedFuture(true);
+        f1.cancel(true);
+
+        assertThrows(QuorumUnreachableException.class,
+                () -> FutureUtils.waitForQuorum(List.of(f1, f2, f3), Boolean::booleanValue, 10, TimeUnit.SECONDS));
     }
 }
