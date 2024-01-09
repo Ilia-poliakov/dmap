@@ -57,11 +57,6 @@ class EntrySet extends AbstractSet<Map.Entry<ByteString, ByteString>> {
     }
 
     @Override
-    public boolean add(Map.Entry<ByteString, ByteString> byteStringByteStringEntry) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean remove(Object o) {
         throw new UnsupportedOperationException();
     }
