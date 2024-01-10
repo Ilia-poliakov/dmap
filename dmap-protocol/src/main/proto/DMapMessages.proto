@@ -7,17 +7,25 @@ option java_outer_classname = "ContainerDMapMessages";
 option optimize_for = SPEED;
 
 enum PayloadType {
+  //commons
   ERROR_RES = 0;
 
-  VALUE_RES = 1;
-  PUT_REQ = 2;
-  GET_REQ = 3;
-  REMOVE_REQ = 4;
+  //RAFT
+  REQUEST_VOTE_REQ = 100;
+  REQUEST_VOTE_RES = 101;
+  APPEND_ENTRIES_REQ = 102;
+  APPEND_ENTRIES_RES = 103;
 
-  REQUEST_VOTE_REQ = 5;
-  REQUEST_VOTE_RES = 6;
-  APPEND_ENTRIES_REQ = 7;
-  APPEND_ENTRIES_RES = 8;
+  //CRDT
+  PN_COUNTER_REPLICATION_REQ = 200;
+
+  //Client
+  VALUE_RES = 1000;
+  PUT_REQ = 1001;
+  GET_REQ = 1002;
+  REMOVE_REQ = 1003;
+
+
 }
 
 message DMapMessage {
