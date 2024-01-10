@@ -244,6 +244,7 @@
                     <excludes>
                         <exclude>**/Main.class</exclude>
                         <exclude>**/Server.class</exclude>
+                        <exclude>**/ProtoMessages.class</exclude>
                         <exclude>**/protocol/**</exclude>
                         <exclude>**/client/**</exclude>
                         <exclude>**/config/**</exclude>

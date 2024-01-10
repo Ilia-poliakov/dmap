@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.command;
 import org.ipoliakov.dmap.node.service.StorageMutationService;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.RemoveReq;
-import org.ipoliakov.dmap.util.ProtoUtils;
+import org.ipoliakov.dmap.util.ProtoMessages;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RemoveCommand implements Command<RemoveReq> {
 
-    @Qualifier("txLoggingStorageService")
+    @Qualifier("replicatedStorageService")
     private final StorageMutationService storageService;
 
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, RemoveReq req) {
         ByteString removedValue = storageService.remove(req);
-        return ProtoUtils.valueRes(removedValue);
+        return ProtoMessages.valueRes(removedValue);
     }
 
     @Override

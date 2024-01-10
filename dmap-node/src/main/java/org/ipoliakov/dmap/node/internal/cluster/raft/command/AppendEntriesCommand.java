@@ -1,12 +1,17 @@
 package org.ipoliakov.dmap.node.internal.cluster.raft.command;
 
+import java.util.List;
+
 import org.ipoliakov.dmap.node.command.Command;
+import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.Role;
 import org.ipoliakov.dmap.node.internal.cluster.raft.election.ElectionService;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
+import org.ipoliakov.dmap.node.txlog.operation.OperationExecutor;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesRes;
+import org.ipoliakov.dmap.protocol.internal.Operation;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;
@@ -20,8 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AppendEntriesCommand implements Command<AppendEntriesReq> {
 
+    private final RaftLog raftLog;
     private final RaftState raftState;
     private final ElectionService electionService;
+    private final OperationExecutor operationExecutor;
 
     @Override
     public MessageLite execute(ChannelHandlerContext ctx, AppendEntriesReq req) {
@@ -41,7 +48,33 @@ public class AppendEntriesCommand implements Command<AppendEntriesReq> {
             raftState.setLeaderId(req.getLeaderId());
         }
         electionService.restartElectionTask();
+        if (!lastLogEntryIsCorrect(req)) {
+            return response(false);
+        }
+        applyOperations(req.getEntriesList());
         return response(true);
+    }
+
+    private boolean lastLogEntryIsCorrect(AppendEntriesReq req) {
+        if (req.getPrevLogIndex() < 1) {
+            return true;
+        }
+        long lastLogIndex = raftLog.getLastIndex();
+        int prevLogTerm = req.getPrevLogIndex() == lastLogIndex ? raftLog.getLastTerm() : readTermByIndex(req.getPrevLogIndex());
+        return req.getPrevLogTerm() == prevLogTerm;
+    }
+
+    private int readTermByIndex(long index) {
+        return raftLog.readByIndex(index)
+                .map(Operation::getTerm)
+                .orElse(-1);
+    }
+
+    private void applyOperations(List<Operation> operation) {
+        for (Operation op : operation) {
+            operationExecutor.execute(op);
+            raftLog.append(op);
+        }
     }
 
     private AppendEntriesRes response(boolean success) {

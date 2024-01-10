@@ -1,6 +1,7 @@
 package org.ipoliakov.dmap.node.txlog.io;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.ipoliakov.dmap.node.txlog.exception.TxLogReadingException;
@@ -10,5 +11,5 @@ public interface TxLogReader {
 
     Stream<Operation> readAll() throws TxLogReadingException;
 
-    Operation read(int address) throws IOException;
+    Optional<Operation> read(int address) throws IOException;
 }
