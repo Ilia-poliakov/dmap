@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft.heartbeat;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesRes;
@@ -18,8 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class HeartbeatTask implements ScheduledTask {
 
+    private final Cluster cluster;
     private final RaftState raftState;
-    private final RaftCluster raftCluster;
 
     @Override
     public void execute() {
@@ -28,7 +28,7 @@ public class HeartbeatTask implements ScheduledTask {
                 .setTerm(raftState.getCurrentTerm())
                 .setLeaderId(raftState.getLeaderId())
                 .build();
-        for (CompletableFuture<AppendEntriesRes> cf : raftCluster.sendToAll(req, AppendEntriesRes.class)) {
+        for (CompletableFuture<AppendEntriesRes> cf : cluster.sendToAll(req, AppendEntriesRes.class)) {
             cf.thenAccept(res -> log.debug("Heartbeat response {}", res)).orTimeout(5, TimeUnit.SECONDS);
         }
     }

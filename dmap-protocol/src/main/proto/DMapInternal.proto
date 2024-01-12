@@ -51,18 +51,12 @@ message AppendEntriesRes {
   bool success = 3;
 }
 
-message PNCounterReplicationReq {
+message PnCounterReplicationReq {
   PayloadType payloadType = 1;
 
-  map<string, VectorClockSnapshot> currentVectorClocks = 2;
-  map<string, PNCounterSnapshot> counters = 3;
+  repeated PnCounterReplicationData replicationData = 2;
 }
 
-message VectorClockSnapshot {
-  map<int32 , int64> timestampsByNodes = 1;
-}
-
-message PNCounterSnapshot {
-    int64 value = 1;
-    int64 timestamp = 2;
+message PnCounterReplicationRes {
+  PayloadType payloadType = 1;
 }

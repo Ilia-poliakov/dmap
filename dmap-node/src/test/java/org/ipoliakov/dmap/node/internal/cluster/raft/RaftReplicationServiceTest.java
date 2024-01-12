@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.PutReq;
@@ -33,7 +34,7 @@ class RaftReplicationServiceTest {
     @Mock
     private RaftLog raftLog;
     @Mock
-    private RaftCluster raftCluster;
+    private Cluster cluster;
 
     private RaftReplicationService raftReplicationService;
 
@@ -42,7 +43,7 @@ class RaftReplicationServiceTest {
         RaftState raftState = leaderState();
         when(raftLog.getLastIndex()).thenReturn(1L);
         when(raftLog.getLastTerm()).thenReturn(1);
-        raftReplicationService = new RaftReplicationService(raftLog, raftState, raftCluster);
+        raftReplicationService = new RaftReplicationService(cluster, raftLog, raftState);
     }
 
     @Test
@@ -64,7 +65,7 @@ class RaftReplicationServiceTest {
             .setPrevLogTerm(raftLog.getLastTerm())
             .addEntries(operation)
             .build();
-        when(raftCluster.sendToAll(appendEntriesReq, AppendEntriesRes.class))
+        when(cluster.sendToAll(appendEntriesReq, AppendEntriesRes.class))
             .thenReturn(List.of(
                 CompletableFuture.completedFuture(AppendEntriesRes.newBuilder().setSuccess(true).build()),
                 CompletableFuture.completedFuture(AppendEntriesRes.newBuilder().setSuccess(true).build()),
@@ -78,7 +79,7 @@ class RaftReplicationServiceTest {
 
     @Test
     void replicate_quorumUnreachable() {
-        when(raftCluster.sendToAll(any(), eq(AppendEntriesRes.class)))
+        when(cluster.sendToAll(any(), eq(AppendEntriesRes.class)))
             .thenReturn(List.of(
                 CompletableFuture.completedFuture(AppendEntriesRes.newBuilder().setSuccess(true).build()),
                 CompletableFuture.completedFuture(AppendEntriesRes.newBuilder().setSuccess(false).build()),

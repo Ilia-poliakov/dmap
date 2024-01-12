@@ -1,5 +1,6 @@
 package org.ipoliakov.dmap.datastructures.crdt.counters;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -7,7 +8,7 @@ import org.ipoliakov.dmap.datastructures.VectorClock;
 import org.ipoliakov.dmap.datastructures.crdt.CRDT;
 import org.ipoliakov.dmap.datastructures.crdt.StampedLong;
 
-public class PNCounter implements CRDT<PNCounter> {
+public class PnCounter implements CRDT<PnCounter> {
 
     private static final int ADDITION_INDEX = 0;
     private static final int SUBTRACT_INDEX = 1;
@@ -16,18 +17,24 @@ public class PNCounter implements CRDT<PNCounter> {
     private final VectorClock vectorClock;
     private final Map<Integer, long[]> state = new ConcurrentHashMap<>();
 
-    public PNCounter(int nodeId) {
+    public PnCounter(int nodeId) {
         this.nodeId = nodeId;
         this.vectorClock = new VectorClock(nodeId);
     }
 
+    public PnCounter(Map<Integer, long[]> state, VectorClock vectorClock) {
+        nodeId = 0;
+        this.vectorClock = vectorClock;
+        this.state.putAll(state);
+    }
+
     @Override
-    public void merge(PNCounter other) {
+    public void merge(PnCounter other) {
         other.state.forEach((nodeId, pnOtherValues) -> {
-            long[] newPNValues = trimToZeroValues(this.state.get(nodeId));
-            newPNValues[0] = Math.max(newPNValues[0], pnOtherValues[0]);
-            newPNValues[1] = Math.max(newPNValues[1], pnOtherValues[1]);
-            this.state.put(nodeId, newPNValues);
+            long[] newPnValues = trimToZeroValues(this.state.get(nodeId));
+            newPnValues[0] = Math.max(newPnValues[0], pnOtherValues[0]);
+            newPnValues[1] = Math.max(newPnValues[1], pnOtherValues[1]);
+            this.state.put(nodeId, newPnValues);
         });
         this.vectorClock.merge(other.vectorClock);
     }
@@ -61,6 +68,14 @@ public class PNCounter implements CRDT<PNCounter> {
             return addAndGet(-delta, timestamp);
         }
         return updateAndGet(delta, timestamp, SUBTRACT_INDEX);
+    }
+
+    public PnCounterSnapshot snapshot() {
+        List<PnCounterState> states = state.entrySet()
+                .stream()
+                .map(entry -> new PnCounterState(entry.getKey(), entry.getValue()[0], entry.getValue()[1]))
+                .toList();
+        return new PnCounterSnapshot(nodeId, states, getCurrentVectorClock());
     }
 
     private void validateConsistency(VectorClock lastReadTimestamp) {

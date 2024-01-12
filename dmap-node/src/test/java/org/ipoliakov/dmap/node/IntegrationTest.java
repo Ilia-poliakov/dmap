@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.ipoliakov.dmap.client.DMapClient;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.election.ElectionService;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
@@ -34,7 +34,7 @@ public abstract class IntegrationTest {
     @Autowired
     private TxLogWriter txLogWriter;
     @Autowired
-    protected RaftCluster raftCluster;
+    protected Cluster cluster;
     @Autowired
     protected RaftLog raftLog;
     @Autowired

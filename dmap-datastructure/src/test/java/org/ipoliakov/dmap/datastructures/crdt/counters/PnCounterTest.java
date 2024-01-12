@@ -4,19 +4,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
+import java.util.Map;
+
 import org.ipoliakov.dmap.datastructures.VectorClock;
 import org.ipoliakov.dmap.datastructures.crdt.StampedLong;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-class PNCounterTest {
+class PnCounterTest {
 
     @Test
     void merge() {
-        PNCounter counter1 = new PNCounter(1);
+        PnCounter counter1 = new PnCounter(1);
         counter1.addAndGet(100, new VectorClock(1));
 
-        PNCounter counter2 = new PNCounter(1);
+        PnCounter counter2 = new PnCounter(1);
         counter2.addAndGet(200, new VectorClock(1));
 
         counter1.merge(counter2);
@@ -26,10 +29,10 @@ class PNCounterTest {
 
     @Test
     void merge_equalClocks() {
-        PNCounter counter1 = new PNCounter(1);
+        PnCounter counter1 = new PnCounter(1);
         counter1.addAndGet(100, new VectorClock(1));
 
-        PNCounter counter2 = new PNCounter(1);
+        PnCounter counter2 = new PnCounter(1);
         counter2.addAndGet(100, new VectorClock(1));
 
         counter1.merge(counter2);
@@ -39,10 +42,10 @@ class PNCounterTest {
 
     @Test
     void merge_greaterWithLess() {
-        PNCounter counter1 = new PNCounter(1);
+        PnCounter counter1 = new PnCounter(1);
         counter1.addAndGet(200, new VectorClock(1));
 
-        PNCounter counter2 = new PNCounter(1);
+        PnCounter counter2 = new PnCounter(1);
         counter2.addAndGet(100, new VectorClock(1));
 
         counter1.merge(counter2);
@@ -51,7 +54,7 @@ class PNCounterTest {
 
     @Test
     void addAndGet() {
-        PNCounter counter = new PNCounter(1);
+        PnCounter counter = new PnCounter(1);
         StampedLong actual = counter.addAndGet(100, new VectorClock(1));
         assertEquals(new StampedLong(100, counter.getCurrentVectorClock()), actual);
 
@@ -68,7 +71,7 @@ class PNCounterTest {
 
     @Test
     void subtractAndGet() {
-        PNCounter counter = new PNCounter(1);
+        PnCounter counter = new PnCounter(1);
         StampedLong actual = counter.subtractAndGet(100, new VectorClock(1));
         assertEquals(new StampedLong(-100, counter.getCurrentVectorClock()), actual);
 
@@ -85,9 +88,28 @@ class PNCounterTest {
 
     @Test
     void getCurrentVectorClock_shouldReturnCopyOfClock() {
-        PNCounter counter = new PNCounter(1);
+        PnCounter counter = new PnCounter(1);
         VectorClock currentVectorClock = counter.getCurrentVectorClock();
         Object internalClock = ReflectionTestUtils.getField(counter, "vectorClock");
         assertNotSame(currentVectorClock, internalClock);
+    }
+
+    @Test
+    void snapshot() {
+        PnCounter counter = new PnCounter(Map.of(
+                1, new long[] {100, 1},
+                2, new long[] {200, 1}
+        ), new VectorClock(1));
+
+        PnCounterSnapshot ectual = counter.snapshot();
+        PnCounterSnapshot expected = new PnCounterSnapshot(
+                0,
+                List.of(
+                        new PnCounterState(1, 100, 1),
+                        new PnCounterState(2, 200, 1)
+                ),
+                new VectorClock(1)
+        );
+        assertEquals(expected, ectual);
     }
 }

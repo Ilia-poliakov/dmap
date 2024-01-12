@@ -42,7 +42,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
                 .setSuccess(false)
                 .build();
 
-        List<CompletableFuture<AppendEntriesRes>> resp = raftCluster.sendToAll(req, AppendEntriesRes.class);
+        List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
     }
@@ -61,7 +61,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
                 .setSuccess(true)
                 .build();
 
-        List<CompletableFuture<AppendEntriesRes>> resp = raftCluster.sendToAll(req, AppendEntriesRes.class);
+        List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
         assertEquals(Role.FOLLOWER, raftState.getRole());
@@ -82,7 +82,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
                 .setSuccess(true)
                 .build();
 
-        List<CompletableFuture<AppendEntriesRes>> resp = raftCluster.sendToAll(req, AppendEntriesRes.class);
+        List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
         assertEquals(Role.FOLLOWER, raftState.getRole());
@@ -104,7 +104,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
                 .setSuccess(false)
                 .build();
 
-        List<CompletableFuture<AppendEntriesRes>> resp = raftCluster.sendToAll(req, AppendEntriesRes.class);
+        List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
         assertTrue(txLogService.readLastEntry().isEmpty());
@@ -125,7 +125,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
                 .setSuccess(true)
                 .build();
 
-        List<CompletableFuture<AppendEntriesRes>> resp = raftCluster.sendToAll(req, AppendEntriesRes.class);
+        List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
         assertEquals(req.getEntries(0), txLogService.readLastEntry().get());

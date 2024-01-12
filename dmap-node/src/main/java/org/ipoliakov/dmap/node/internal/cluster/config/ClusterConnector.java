@@ -7,7 +7,7 @@ import org.ipoliakov.dmap.common.IdGenerator;
 import org.ipoliakov.dmap.common.network.MessageSender;
 import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +40,7 @@ public class ClusterConnector implements InitializingBean {
     @Autowired
     private NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer;
     @Autowired
-    private RaftCluster raftCluster;
+    private Cluster cluster;
     @Autowired
     private ResponseFutures responseFutures;
     @Autowired
@@ -71,17 +71,17 @@ public class ClusterConnector implements InitializingBean {
                 .addListener((ChannelFutureListener) future -> {
                     if (future.isSuccess()) {
                         Channel channel = future.channel();
-                        raftCluster.addMessageSender(nodeId, new MessageSender(channel, idGenerator, responseFutures, protoMessageRegistry));
+                        cluster.addMessageSender(nodeId, new MessageSender(channel, idGenerator, responseFutures, protoMessageRegistry));
                         log.debug("Successfully connected to channel = {}", channel);
                         channel.closeFuture().addListener((ChannelFutureListener) future1 -> {
                             Channel c = future1.channel();
-                            raftCluster.remove(nodeId);
+                            cluster.remove(nodeId);
                             log.debug("Channel {} closed", c);
                             scheduleConnect(nodeId, host, port);
                         });
                     } else {
                         Channel c = future.channel();
-                        raftCluster.remove(nodeId);
+                        cluster.remove(nodeId);
                         log.warn("Failed to connect to {}", c, future.cause());
                         scheduleConnect(nodeId, host, port);
                     }

@@ -1,5 +1,6 @@
 package org.ipoliakov.dmap.datastructures;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,11 +14,19 @@ public class VectorClock {
     private final Map<Integer, Long> timestampsByNodes = new ConcurrentHashMap<>();
 
     public VectorClock(int nodeId) {
-        this.timestampsByNodes.put(nodeId, Long.MIN_VALUE);
+        this(nodeId, Long.MIN_VALUE);
+    }
+
+    public VectorClock(int nodeId, long timestamp) {
+        this.timestampsByNodes.put(nodeId, timestamp);
     }
 
     public VectorClock(VectorClock from) {
-        this.timestampsByNodes.putAll(from.timestampsByNodes);
+        this(from.timestampsByNodes);
+    }
+
+    public VectorClock(Map<Integer, Long> from) {
+        this.timestampsByNodes.putAll(from);
     }
 
     public void merge(VectorClock other) {
@@ -45,5 +54,9 @@ public class VectorClock {
             }
         }
         return anyIsAfter || other.timestampsByNodes.size() < this.timestampsByNodes.size();
+    }
+
+    public Map<Integer, Long> getMap() {
+        return Collections.unmodifiableMap(timestampsByNodes);
     }
 }

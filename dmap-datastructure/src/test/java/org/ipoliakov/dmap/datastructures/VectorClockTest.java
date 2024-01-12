@@ -3,6 +3,7 @@ package org.ipoliakov.dmap.datastructures;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
@@ -129,5 +130,15 @@ class VectorClockTest {
         long next = clock.getNext(1);
         assertEquals(101, next);
         assertEquals(expected, clock);
+    }
+
+    @Test
+    void getMap_shouldReturnUnmodifiableMap() {
+        VectorClock clock = new VectorClock(1);
+        clock.set(1, 100);
+        clock.set(2, 100);
+        clock.set(3, 100);
+
+        assertThrows(UnsupportedOperationException.class, () -> clock.getMap().put(1, 1L));
     }
 }

@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft.election;
 
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LeaderElectionTask implements ScheduledTask {
 
+    private final Cluster cluster;
     private final RaftLog raftLog;
     private final RaftState raftState;
-    private final RaftCluster raftCluster;
     private final VoteResponseHandler voteResponseHandler;
 
     @Override
@@ -38,8 +38,8 @@ public class LeaderElectionTask implements ScheduledTask {
                 .build();
         log.info("Leader election - start: voteReq = {}", voteReq);
 
-        for (CompletableFuture<RequestVoteRes> cf : raftCluster.sendToAll(voteReq, RequestVoteRes.class)) {
-            cf.thenAcceptAsync(res -> voteResponseHandler.handle(res, raftCluster.getMajorityNodesCount()));
+        for (CompletableFuture<RequestVoteRes> cf : cluster.sendToAll(voteReq, RequestVoteRes.class)) {
+            cf.thenAcceptAsync(res -> voteResponseHandler.handle(res, cluster.getMajorityNodesCount()));
         }
     }
 }

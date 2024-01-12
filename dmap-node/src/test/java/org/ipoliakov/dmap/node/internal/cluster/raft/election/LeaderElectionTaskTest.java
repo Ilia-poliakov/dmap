@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PayloadType;
@@ -28,7 +28,7 @@ class LeaderElectionTaskTest {
     @Mock
     private RaftState raftState;
     @Mock
-    private RaftCluster raftCluster;
+    private Cluster cluster;
     @Mock
     private VoteResponseHandler voteResponseHandler;
 
@@ -45,7 +45,7 @@ class LeaderElectionTaskTest {
         when(raftState.getSelfId()).thenReturn(selfId);
         when(raftLog.getLastIndex()).thenReturn(lastLogIndex);
         when(raftLog.getLastTerm()).thenReturn(lastTerm);
-        when(raftCluster.getMajorityNodesCount()).thenReturn(5);
+        when(cluster.getMajorityNodesCount()).thenReturn(5);
         RequestVoteReq req = RequestVoteReq.newBuilder()
                 .setPayloadType(PayloadType.REQUEST_VOTE_REQ)
                 .setTerm(currentTerm)
@@ -53,7 +53,7 @@ class LeaderElectionTaskTest {
                 .setLastLogIndex(lastLogIndex)
                 .setLastLogTerm(lastTerm)
                 .build();
-        when(raftCluster.sendToAll(req, RequestVoteRes.class))
+        when(cluster.sendToAll(req, RequestVoteRes.class))
                 .thenReturn(List.of(CompletableFuture.completedFuture(RequestVoteRes.getDefaultInstance())));
 
         leaderElectionTask.run();

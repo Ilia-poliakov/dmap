@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.it;
+package org.ipoliakov.dmap.it.kvstorage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -6,9 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.client.DMapClient;
+import org.ipoliakov.dmap.it.ClusterIntegrationTest;
 import org.junit.jupiter.api.Test;
 
-public class PutGetTest extends ClusterIntegrationTest {
+public class KeyValueStorageTest extends ClusterIntegrationTest {
 
     @Test
     void basePutGetCase() throws Exception {
