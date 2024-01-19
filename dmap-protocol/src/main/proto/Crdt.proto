@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "DMapCommon.proto";
+
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+option java_package = "org.ipoliakov.dmap.protocol.crdt";
+option java_outer_classname = "ContainerDMapInternal";
+option optimize_for = SPEED;
+
+message PnCounterGetReq {
+  PayloadType payloadType = 1;
+
+  string name = 2;
+  VectorClockSnapshot timestamp = 3;
+}
+
+message PnCounterGetRes {
+  PayloadType payloadType = 1;
+  PnCounterSnapshot value = 2;
+}
+
+message PnCounterAddAndGetReq {
+  PayloadType payloadType = 1;
+
+  string name = 2;
+  int64 delta = 3;
+  VectorClockSnapshot timestamp = 4;
+}
+
+message PnCounterAddAndGetRes {
+  PayloadType payloadType = 1;
+  PnCounterSnapshot value = 2;
+}
+
+message PnCounterSnapshot {
+  int64 value = 1;
+  VectorClockSnapshot timestamp = 2;
+}
+
+message PnCounterReplicationData {
+  string name = 1;
+  repeated PnCounterStateData state = 2;
+  VectorClockSnapshot timestamp = 3;
+}
+
+message PnCounterStateData {
+  int32 nodeId = 1;
+  int64 pCounter = 2;
+  int64 nCounter = 3;
+}
+
+message VectorClockSnapshot {
+  map<int32 , int64> timestampByNodes = 1;
+}
+
+message PnCounterReplicationReq {
+  PayloadType payloadType = 1;
+
+  repeated PnCounterReplicationData replicationData = 2;
+}
+
+message PnCounterReplicationRes {
+  PayloadType payloadType = 1;
+}

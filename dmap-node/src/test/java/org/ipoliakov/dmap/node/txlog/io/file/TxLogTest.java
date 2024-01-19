@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
+import org.ipoliakov.dmap.protocol.storage.PutReq;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

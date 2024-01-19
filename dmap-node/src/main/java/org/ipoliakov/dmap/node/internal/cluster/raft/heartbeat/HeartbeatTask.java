@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
-import org.ipoliakov.dmap.protocol.internal.AppendEntriesRes;
+import org.ipoliakov.dmap.protocol.raft.AppendEntriesReq;
+import org.ipoliakov.dmap.protocol.raft.AppendEntriesRes;
 import org.ipoliakov.dmap.util.concurrent.ScheduledTask;
 import org.springframework.stereotype.Component;
 

@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft.election;
 
 import org.ipoliakov.dmap.node.internal.cluster.raft.Role;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.protocol.internal.RequestVoteRes;
+import org.ipoliakov.dmap.protocol.raft.RequestVoteRes;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;

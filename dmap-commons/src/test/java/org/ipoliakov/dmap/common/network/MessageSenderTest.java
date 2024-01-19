@@ -3,8 +3,8 @@ package org.ipoliakov.dmap.common.network;
 import org.ipoliakov.dmap.common.MonotonicallyIdGenerator;
 import org.ipoliakov.dmap.protocol.DMapMessage;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.storage.PutReq;
+import org.ipoliakov.dmap.protocol.storage.ValueRes;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

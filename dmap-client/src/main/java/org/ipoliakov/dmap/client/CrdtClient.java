@@ -4,12 +4,12 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.common.network.MessageSender;
-import org.ipoliakov.dmap.protocol.PnCounterAddAndGetReq;
-import org.ipoliakov.dmap.protocol.PnCounterAddAndGetRes;
-import org.ipoliakov.dmap.protocol.PnCounterGetReq;
-import org.ipoliakov.dmap.protocol.PnCounterGetRes;
-import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
-import org.ipoliakov.dmap.protocol.VectorClockSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetReq;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterGetReq;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterGetRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.VectorClockSnapshot;
 import org.ipoliakov.dmap.util.ProtoMessages;
 
 import lombok.RequiredArgsConstructor;

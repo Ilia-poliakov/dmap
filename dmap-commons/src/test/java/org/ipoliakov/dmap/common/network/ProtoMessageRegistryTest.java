@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.nio.charset.StandardCharsets;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
-import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
+import org.ipoliakov.dmap.protocol.storage.GetReq;
+import org.ipoliakov.dmap.protocol.storage.PutReq;
 import org.junit.jupiter.api.Test;
 
 import com.google.protobuf.ByteString;

@@ -2,8 +2,8 @@ package org.ipoliakov.dmap.node.service;
 
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftReplicationService;
 import org.ipoliakov.dmap.node.internal.cluster.raft.exception.ReplicationException;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.RemoveReq;
+import org.ipoliakov.dmap.protocol.storage.PutReq;
+import org.ipoliakov.dmap.protocol.storage.RemoveReq;
 import org.springframework.stereotype.Service;
 
 import com.google.protobuf.ByteString;

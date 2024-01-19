@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+option java_package = "org.ipoliakov.dmap.protocol";
+option java_outer_classname = "ContainerDMapInternal";
+option optimize_for = SPEED;
+
+enum PayloadType {
+  //commons
+  ERROR_RES = 0;
+
+  //RAFT
+  REQUEST_VOTE_REQ = 100;
+  REQUEST_VOTE_RES = 101;
+  APPEND_ENTRIES_REQ = 102;
+  APPEND_ENTRIES_RES = 103;
+
+  //CRDT
+  PN_COUNTER_REPLICATION_REQ = 200;
+  PN_COUNTER_REPLICATION_RES = 201;
+  PN_COUNTER_GET_REQ = 202;
+  PN_COUNTER_GET_RES = 203;
+  PN_COUNTER_ADD_AND_GET_REQ = 204;
+  PN_COUNTER_ADD_AND_GET_RES = 205;
+
+  //Client
+  VALUE_RES = 1000;
+  PUT_REQ = 1001;
+  GET_REQ = 1002;
+  REMOVE_REQ = 1003;
+
+}
+
+message DMapMessage {
+  PayloadType payloadType = 1;
+
+  int64 messageId = 2;
+  bytes payload = 3;
+}
+
+message ErrorMessage {
+  PayloadType payloadType = 1;
+
+  ErrorCode errorCode = 2;
+  string message = 3;
+}
+
+enum ErrorCode {
+  UNKNOWN_COMMAND = 0;
+}

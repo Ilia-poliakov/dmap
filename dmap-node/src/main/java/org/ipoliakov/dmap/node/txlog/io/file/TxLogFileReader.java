@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
 import org.ipoliakov.dmap.node.txlog.exception.TxLogReadingException;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;

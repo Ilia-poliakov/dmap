@@ -6,7 +6,7 @@ import org.ipoliakov.dmap.datastructures.crdt.counters.PnCounter;
 import org.ipoliakov.dmap.datastructures.crdt.counters.PnCounterSnapshot;
 import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.crdt.mapping.PnCounterMapper;
-import org.ipoliakov.dmap.protocol.internal.PnCounterReplicationRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterReplicationRes;
 import org.ipoliakov.dmap.util.ProtoMessages;
 import org.springframework.stereotype.Service;
 

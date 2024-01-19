@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-import "DMapMessages.proto";
+import "DMapCommon.proto";
 
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
-option java_package = "org.ipoliakov.dmap.protocol.internal";
+option java_package = "org.ipoliakov.dmap.protocol.raft";
 option java_outer_classname = "ContainerDMapInternal";
 option optimize_for = SPEED;
 
@@ -49,14 +49,4 @@ message AppendEntriesRes {
 
   int32 term = 2;
   bool success = 3;
-}
-
-message PnCounterReplicationReq {
-  PayloadType payloadType = 1;
-
-  repeated PnCounterReplicationData replicationData = 2;
-}
-
-message PnCounterReplicationRes {
-  PayloadType payloadType = 1;
 }

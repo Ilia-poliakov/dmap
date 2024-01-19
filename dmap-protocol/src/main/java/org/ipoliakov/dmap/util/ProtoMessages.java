@@ -1,18 +1,18 @@
 package org.ipoliakov.dmap.util;
 
-import org.ipoliakov.dmap.protocol.GetReq;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PnCounterAddAndGetReq;
-import org.ipoliakov.dmap.protocol.PnCounterAddAndGetRes;
-import org.ipoliakov.dmap.protocol.PnCounterGetReq;
-import org.ipoliakov.dmap.protocol.PnCounterGetRes;
-import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.RemoveReq;
-import org.ipoliakov.dmap.protocol.ValueRes;
-import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
-import org.ipoliakov.dmap.protocol.internal.PnCounterReplicationReq;
-import org.ipoliakov.dmap.protocol.internal.PnCounterReplicationRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetReq;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterGetReq;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterGetRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterReplicationReq;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterReplicationRes;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
+import org.ipoliakov.dmap.protocol.raft.AppendEntriesReq;
+import org.ipoliakov.dmap.protocol.storage.GetReq;
+import org.ipoliakov.dmap.protocol.storage.PutReq;
+import org.ipoliakov.dmap.protocol.storage.RemoveReq;
+import org.ipoliakov.dmap.protocol.storage.ValueRes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.MessageLite;

@@ -2,9 +2,9 @@ package org.ipoliakov.dmap.node.internal.cluster.crdt.mapping;
 
 import org.ipoliakov.dmap.datastructures.crdt.StampedLong;
 import org.ipoliakov.dmap.datastructures.crdt.counters.PnCounterState;
-import org.ipoliakov.dmap.protocol.PnCounterReplicationData;
-import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
-import org.ipoliakov.dmap.protocol.PnCounterStateData;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterReplicationData;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterStateData;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

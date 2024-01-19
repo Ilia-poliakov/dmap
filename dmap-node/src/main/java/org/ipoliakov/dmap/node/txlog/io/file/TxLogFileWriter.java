@@ -10,7 +10,7 @@ import java.nio.channels.FileChannel;
 import org.ipoliakov.dmap.common.ByteBufferUnmapper;
 import org.ipoliakov.dmap.common.OS;
 import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 
 import com.google.protobuf.ByteString;
 

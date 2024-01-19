@@ -7,7 +7,7 @@ import org.ipoliakov.dmap.node.IntegrationTest;
 import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
 import org.ipoliakov.dmap.node.txlog.repair.RepairManager;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.ipoliakov.dmap.util.ProtoMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
