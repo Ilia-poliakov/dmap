@@ -13,7 +13,7 @@ class GetCommandTest extends IntegrationTest {
     @Test
     void execute() throws Exception {
         dataStorage.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8("value"));
-        String actualValue = client.get("key").get();
+        String actualValue = storageClient.get("key").get();
         assertEquals("value", actualValue);
     }
 
@@ -21,6 +21,6 @@ class GetCommandTest extends IntegrationTest {
     void execute_NotExistingKey() throws Exception {
         String notExistingKey = "not_existing_key";
         dataStorage.get(ByteString.copyFromUtf8(notExistingKey));
-        assertTrue(client.get(notExistingKey).get().isEmpty());
+        assertTrue(storageClient.get(notExistingKey).get().isEmpty());
     }
 }

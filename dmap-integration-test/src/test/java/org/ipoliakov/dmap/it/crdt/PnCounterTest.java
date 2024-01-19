@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.ipoliakov.dmap.client.DMapClient;
+import org.ipoliakov.dmap.client.CrdtClient;
 import org.ipoliakov.dmap.it.ClusterIntegrationTest;
 import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
 import org.ipoliakov.dmap.protocol.VectorClockSnapshot;
@@ -18,7 +18,7 @@ public class PnCounterTest extends ClusterIntegrationTest {
 
     @Test
     void incrementCounter_withReplication() throws Exception {
-        DMapClient<String, String> client1 = clients.getFirst();
+        CrdtClient client1 = crdtClients.getFirst();
         String name = UUID.randomUUID().toString();
         Map<Integer, Long> lastObservedTimestamp = Map.of(1, Long.MIN_VALUE);
 
@@ -32,8 +32,8 @@ public class PnCounterTest extends ClusterIntegrationTest {
                 .build();
         assertEquals(expected, snapshot);
 
-        for (int i = 0; i < clients.size(); i++) {
-            DMapClient<String, String> client = clients.get(i);
+        for (int i = 0; i < storageClients.size(); i++) {
+            CrdtClient client = crdtClients.get(i);
             PnCounterSnapshot actual = client.getCounterValue(name, lastObservedTimestamp).get(10, TimeUnit.SECONDS);
             assertEquals(100, actual.getValue(), "Wrong result for client " + (i + 1));
         }

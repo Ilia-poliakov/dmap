@@ -3,15 +3,15 @@ package org.ipoliakov.dmap.it;
 import static org.awaitility.Awaitility.await;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.awaitility.Awaitility;
-import org.ipoliakov.dmap.client.DMapClient;
-import org.ipoliakov.dmap.client.serializer.StringSerializer;
+import org.ipoliakov.dmap.client.ClientBuilder;
+import org.ipoliakov.dmap.client.CrdtClient;
+import org.ipoliakov.dmap.client.KvStorageClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.containers.DockerComposeContainer;
@@ -26,7 +26,8 @@ public abstract class ClusterIntegrationTest {
     private static final int DEFAULT_PORT = 9090;
 
     protected DockerComposeContainer<?> environment;
-    protected List<DMapClient<String, String>> clients = new ArrayList<>();
+    protected List<KvStorageClient<String, String>> storageClients;
+    protected List<CrdtClient> crdtClients;
 
     private Integer leaderId;
 
@@ -46,15 +47,23 @@ public abstract class ClusterIntegrationTest {
         environment.start();
         waitingConsumer.waitUntil((OutputFrame outputFrame) -> outputFrame.getUtf8String().contains("BECOME THE LEADER"), 5, TimeUnit.MINUTES);
 
-        clients.add(createClient("node1"));
-        clients.add(createClient("node2"));
-        clients.add(createClient("node3"));
+        List<ClientBuilder.ClientConfigurator> configurators = List.of(
+                connect("node1"),
+                connect("node2"),
+                connect("node3")
+        );
+        storageClients = configurators.stream()
+                .map(nodeConfigurator -> nodeConfigurator.keyValueStorageBuilder().build())
+                .toList();
+        crdtClients = configurators.stream()
+                .map(nodeConfigurator -> nodeConfigurator.crdtClientBuilder().build())
+                .toList();
 
         leaderId = findLeaderId(waitingConsumer);
     }
 
-    public DMapClient<String, String> getLeaderClient() {
-        return clients.get(leaderId - 1);
+    public KvStorageClient<String, String> getLeaderClient() {
+        return storageClients.get(leaderId - 1);
     }
 
     private static Integer findLeaderId(WaitingConsumer waitingConsumer) {
@@ -69,13 +78,13 @@ public abstract class ClusterIntegrationTest {
                         .strip()), Objects::nonNull);
     }
 
-    private DMapClient<String, String> createClient(String serviceName) {
+    private ClientBuilder.ClientConfigurator connect(String serviceName) {
         return await()
                 .ignoreExceptions()
-                .until(() -> DMapClient.builder()
+                .until(() -> new ClientBuilder()
                                 .setHost(environment.getServiceHost(serviceName, DEFAULT_PORT))
                                 .setPort(environment.getServicePort(serviceName, DEFAULT_PORT))
-                                .build(new StringSerializer(), new StringSerializer()),
+                                .connect(),
                         c -> true
                 );
     }

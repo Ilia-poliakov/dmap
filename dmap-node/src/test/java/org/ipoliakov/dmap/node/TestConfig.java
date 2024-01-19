@@ -5,8 +5,9 @@ import static org.awaitility.Awaitility.await;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.ipoliakov.dmap.client.DMapClient;
-import org.ipoliakov.dmap.client.serializer.StringSerializer;
+import org.ipoliakov.dmap.client.ClientBuilder;
+import org.ipoliakov.dmap.client.CrdtClient;
+import org.ipoliakov.dmap.client.KvStorageClient;
 import org.ipoliakov.dmap.node.server.Server;
 import org.ipoliakov.dmap.node.service.StorageServiceImpl;
 import org.springframework.beans.factory.InitializingBean;
@@ -36,15 +37,25 @@ public class TestConfig implements InitializingBean {
     }
 
     @Bean
-    DMapClient<String, String> client() {
+    ClientBuilder.ClientConfigurator clientConfigurator() {
         return await()
                 .ignoreExceptions()
-                .until(() -> DMapClient.builder()
+                .until(() -> new ClientBuilder()
                                 .setPort(9090)
                                 .setHost("localhost")
                                 .setThreadCount(1)
-                                .build(new StringSerializer(), new StringSerializer()),
+                                .connect(),
                         client -> true
                 );
+    }
+
+    @Bean
+    KvStorageClient<String, String> storageClient(ClientBuilder.ClientConfigurator clientConfigurator) {
+        return clientConfigurator.keyValueStorageBuilder().build();
+    }
+
+    @Bean
+    CrdtClient crdtClient(ClientBuilder.ClientConfigurator clientConfigurator) {
+        return clientConfigurator.crdtClientBuilder().build();
     }
 }

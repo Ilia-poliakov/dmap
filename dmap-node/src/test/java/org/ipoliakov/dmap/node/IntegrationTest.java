@@ -3,7 +3,8 @@ package org.ipoliakov.dmap.node;
 import java.io.File;
 import java.util.Map;
 
-import org.ipoliakov.dmap.client.DMapClient;
+import org.ipoliakov.dmap.client.CrdtClient;
+import org.ipoliakov.dmap.client.KvStorageClient;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
@@ -28,7 +29,9 @@ public abstract class IntegrationTest {
     @Autowired
     protected Map<ByteString, ByteString> dataStorage;
     @Autowired
-    protected DMapClient<String, String> client;
+    protected KvStorageClient<String, String> storageClient;
+    @Autowired
+    protected CrdtClient crdtClient;
     @Autowired
     private File txLogFile;
     @Autowired

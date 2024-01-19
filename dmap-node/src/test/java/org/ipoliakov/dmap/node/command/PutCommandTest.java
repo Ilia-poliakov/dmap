@@ -12,7 +12,7 @@ class PutCommandTest extends IntegrationTest {
 
     @Test
     void execute() throws Exception {
-        String prev = client.put("key", "value").get();
+        String prev = storageClient.put("key", "value").get();
 
         ByteString actualVal = dataStorage.get(ByteString.copyFromUtf8("key"));
         ByteString expectedVal = ByteString.copyFromUtf8("value");
@@ -23,8 +23,8 @@ class PutCommandTest extends IntegrationTest {
 
     @Test
     void execute_returnPrev_WhenRewriteByKey() throws Exception {
-        client.put("key", "value1").get();
-        String prev = client.put("key", "value2").get();
+        storageClient.put("key", "value1").get();
+        String prev = storageClient.put("key", "value2").get();
 
         ByteString actualVal = dataStorage.get(ByteString.copyFromUtf8("key"));
         assertEquals("value2", actualVal.toStringUtf8());

@@ -18,7 +18,7 @@ class RemoveCommandTest extends IntegrationTest {
     void execute() throws Exception {
         String value = "value";
         dataStorage.put(ByteString.copyFromUtf8("key"), ByteString.copyFromUtf8(value));
-        String removedValue = client.remove("key", value).get();
+        String removedValue = storageClient.remove("key", value).get();
         assertEquals(value, removedValue);
         assertFalse(dataStorage.containsKey(ByteString.copyFromUtf8(value)));
     }
@@ -26,7 +26,7 @@ class RemoveCommandTest extends IntegrationTest {
     @Test
     @DisplayName("execute - return empty when nothing to remove")
     void execute_returnEmptyWhenNothingToRemove() throws Exception {
-        String removedValue = client.remove("key", "value").get();
+        String removedValue = storageClient.remove("key", "value").get();
         assertTrue(removedValue.isEmpty());
     }
 }
