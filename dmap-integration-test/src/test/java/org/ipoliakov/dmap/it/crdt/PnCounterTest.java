@@ -1,6 +1,6 @@
 package org.ipoliakov.dmap.it.crdt;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.awaitility.Awaitility.await;
 
 import java.util.Map;
 import java.util.UUID;
@@ -32,10 +32,12 @@ public class PnCounterTest extends ClusterIntegrationTest {
                 .build();
         assertEquals(expected, snapshot);
 
-        for (int i = 0; i < storageClients.size(); i++) {
-            CrdtClient client = crdtClients.get(i);
-            PnCounterSnapshot actual = client.getCounterValue(name, lastObservedTimestamp).get(10, TimeUnit.SECONDS);
-            assertEquals(100, actual.getValue(), "Wrong result for client " + (i + 1));
-        }
+        await().untilAsserted(() -> {
+            for (int i = 0; i < storageClients.size(); i++) {
+                CrdtClient client = crdtClients.get(i);
+                PnCounterSnapshot actual = client.getCounterValue(name, lastObservedTimestamp).get(10, TimeUnit.SECONDS);
+                assertEquals(100, actual.getValue(), "Wrong result for client " + (i + 1));
+            }
+        });
     }
 }
