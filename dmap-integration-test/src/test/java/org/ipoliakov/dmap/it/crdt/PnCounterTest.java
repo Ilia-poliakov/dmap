@@ -1,6 +1,7 @@
 package org.ipoliakov.dmap.it.crdt;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 import java.util.UUID;

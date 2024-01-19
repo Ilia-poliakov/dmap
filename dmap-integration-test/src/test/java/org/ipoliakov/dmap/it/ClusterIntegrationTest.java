@@ -45,7 +45,7 @@ public abstract class ClusterIntegrationTest {
                 .withOptions("--compatibility")
                 .withLocalCompose(true);
         environment.start();
-        waitingConsumer.waitUntil((OutputFrame outputFrame) -> outputFrame.getUtf8String().contains("AppendEntriesCommand"), 5, TimeUnit.MINUTES);
+        waitingConsumer.waitUntil((OutputFrame outputFrame) -> outputFrame.getUtf8String().contains("leaderId:"), 5, TimeUnit.MINUTES);
 
         List<ClientBuilder.ClientConfigurator> configurators = List.of(
                 connect("node1"),
