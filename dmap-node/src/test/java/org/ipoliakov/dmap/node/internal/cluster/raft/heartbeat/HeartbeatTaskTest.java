@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftCluster;
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesRes;
@@ -19,20 +19,20 @@ class HeartbeatTaskTest {
     void heartbeatRequest() {
         int term = 10;
         int leaderId = 1;
-        RaftCluster raftCluster = Mockito.mock(RaftCluster.class);
+        Cluster cluster = Mockito.mock(Cluster.class);
         var req = AppendEntriesReq.newBuilder()
             .setTerm(term)
             .setLeaderId(leaderId)
             .build();
-        when(raftCluster.sendToAll(req, AppendEntriesRes.class))
+        when(cluster.sendToAll(req, AppendEntriesRes.class))
             .thenReturn(List.of(CompletableFuture.completedFuture(AppendEntriesRes.getDefaultInstance())));
 
         RaftState raftState = new RaftState(leaderId, Mockito.mock(ApplicationEventPublisher.class));
         raftState.setCurrentTerm(term);
         raftState.becomeLeader();
-        HeartbeatTask heartbeatTask = new HeartbeatTask(raftState, raftCluster);
+        HeartbeatTask heartbeatTask = new HeartbeatTask(cluster, raftState);
         heartbeatTask.execute();
 
-        Mockito.verify(raftCluster).sendToAll(req, AppendEntriesRes.class);
+        Mockito.verify(cluster).sendToAll(req, AppendEntriesRes.class);
     }
 }

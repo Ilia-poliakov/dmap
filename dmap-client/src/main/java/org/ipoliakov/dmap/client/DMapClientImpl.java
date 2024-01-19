@@ -1,6 +1,7 @@
 package org.ipoliakov.dmap.client;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
@@ -9,10 +10,16 @@ import org.ipoliakov.dmap.common.network.MessageSender;
 import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.common.network.ResponseFutures;
 import org.ipoliakov.dmap.protocol.GetReq;
-import org.ipoliakov.dmap.protocol.PayloadType;
+import org.ipoliakov.dmap.protocol.PnCounterAddAndGetReq;
+import org.ipoliakov.dmap.protocol.PnCounterAddAndGetRes;
+import org.ipoliakov.dmap.protocol.PnCounterGetReq;
+import org.ipoliakov.dmap.protocol.PnCounterGetRes;
+import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
 import org.ipoliakov.dmap.protocol.PutReq;
 import org.ipoliakov.dmap.protocol.RemoveReq;
 import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.VectorClockSnapshot;
+import org.ipoliakov.dmap.util.ProtoMessages;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Message;
@@ -39,10 +46,7 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
 
     @Override
     public CompletableFuture<V> get(K key) {
-        GetReq req = GetReq.newBuilder()
-                .setPayloadType(PayloadType.GET_REQ)
-                .setKey(keySerializer.serialize(key))
-                .build();
+        GetReq req = ProtoMessages.getReq(keySerializer.serialize(key));
         return messageSender.send(req, ValueRes.class)
                 .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
@@ -51,8 +55,7 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
 
     @Override
     public CompletableFuture<V> put(K key, V value) {
-        PutReq req = PutReq.newBuilder()
-                .setPayloadType(PayloadType.PUT_REQ)
+        PutReq req = ProtoMessages.putReq()
                 .setKey(keySerializer.serialize(key))
                 .setValue(valueSerializer.serialize(value))
                 .build();
@@ -64,14 +67,33 @@ class DMapClientImpl<K extends Serializable, V extends Serializable> implements 
 
     @Override
     public CompletableFuture<V> remove(K key, V value) {
-        RemoveReq req = RemoveReq.newBuilder()
-                .setPayloadType(PayloadType.REMOVE_REQ)
-                .setKey(keySerializer.serialize(key))
-                .build();
+        RemoveReq req = ProtoMessages.removeReq(keySerializer.serialize(key));
         return messageSender.send(req, ValueRes.class)
                 .thenApply(ValueRes::getValue)
                 .thenApply(valueSerializer::dserialize)
                 .exceptionally(t -> handleError(req, t));
+    }
+
+    @Override
+    public CompletableFuture<PnCounterSnapshot> getCounterValue(String name, Map<Integer, Long> lastObservedTimestamp) {
+        PnCounterGetReq req = ProtoMessages.pnCounterGetReq(name)
+                .setTimestamp(
+                        VectorClockSnapshot.newBuilder()
+                                .putAllTimestampByNodes(lastObservedTimestamp))
+                .build();
+        return messageSender.send(req, PnCounterGetRes.class)
+                .thenApply(PnCounterGetRes::getValue);
+    }
+
+    @Override
+    public CompletableFuture<PnCounterSnapshot> addAndGetCounter(String name, long delta, Map<Integer, Long> lastObservedTimestamp) {
+        PnCounterAddAndGetReq req = ProtoMessages.pnCounterAddAndGetReq(name, delta)
+                .setTimestamp(
+                        VectorClockSnapshot.newBuilder()
+                                .putAllTimestampByNodes(lastObservedTimestamp))
+                .build();
+        return messageSender.send(req, PnCounterAddAndGetRes.class)
+                .thenApply(PnCounterAddAndGetRes::getValue);
     }
 
     private V handleError(Message message, Throwable t) {

@@ -3,6 +3,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.internal.AppendEntriesReq;
@@ -22,9 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RaftReplicationService {
 
+    private final Cluster cluster;
     private final RaftLog raftLog;
     private final RaftState raftState;
-    private final RaftCluster raftCluster;
 
     public Optional<Operation> replicate(PayloadType payloadType, MessageLite messageLite) {
         var operation = operation(payloadType, messageLite);
@@ -37,7 +38,7 @@ public class RaftReplicationService {
                 .build();
         try {
             FutureUtils.waitForQuorum(
-                    raftCluster.sendToAll(req, AppendEntriesRes.class),
+                    cluster.sendToAll(req, AppendEntriesRes.class),
                     AppendEntriesRes::getSuccess,
                     10, TimeUnit.SECONDS
             );

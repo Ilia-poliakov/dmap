@@ -1,4 +1,4 @@
-package org.ipoliakov.dmap.node.internal.cluster.raft;
+package org.ipoliakov.dmap.node.internal.cluster;
 
 import java.util.List;
 import java.util.Map;
@@ -14,14 +14,14 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class RaftCluster {
+public class Cluster {
 
     private final Map<Integer, MessageSender> messageSenders = new ConcurrentHashMap<>();
 
-    public <R extends MessageLite> List<CompletableFuture<R>> sendToAll(MessageLite messages, Class<R> responseType) {
+    public <R extends MessageLite> List<CompletableFuture<R>> sendToAll(MessageLite message, Class<R> responseType) {
         return messageSenders.values()
                 .stream()
-                .map(sender -> sender.send(messages, responseType))
+                .map(sender -> sender.send(message, responseType))
                 .toList();
     }
 

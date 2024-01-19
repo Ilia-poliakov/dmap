@@ -34,7 +34,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setTerm(raftState.getCurrentTerm())
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -51,7 +51,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setPayloadType(PayloadType.REQUEST_VOTE_REQ)
                 .build();
 
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         resp.get(0).get(5, TimeUnit.SECONDS);
@@ -76,7 +76,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setTerm(raftState.getCurrentTerm())
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -99,7 +99,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setVoterId(1)
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -121,7 +121,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
         raftState.setVotedFor(2);
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -143,7 +143,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
         raftState.setVotedFor(100);
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -166,7 +166,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setTerm(raftState.getCurrentTerm())
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -190,7 +190,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setTerm(raftState.getCurrentTerm())
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
@@ -214,7 +214,7 @@ class RequestVoteCommandTest extends IntegrationTest {
                 .setTerm(raftState.getCurrentTerm())
                 .setPayloadType(PayloadType.REQUEST_VOTE_RES)
                 .build();
-        List<CompletableFuture<RequestVoteRes>> resp = raftCluster.sendToAll(req, RequestVoteRes.class);
+        List<CompletableFuture<RequestVoteRes>> resp = cluster.sendToAll(req, RequestVoteRes.class);
 
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
