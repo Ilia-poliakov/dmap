@@ -108,7 +108,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
         assertTrue(txLogService.readLastEntry().isEmpty());
-        assertEquals("", client.get("key").get());
+        assertEquals("", storageClient.get("key").get());
     }
 
     @Test
@@ -129,7 +129,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
         assertEquals(req.getEntries(0), txLogService.readLastEntry().get());
-        assertEquals("value", client.get("key").get());
+        assertEquals("value", storageClient.get("key").get());
     }
 
     private AppendEntriesReq appendEntriesReq(long prevLogIndex) {

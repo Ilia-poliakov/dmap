@@ -25,7 +25,7 @@ class PnCounterGetReqCmdTest extends IntegrationTest {
     void execute() throws Exception {
         String name = UUID.randomUUID().toString();
         pnCounterService.addAndGet(name, 100, new VectorClock(1));
-        PnCounterSnapshot actual = client.getCounterValue(name, Map.of(1, Long.MIN_VALUE)).get(10, TimeUnit.SECONDS);
+        PnCounterSnapshot actual = crdtClient.getCounterValue(name, Map.of(1, Long.MIN_VALUE)).get(10, TimeUnit.SECONDS);
 
         PnCounterSnapshot expected = PnCounterSnapshot.newBuilder()
                 .setValue(100)
