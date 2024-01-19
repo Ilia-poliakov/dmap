@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.ValueRes;
+import org.ipoliakov.dmap.protocol.storage.ValueRes;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 

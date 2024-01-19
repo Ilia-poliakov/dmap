@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "DMapCommon.proto";
+
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+option java_package = "org.ipoliakov.dmap.protocol.storage";
+option java_outer_classname = "ContainerDMapMessages";
+option optimize_for = SPEED;
+
+message PutReq {
+  PayloadType payloadType = 1;
+
+  bytes key = 2;
+  bytes value = 3;
+}
+
+message GetReq {
+  PayloadType payloadType = 1;
+  bytes key = 2;
+}
+
+message RemoveReq {
+  PayloadType payloadType = 1;
+  bytes key = 2;
+}
+
+message ValueRes {
+  PayloadType payloadType = 1;
+  bytes value = 2;
+}

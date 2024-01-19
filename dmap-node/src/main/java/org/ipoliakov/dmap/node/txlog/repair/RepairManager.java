@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.txlog.io.TxLogReader;
 import org.ipoliakov.dmap.node.txlog.operation.OperationExecutor;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;

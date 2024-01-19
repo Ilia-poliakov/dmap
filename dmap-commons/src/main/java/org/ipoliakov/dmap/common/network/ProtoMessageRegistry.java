@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import org.ipoliakov.dmap.protocol.DMapMessage;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.reflections.Reflections;
 
 import com.google.protobuf.ByteString;

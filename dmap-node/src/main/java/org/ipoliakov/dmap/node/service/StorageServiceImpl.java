@@ -3,8 +3,8 @@ package org.ipoliakov.dmap.node.service;
 import java.util.Map;
 import java.util.Objects;
 
-import org.ipoliakov.dmap.protocol.PutReq;
-import org.ipoliakov.dmap.protocol.RemoveReq;
+import org.ipoliakov.dmap.protocol.storage.PutReq;
+import org.ipoliakov.dmap.protocol.storage.RemoveReq;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 

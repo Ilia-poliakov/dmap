@@ -6,9 +6,9 @@ import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.internal.cluster.crdt.PnCounterService;
 import org.ipoliakov.dmap.node.internal.cluster.crdt.mapping.PnCounterMapper;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.PnCounterGetReq;
-import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
-import org.ipoliakov.dmap.protocol.VectorClockSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterGetReq;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.VectorClockSnapshot;
 import org.ipoliakov.dmap.util.ProtoMessages;
 import org.springframework.stereotype.Component;
 

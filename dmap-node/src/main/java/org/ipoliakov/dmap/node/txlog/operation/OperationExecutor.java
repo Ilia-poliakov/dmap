@@ -4,7 +4,7 @@ import java.util.EnumMap;
 
 import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;

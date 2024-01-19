@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.ipoliakov.dmap.node.IntegrationTest;
-import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
-import org.ipoliakov.dmap.protocol.VectorClockSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.VectorClockSnapshot;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 

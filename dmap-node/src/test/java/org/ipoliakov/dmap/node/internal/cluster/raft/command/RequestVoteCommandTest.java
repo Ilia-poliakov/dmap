@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.ipoliakov.dmap.node.IntegrationTest;
 import org.ipoliakov.dmap.node.internal.cluster.raft.Role;
 import org.ipoliakov.dmap.protocol.PayloadType;
-import org.ipoliakov.dmap.protocol.internal.RequestVoteReq;
-import org.ipoliakov.dmap.protocol.internal.RequestVoteRes;
+import org.ipoliakov.dmap.protocol.raft.RequestVoteReq;
+import org.ipoliakov.dmap.protocol.raft.RequestVoteRes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

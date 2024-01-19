@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.txlog.io;
 
 import java.io.IOException;
 
-import org.ipoliakov.dmap.protocol.internal.Operation;
+import org.ipoliakov.dmap.protocol.raft.Operation;
 
 public interface TxLogWriter extends AutoCloseable {
 

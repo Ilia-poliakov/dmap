@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.client.CrdtClient;
 import org.ipoliakov.dmap.it.ClusterIntegrationTest;
-import org.ipoliakov.dmap.protocol.PnCounterSnapshot;
-import org.ipoliakov.dmap.protocol.VectorClockSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
+import org.ipoliakov.dmap.protocol.crdt.VectorClockSnapshot;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
