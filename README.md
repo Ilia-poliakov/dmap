@@ -11,6 +11,7 @@ Distributed in-memory key-value storage with replication based on [Raft](https:/
    - Off-heap hash map
    - Off-heap with optimistic read
 * Raft consensus algorithm
+* CRDT PN counter (state based)
 * Write ahead log for recovering after restarts
 
 ### How to run
