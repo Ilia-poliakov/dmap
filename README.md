@@ -1,5 +1,5 @@
 ![Build Status](https://github.com/ilia-poliakov/dmap/actions/workflows/build.yml/badge.svg)
-[![codecov](https://codecov.io/gh/ilia-poliakov/dmap/branch/master/graph/badge.svg?token=BEF5jFY7wv)](https://codecov.io/gh/ilia-poliakov/dmap)
+[![codecov](https://codecov.io/gh/ilia-poliakov/dmap/graph/badge.svg?token=BEF5jFY7wv)](https://codecov.io/gh/ilia-poliakov/dmap)
 ----
 
 ## DMap
