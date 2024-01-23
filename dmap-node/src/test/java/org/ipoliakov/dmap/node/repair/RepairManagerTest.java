@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.ipoliakov.dmap.node.IntegrationTest;
-import org.ipoliakov.dmap.node.internal.cluster.raft.log.io.file.RaftLogFileWriter;
-import org.ipoliakov.dmap.node.internal.cluster.raft.log.repair.RepairManager;
+import org.ipoliakov.dmap.node.cluster.raft.log.io.file.RaftLogFileWriter;
+import org.ipoliakov.dmap.node.cluster.raft.log.repair.RepairManager;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.ipoliakov.dmap.util.ProtoMessages;

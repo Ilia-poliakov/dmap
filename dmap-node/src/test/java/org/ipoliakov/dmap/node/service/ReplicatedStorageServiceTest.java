@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftReplicationService;
-import org.ipoliakov.dmap.node.internal.cluster.raft.exception.ReplicationException;
+import org.ipoliakov.dmap.node.cluster.raft.RaftReplicationService;
+import org.ipoliakov.dmap.node.cluster.raft.exception.ReplicationException;
 import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.ipoliakov.dmap.util.ProtoMessages;
 import org.junit.jupiter.api.DisplayName;
