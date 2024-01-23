@@ -6,11 +6,11 @@ import java.util.Map;
 import org.ipoliakov.dmap.client.CrdtClient;
 import org.ipoliakov.dmap.client.KvStorageClient;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
-import org.ipoliakov.dmap.node.internal.cluster.Cluster;
-import org.ipoliakov.dmap.node.internal.cluster.raft.RaftLog;
-import org.ipoliakov.dmap.node.internal.cluster.raft.election.ElectionService;
-import org.ipoliakov.dmap.node.internal.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.node.txlog.io.TxLogWriter;
+import org.ipoliakov.dmap.node.cluster.Cluster;
+import org.ipoliakov.dmap.node.cluster.raft.RaftLog;
+import org.ipoliakov.dmap.node.cluster.raft.election.ElectionService;
+import org.ipoliakov.dmap.node.cluster.raft.log.io.RaftLogWriter;
+import org.ipoliakov.dmap.node.cluster.raft.state.RaftState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,9 +33,9 @@ public abstract class IntegrationTest {
     @Autowired
     protected CrdtClient crdtClient;
     @Autowired
-    private File txLogFile;
+    private File raftLogFile;
     @Autowired
-    private TxLogWriter txLogWriter;
+    private RaftLogWriter raftLogWriter;
     @Autowired
     protected Cluster cluster;
     @Autowired
@@ -43,7 +43,7 @@ public abstract class IntegrationTest {
     @Autowired
     protected RaftState raftState;
     @Autowired
-    protected IntRingBuffer txLogFileIndex;
+    protected IntRingBuffer raftLogFileIndex;
     @Autowired
     protected ElectionService electionService;
 
@@ -62,13 +62,13 @@ public abstract class IntegrationTest {
         raftState.reset();
         raftLog.setLastTerm(0);
         raftLog.setLastIndex(0);
-        txLogWriter.close();
-        txLogFileIndex.clear();
+        raftLogWriter.close();
+        raftLogFileIndex.clear();
         electionService.restartElectionTask();
     }
 
     private void recreateLog() throws Exception {
-        txLogFile.delete();
-        txLogFile.createNewFile();
+        raftLogFile.delete();
+        raftLogFile.createNewFile();
     }
 }

@@ -3,7 +3,7 @@ package org.ipoliakov.dmap.client;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.common.network.MessageSender;
+import org.ipoliakov.dmap.common.rpc.MessageSender;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetReq;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetRes;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterGetReq;

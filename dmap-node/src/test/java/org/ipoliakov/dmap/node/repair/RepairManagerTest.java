@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.ipoliakov.dmap.node.IntegrationTest;
-import org.ipoliakov.dmap.node.txlog.io.file.TxLogFileWriter;
-import org.ipoliakov.dmap.node.txlog.repair.RepairManager;
+import org.ipoliakov.dmap.node.cluster.raft.log.io.file.RaftLogFileWriter;
+import org.ipoliakov.dmap.node.cluster.raft.log.repair.RepairManager;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.ipoliakov.dmap.util.ProtoMessages;
@@ -20,7 +20,7 @@ class RepairManagerTest extends IntegrationTest {
     @Autowired
     private RepairManager repairManager;
     @Autowired
-    private TxLogFileWriter txLogWriter;
+    private RaftLogFileWriter raftLogWriter;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -35,7 +35,7 @@ class RepairManagerTest extends IntegrationTest {
         }
         logRemoveOperation(1, operationCount);
 
-        txLogWriter.flush();
+        raftLogWriter.flush();
         dataStorage.clear();
 
         repairManager.repairAll();

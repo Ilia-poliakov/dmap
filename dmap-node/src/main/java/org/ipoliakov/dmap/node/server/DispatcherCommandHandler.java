@@ -4,7 +4,7 @@ import static io.netty.channel.ChannelHandler.Sharable;
 
 import java.util.EnumMap;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
+import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.command.DefaultCommand;
 import org.ipoliakov.dmap.protocol.DMapMessage;
