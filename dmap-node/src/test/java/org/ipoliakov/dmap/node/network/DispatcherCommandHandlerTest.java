@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.EnumMap;
 import java.util.Map;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
+import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
 import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.node.server.DispatcherCommandHandler;
 import org.ipoliakov.dmap.protocol.DMapMessage;

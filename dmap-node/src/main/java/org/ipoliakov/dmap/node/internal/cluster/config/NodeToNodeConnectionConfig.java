@@ -1,11 +1,11 @@
 package org.ipoliakov.dmap.node.internal.cluster.config;
 
-import static org.ipoliakov.dmap.node.config.NetworkBaseConfig.threadEventLoopGroup;
+import static org.ipoliakov.dmap.node.server.config.NetworkBaseConfig.threadEventLoopGroup;
 
 import java.time.Clock;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.network.ResponseFutures;
+import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
+import org.ipoliakov.dmap.common.rpc.ResponseFutures;
 import org.ipoliakov.dmap.util.concurrent.LockFreeSnowflakeIdGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class NodeToNodeConnectionConfig {
 
     @Bean
     public EventLoopGroup nodeToNodeEventLoopGroup() {
-        return threadEventLoopGroup(clientThreadNumber, "client-");
+        return threadEventLoopGroup(clientThreadNumber, "cluster-");
     }
 
     @Bean

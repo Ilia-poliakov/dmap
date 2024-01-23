@@ -1,8 +1,8 @@
 package org.ipoliakov.dmap.node.internal.cluster.config;
 
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.network.ResponseFutures;
-import org.ipoliakov.dmap.common.network.ResponseHandler;
+import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
+import org.ipoliakov.dmap.common.rpc.ResponseFutures;
+import org.ipoliakov.dmap.common.rpc.ResponseHandler;
 import org.ipoliakov.dmap.protocol.DMapMessage;
 
 import io.netty.channel.Channel;

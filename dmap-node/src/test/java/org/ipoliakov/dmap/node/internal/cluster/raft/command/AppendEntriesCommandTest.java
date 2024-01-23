@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.node.IntegrationTest;
 import org.ipoliakov.dmap.node.internal.cluster.raft.Role;
-import org.ipoliakov.dmap.node.txlog.TxLogService;
+import org.ipoliakov.dmap.node.internal.cluster.raft.log.RaftLogService;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.raft.AppendEntriesReq;
 import org.ipoliakov.dmap.protocol.raft.AppendEntriesRes;
@@ -26,7 +26,7 @@ import com.google.protobuf.ByteString;
 class AppendEntriesCommandTest extends IntegrationTest {
 
     @Autowired
-    private TxLogService txLogService;
+    private RaftLogService raftLogService;
 
     @Test
     @DisplayName("Reply false if term < currentTerm (§5.1)")
@@ -107,7 +107,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
         List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
-        assertTrue(txLogService.readLastEntry().isEmpty());
+        assertTrue(raftLogService.readLastEntry().isEmpty());
         assertEquals("", storageClient.get("key").get());
     }
 
@@ -128,7 +128,7 @@ class AppendEntriesCommandTest extends IntegrationTest {
         List<CompletableFuture<AppendEntriesRes>> resp = cluster.sendToAll(req, AppendEntriesRes.class);
         assertEquals(1, resp.size());
         assertEquals(expected, resp.get(0).get(5, TimeUnit.SECONDS));
-        assertEquals(req.getEntries(0), txLogService.readLastEntry().get());
+        assertEquals(req.getEntries(0), raftLogService.readLastEntry().get());
         assertEquals("value", storageClient.get("key").get());
     }
 

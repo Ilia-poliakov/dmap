@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft;
 
 import java.util.Optional;
 
-import org.ipoliakov.dmap.node.txlog.TxLogService;
+import org.ipoliakov.dmap.node.internal.cluster.raft.log.RaftLogService;
 import org.ipoliakov.dmap.protocol.raft.Operation;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +20,10 @@ public class RaftLog {
     @Setter
     private volatile long lastIndex;
 
-    private final TxLogService txLogService;
+    private final RaftLogService raftLogService;
 
     public void append(Operation operation) {
-        txLogService.append(operation);
+        raftLogService.append(operation);
         lastIndex = operation.getLogIndex();
         lastTerm = operation.getTerm();
     }
@@ -45,11 +45,11 @@ public class RaftLog {
     }
 
     public Optional<Operation> readByIndex(long index) {
-        return txLogService.readByLogIndex(index);
+        return raftLogService.readByLogIndex(index);
     }
 
     private Operation readLast() {
-        Operation operation = txLogService.readLastEntry()
+        Operation operation = raftLogService.readLastEntry()
                 .orElseGet(Operation::getDefaultInstance);
         lastIndex = operation.getLogIndex();
         lastTerm = operation.getTerm();

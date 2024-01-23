@@ -2,7 +2,7 @@ package org.ipoliakov.dmap.node.internal.cluster.raft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.ipoliakov.dmap.common.network.MessageSender;
+import org.ipoliakov.dmap.common.rpc.MessageSender;
 import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
-import org.ipoliakov.dmap.common.network.MessageSender;
+import org.ipoliakov.dmap.common.rpc.MessageSender;
 import org.ipoliakov.dmap.protocol.storage.GetReq;
 import org.ipoliakov.dmap.protocol.storage.PutReq;
 import org.ipoliakov.dmap.protocol.storage.RemoveReq;

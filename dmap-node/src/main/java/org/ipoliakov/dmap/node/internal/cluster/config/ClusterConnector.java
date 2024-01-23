@@ -4,9 +4,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.common.IdGenerator;
-import org.ipoliakov.dmap.common.network.MessageSender;
-import org.ipoliakov.dmap.common.network.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.network.ResponseFutures;
+import org.ipoliakov.dmap.common.rpc.MessageSender;
+import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
+import org.ipoliakov.dmap.common.rpc.ResponseFutures;
 import org.ipoliakov.dmap.node.internal.cluster.Cluster;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package org.ipoliakov.dmap.node.internal.cluster.initializer;
 
 import org.ipoliakov.dmap.node.Initializer;
-import org.ipoliakov.dmap.node.txlog.repair.RepairManager;
+import org.ipoliakov.dmap.node.internal.cluster.raft.log.repair.RepairManager;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
