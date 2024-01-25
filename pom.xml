@@ -36,7 +36,7 @@
 
         <awaitility.version>4.2.0</awaitility.version>
         <junit.version>5.10.1</junit.version>
-        <mockito.version>5.9.0</mockito.version>
+        <mockito.version>5.10.0</mockito.version>
         <testcontainers.version>1.19.3</testcontainers.version>
         <jmh.version>1.37</jmh.version>
     </properties>
