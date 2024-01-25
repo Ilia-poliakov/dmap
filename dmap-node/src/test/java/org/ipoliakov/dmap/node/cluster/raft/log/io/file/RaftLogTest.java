@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.protobuf.ByteString;
 
-class raftLogTest {
+class RaftLogTest {
 
     private File tempFile;
 
