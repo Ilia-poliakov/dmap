@@ -2,13 +2,13 @@ package org.ipoliakov.dmap.client;
 
 import java.io.Serializable;
 
-import org.ipoliakov.dmap.client.internal.ClientPipelineInitializer;
 import org.ipoliakov.dmap.client.serializer.StringSerializer;
 import org.ipoliakov.dmap.common.IdGenerator;
 import org.ipoliakov.dmap.common.MonotonicallyIdGenerator;
-import org.ipoliakov.dmap.common.rpc.MessageSender;
-import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.rpc.ResponseFutures;
+import org.ipoliakov.dmap.rpc.commons.ClientPipelineInitializer;
+import org.ipoliakov.dmap.rpc.commons.MessageSender;
+import org.ipoliakov.dmap.rpc.commons.ProtoMessageRegistry;
+import org.ipoliakov.dmap.rpc.commons.ResponseFutures;
 
 import com.google.protobuf.ByteString;
 

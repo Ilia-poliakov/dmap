@@ -3,13 +3,13 @@ package org.ipoliakov.dmap.client;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.ipoliakov.dmap.common.rpc.MessageSender;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetReq;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterAddAndGetRes;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterGetReq;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterGetRes;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterSnapshot;
 import org.ipoliakov.dmap.protocol.crdt.VectorClockSnapshot;
+import org.ipoliakov.dmap.rpc.commons.MessageSender;
 import org.ipoliakov.dmap.util.ProtoMessages;
 
 import lombok.RequiredArgsConstructor;

@@ -11,19 +11,4 @@
 
     <artifactId>dmap-commons</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.ipoliakov</groupId>
-            <artifactId>dmap-protocol</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

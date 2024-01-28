@@ -7,11 +7,11 @@ import org.ipoliakov.dmap.node.cluster.raft.Role;
 import org.ipoliakov.dmap.node.cluster.raft.election.ElectionService;
 import org.ipoliakov.dmap.node.cluster.raft.log.operation.OperationExecutor;
 import org.ipoliakov.dmap.node.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.raft.AppendEntriesReq;
 import org.ipoliakov.dmap.protocol.raft.AppendEntriesRes;
 import org.ipoliakov.dmap.protocol.raft.Operation;
+import org.ipoliakov.dmap.rpc.command.Command;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;

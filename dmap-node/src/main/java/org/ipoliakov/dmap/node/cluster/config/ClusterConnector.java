@@ -4,10 +4,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.ipoliakov.dmap.common.IdGenerator;
-import org.ipoliakov.dmap.common.rpc.MessageSender;
-import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.rpc.ResponseFutures;
 import org.ipoliakov.dmap.node.cluster.Cluster;
+import org.ipoliakov.dmap.rpc.commons.ClientPipelineInitializer;
+import org.ipoliakov.dmap.rpc.commons.MessageSender;
+import org.ipoliakov.dmap.rpc.commons.ProtoMessageRegistry;
+import org.ipoliakov.dmap.rpc.commons.ResponseFutures;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +39,7 @@ public class ClusterConnector implements InitializingBean {
     @Autowired
     private ScheduledExecutorService reconnectionExecutor;
     @Autowired
-    private NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer;
+    private ClientPipelineInitializer nodeToNodeChannelPipelineInitializer;
     @Autowired
     private Cluster cluster;
     @Autowired

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
 import org.ipoliakov.dmap.node.cluster.raft.log.io.RaftLogReader;
 import org.ipoliakov.dmap.node.cluster.raft.log.io.RaftLogWriter;
@@ -26,8 +25,8 @@ public class RaftLogConfig {
     private Long growSize;
 
     @Bean
-    public File raftLogFile(@Value("${raft.log.dir}") String raftDir) throws IOException {
-        FileUtils.forceMkdir(new File(raftDir));
+    public File raftLogFile(@Value("${raft.log.dir}") String raftDir) {
+        new File(raftDir).mkdirs();
         return new File(raftDir + "/" + UUID.randomUUID());
     }
 

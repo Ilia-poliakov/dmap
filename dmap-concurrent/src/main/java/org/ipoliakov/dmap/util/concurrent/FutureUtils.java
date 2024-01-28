@@ -8,9 +8,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Predicate;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class FutureUtils {
 
     /**

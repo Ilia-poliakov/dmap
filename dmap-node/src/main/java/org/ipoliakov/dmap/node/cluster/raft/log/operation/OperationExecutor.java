@@ -2,9 +2,9 @@ package org.ipoliakov.dmap.node.cluster.raft.log.operation;
 
 import java.util.EnumMap;
 
-import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.raft.Operation;
+import org.ipoliakov.dmap.rpc.commons.ProtoMessageRegistry;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;
