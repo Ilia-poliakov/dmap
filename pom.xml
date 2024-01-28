@@ -16,6 +16,7 @@
         <module>dmap-datastructure</module>
         <module>dmap-concurrent</module>
         <module>dmap-integration-test</module>
+        <module>dmap-rpc</module>
     </modules>
 
     <properties>
@@ -67,6 +68,16 @@
             <dependency>
                 <groupId>org.ipoliakov</groupId>
                 <artifactId>dmap-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ipoliakov</groupId>
+                <artifactId>dmap-rpc-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ipoliakov</groupId>
+                <artifactId>dmap-rpc-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- endregion -->
@@ -122,11 +133,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
             </dependency>
 
             <!-- region testing -->

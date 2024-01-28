@@ -2,10 +2,10 @@ package org.ipoliakov.dmap.node.cluster.raft.command;
 
 import org.ipoliakov.dmap.node.cluster.raft.RaftLog;
 import org.ipoliakov.dmap.node.cluster.raft.state.RaftState;
-import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.raft.RequestVoteReq;
 import org.ipoliakov.dmap.protocol.raft.RequestVoteRes;
+import org.ipoliakov.dmap.rpc.command.Command;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;

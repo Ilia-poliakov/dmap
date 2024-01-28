@@ -1,11 +1,12 @@
 package org.ipoliakov.dmap.node.cluster.config;
 
-import static org.ipoliakov.dmap.node.server.config.NetworkBaseConfig.threadEventLoopGroup;
+import static org.ipoliakov.dmap.rpc.config.NetworkBaseConfig.threadEventLoopGroup;
 
 import java.time.Clock;
 
-import org.ipoliakov.dmap.common.rpc.ProtoMessageRegistry;
-import org.ipoliakov.dmap.common.rpc.ResponseFutures;
+import org.ipoliakov.dmap.rpc.commons.ClientPipelineInitializer;
+import org.ipoliakov.dmap.rpc.commons.ProtoMessageRegistry;
+import org.ipoliakov.dmap.rpc.commons.ResponseFutures;
 import org.ipoliakov.dmap.util.concurrent.LockFreeSnowflakeIdGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ public class NodeToNodeConnectionConfig {
 
     @Value("${MEMBER_ID:${member.id:}}")
     private int memberId;
+
     @Value("${cluster.clientThreadNumber}")
     private int clientThreadNumber;
 
@@ -29,9 +31,11 @@ public class NodeToNodeConnectionConfig {
     }
 
     @Bean
-    public NodeToNodeChannelPipelineInitializer nodeToNodeChannelPipelineInitializer(ResponseFutures responseFutures,
-                                                                                     ProtoMessageRegistry protoMessageRegistry) {
-        return new NodeToNodeChannelPipelineInitializer(responseFutures, protoMessageRegistry);
+    public ClientPipelineInitializer clientPipelineInitializer(
+        ResponseFutures responseFutures,
+        ProtoMessageRegistry protoMessageRegistry
+    ) {
+        return new ClientPipelineInitializer(responseFutures, protoMessageRegistry);
     }
 
     @Bean

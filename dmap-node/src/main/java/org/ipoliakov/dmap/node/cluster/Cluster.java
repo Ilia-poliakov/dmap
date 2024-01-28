@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.ipoliakov.dmap.common.rpc.MessageSender;
+import org.ipoliakov.dmap.rpc.commons.MessageSender;
 import org.springframework.stereotype.Component;
 
 import com.google.protobuf.MessageLite;

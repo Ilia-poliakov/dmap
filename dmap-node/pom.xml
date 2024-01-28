@@ -14,6 +14,10 @@
     <dependencies>
         <dependency>
             <groupId>org.ipoliakov</groupId>
+            <artifactId>dmap-rpc-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ipoliakov</groupId>
             <artifactId>dmap-commons</artifactId>
         </dependency>
         <dependency>
@@ -21,16 +25,8 @@
             <artifactId>dmap-datastructure</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>

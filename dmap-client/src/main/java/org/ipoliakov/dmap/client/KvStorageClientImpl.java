@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
 import org.ipoliakov.dmap.client.internal.exception.RequestException;
-import org.ipoliakov.dmap.common.rpc.MessageSender;
 import org.ipoliakov.dmap.protocol.storage.GetReq;
 import org.ipoliakov.dmap.protocol.storage.PutReq;
 import org.ipoliakov.dmap.protocol.storage.RemoveReq;
 import org.ipoliakov.dmap.protocol.storage.ValueRes;
+import org.ipoliakov.dmap.rpc.commons.MessageSender;
 import org.ipoliakov.dmap.util.ProtoMessages;
 
 import com.google.protobuf.ByteString;

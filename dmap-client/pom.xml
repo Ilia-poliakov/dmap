@@ -14,11 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>org.ipoliakov</groupId>
-            <artifactId>dmap-commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
+            <artifactId>dmap-rpc-commons</artifactId>
         </dependency>
     </dependencies>
 

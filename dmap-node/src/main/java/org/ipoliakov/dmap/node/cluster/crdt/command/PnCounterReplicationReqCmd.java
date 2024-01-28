@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import org.ipoliakov.dmap.datastructures.VectorClock;
 import org.ipoliakov.dmap.datastructures.crdt.counters.PnCounter;
 import org.ipoliakov.dmap.node.cluster.crdt.PnCounterService;
-import org.ipoliakov.dmap.node.command.Command;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterReplicationData;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterReplicationReq;
 import org.ipoliakov.dmap.protocol.crdt.PnCounterStateData;
+import org.ipoliakov.dmap.rpc.command.Command;
 import org.ipoliakov.dmap.util.ProtoMessages;
 import org.springframework.stereotype.Component;
 

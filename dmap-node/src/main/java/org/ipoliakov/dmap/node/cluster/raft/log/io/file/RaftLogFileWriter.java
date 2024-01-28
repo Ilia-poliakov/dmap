@@ -7,9 +7,9 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
-import org.ipoliakov.dmap.common.ByteBufferUnmapper;
-import org.ipoliakov.dmap.common.OS;
 import org.ipoliakov.dmap.node.cluster.raft.log.io.RaftLogWriter;
+import org.ipoliakov.dmap.node.cluster.raft.log.util.ByteBufferUnmapper;
+import org.ipoliakov.dmap.node.cluster.raft.log.util.OS;
 import org.ipoliakov.dmap.protocol.raft.Operation;
 
 import com.google.protobuf.ByteString;

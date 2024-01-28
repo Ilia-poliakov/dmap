@@ -3,6 +3,7 @@ package org.ipoliakov.dmap.node.command;
 import org.ipoliakov.dmap.node.service.StorageReadOnlyService;
 import org.ipoliakov.dmap.protocol.PayloadType;
 import org.ipoliakov.dmap.protocol.storage.GetReq;
+import org.ipoliakov.dmap.rpc.command.Command;
 import org.ipoliakov.dmap.util.ProtoMessages;
 import org.springframework.stereotype.Component;
 
