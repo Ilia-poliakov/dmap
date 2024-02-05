@@ -36,7 +36,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 
         <awaitility.version>4.2.0</awaitility.version>
-        <junit.version>5.10.1</junit.version>
+        <junit.version>5.10.2</junit.version>
         <mockito.version>5.10.0</mockito.version>
         <testcontainers.version>1.19.4</testcontainers.version>
         <jmh.version>1.37</jmh.version>
