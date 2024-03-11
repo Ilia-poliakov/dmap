@@ -40,7 +40,7 @@ public class ProtoMessageRegistry {
             payloadTypeOnParser = payloadParser;
             classPayloadTypeMap = classOnPayloadType;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ExceptionInInitializerError(e);
         }
     }
 
