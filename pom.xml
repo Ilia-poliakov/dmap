@@ -35,7 +35,7 @@
         <spring.version>6.1.5</spring.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 
-        <awaitility.version>4.2.0</awaitility.version>
+        <awaitility.version>4.2.1</awaitility.version>
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.11.0</mockito.version>
         <testcontainers.version>1.19.7</testcontainers.version>
