@@ -3,6 +3,7 @@ package org.ipoliakov.dmap.node;
 import java.io.File;
 import java.util.Map;
 
+import org.awaitility.Awaitility;
 import org.ipoliakov.dmap.client.CrdtClient;
 import org.ipoliakov.dmap.client.KvStorageClient;
 import org.ipoliakov.dmap.datastructures.IntRingBuffer;
@@ -49,6 +50,7 @@ public abstract class IntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
+        Awaitility.await().until(() -> cluster.getMajorityNodesCount() == 1);
         recreateLog();
     }
 
